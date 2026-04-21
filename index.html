@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Execution Curve</title>
+
+<style>
+:root {
+    --bg: #ffffff;
+    --card: #f6f7f9;
+    --text: #111111;
+    --muted: #666666;
+    --border: #e5e7eb;
+    --accent: #ff7a18;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    scroll-behavior: smooth;
+}
+
+.container {
+    max-width: 820px;
+    margin: auto;
+    padding: 80px 20px;
+}
+
+h1 { font-size: 40px; margin-bottom: 10px; }
+h2 { font-size: 26px; }
+
+p { color: var(--muted); }
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover { background: #f3f4f6; }
+
+.card {
+    background: var(--card);
+    padding: 22px;
+    border-radius: 16px;
+    margin-top: 18px;
+}
+
+.highlight {
+    border-left: 3px solid var(--accent);
+    padding: 16px;
+    margin-top: 18px;
+    background: #fff7f0;
+}
+
+/* MULTI STEP ANIMATION */
+.step {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.4s ease;
+}
+
+.step.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section {
+    margin-bottom: 90px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.section.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hidden { display: none; }
+
+.back {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #888;
+    cursor: pointer;
+}
+.back:hover { color: #111; }
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 60px;
+}
+
+.logo img {
+    width: 60px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+    <img src="logo.png" alt="Execution Curve Logo"/>
+    <span>Execution Curve</span>
+</div>
+<p>Note: This is a beta version</p>
+<p>Contact: executioncurve@gmail.com if you have any questions, concerns, or feedback. Anything would be appreciated!
+<!-- HERO -->
+<div class="section show" id="hero">
+<h1>Most people don’t fail because they start.</h1>
+<h1>They fail when progress stops feeling visible.</h1>
+
+<p>Execution Curve helps you understand the phase you're in, so you don't quit in the middle. A simple way to understand what’s happening when things feel unclear.</p>
+
+<button onclick="start()">Read this if you feel like quitting</button>
+</div>
+
+<!-- EMOTION -->
+<div class="section hidden" id="emotion">
+<h2>This feeling is normal</h2>
+
+<div class="card">
+<p>You started with clarity. Then things slowed down.</p>
+<p>Now it feels like nothing is working.</p>
+
+<ul>
+<li>progress feels invisible</li>
+<li>everything feels unclear</li>
+<li>you start doubting yourself</li>
+<li>you want to restart</li>
+</ul>
+
+<p><b>This is where most people stop.</b></p>
+</div>
+
+<button onclick="goTool()">Continue</button>
+<div class="back" onclick="goHero()">← Go back</div>
+</div>
+
+<!-- TOOL -->
+<div class="section hidden" id="tool">
+<h2>Where are you right now?</h2>
+<p>Choose the option that feels closest. Don't overthink it.</p>
+
+<div class="card">
+<button onclick="select(1)">I feel excited but don’t know where to start</button>
+<button onclick="select(2)">I started but nothing is working</button>
+<button onclick="select(3)">I keep thinking but not acting</button>
+<button onclick="select(4)">I keep restarting</button>
+</div>
+
+<div class="back" onclick="goEmotion()">← Go back</div>
+</div>
+
+<!-- RESULT -->
+<div class="section hidden" id="result">
+<h2>What’s happening</h2>
+
+<div class="card">
+<p id="explain"></p>
+</div>
+
+<div class="highlight">
+
+<div id="action" class="step"></div>
+<div id="why" class="step"></div>
+
+</div>
+
+<div class="card" style="margin-top:20px;">
+<p><b>Here’s the part most people don’t realize:</b></p>
+
+<p>Progress doesn’t feel like progress while it’s happening.</p>
+
+<p>
+You expect fast feedback and clear direction.
+But real progress is slow, uneven, and hard to see in the moment.
+It is about continuation, not instant results.
+</p>
+
+<p>
+Most people quit here — not because they failed,
+but because they can’t see that it’s working yet.
+</p>
+
+<p><b>If it feels invisible, you’re probably early.</b></p>
+</div>
+
+<div class="back" onclick="resetFlow()">← Choose again</div>
+</div>
+
+</div>
+
+<script>
+
+function showSection(id) {
+    const el = document.getElementById(id);
+    el.classList.remove("hidden");
+    setTimeout(() => el.classList.add("show"), 10);
+    el.scrollIntoView({ behavior: "smooth" });
+}
+
+function hideSection(id) {
+    document.getElementById(id).classList.add("hidden");
+}
+
+function start() {
+    hideSection("hero");
+    showSection("emotion");
+}
+
+function goHero() {
+    hideSection("emotion");
+    showSection("hero");
+}
+
+function goTool() {
+    hideSection("emotion");
+    showSection("tool");
+}
+
+function goEmotion() {
+    hideSection("tool");
+    showSection("emotion");
+}
+
+function resetFlow() {
+    hideSection("result");
+    showSection("tool");
+}
+
+function revealStep(id, delay) {
+    setTimeout(() => {
+        document.getElementById(id).classList.add("show");
+    }, delay);
+}
+
+function select(state) {
+
+    let explain = "";
+    let action = "";
+    let why = "";
+
+    if (state === 1) {
+        explain = "You have energy, but no clear direction yet.";
+        action = "Write your idea in one sentence.";
+        why = "Why: clarity removes overwhelm and gives you a starting point.";
+    }
+
+    if (state === 2) {
+        explain = "Things feel messy. That’s part of real progress.";
+        action = "Improve ONE small thing. Don’t restart.";
+        why = "Why: restarting resets progress, small improvements compound.";
+    }
+
+    if (state === 3) {
+        explain = "You’re stuck thinking instead of acting.";
+        action = "Work for just 5 minutes.";
+        why = "Why: starting breaks overthinking and builds momentum.";
+    }
+
+    if (state === 4) {
+        explain = "Restarting resets your progress.";
+        action = "Continue from where you left off.";
+        why = "Why: progress only builds when you don’t reset the cycle.";
+    }
+
+    // set base state
+    document.getElementById("explain").innerText = explain;
+    document.getElementById("action").innerText = action;
+    document.getElementById("why").innerText = why;
+
+    // reset animation
+    document.getElementById("action").classList.remove("show");
+    document.getElementById("why").classList.remove("show");
+
+    hideSection("tool");
+    showSection("result");
+
+    // MULTI-STEP REVEAL
+    revealStep("action", 200);  // step 1
+    revealStep("why", 800);     // step 2
+}
+
+</script>
+
+</body>
+</html>
