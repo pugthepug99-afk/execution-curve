@@ -161,6 +161,7 @@ button:hover { background: #f3f4f6; }
 <button onclick="select(2)">I started but nothing is working</button>
 <button onclick="select(3)">I keep thinking but not acting</button>
 <button onclick="select(4)">I keep restarting</button>
+<button onclick="select(5)">Everyone feels so ahead. I feel behind.</button>
 </div>
 
 <div class="back" onclick="goEmotion()">← Go back</div>
@@ -280,7 +281,11 @@ function select(state) {
         action = "Continue from where you left off.";
         why = "Why: progress only builds when you don’t reset the cycle.";
     }
-
+if (state === 5) {
+    explain = "You’re comparing your beginning to other people’s visible progress.";
+    action = "Focus on your next step, not someone else’s timeline.";
+    why = "Why: comparison distorts progress. Most people only show results, not the years before them.";
+}
     // set base state
     document.getElementById("explain").innerText = explain;
     document.getElementById("action").innerText = action;
