@@ -78,6 +78,10 @@
 
   .nav-links a:hover { color: var(--black); }
 
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
   .nav-cta {
     font-family: var(--body);
     font-size: 0.875rem;
@@ -402,6 +406,68 @@
 
   footer a:hover { color: var(--black); }
 
+  /* ---- HOW IT WORKS SECTION ---- */
+  #how {
+    padding: 8rem 3rem;
+    border-top: 1px solid var(--gray-2);
+  }
+
+  .how-header { margin-bottom: 4rem; }
+  .how-header .section-heading { max-width: 500px; }
+
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.5rem;
+  }
+
+  .how-step {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .how-step-top {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .how-step-num {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--amber);
+    letter-spacing: 0.04em;
+  }
+
+  .how-step-visual {
+    width: 100%;
+    aspect-ratio: 120 / 64;
+    background: var(--gray-3);
+  }
+
+  .how-step-title {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 0.75rem;
+    line-height: 1.25;
+  }
+
+  .how-step-body {
+    font-family: var(--body);
+    font-size: 0.9rem;
+    color: var(--gray-1);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 768px) {
+    #how { padding: 5rem 1.25rem; }
+    .how-steps { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
   /* ---- YOUR LOG SECTION ---- */
   #log {
     padding: 8rem 3rem 6rem;
@@ -425,6 +491,62 @@
     color: var(--gray-1);
     letter-spacing: 0.04em;
     padding-bottom: 0.4rem;
+  }
+
+  /* Milestone banner */
+  .milestone-banner {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--amber);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .milestone-banner.show {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .milestone-num {
+    font-family: var(--display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--black);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+
+  .milestone-text {
+    font-family: var(--body);
+    font-size: 0.88rem;
+    color: var(--black);
+    line-height: 1.5;
+  }
+
+  .milestone-dismiss {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--black);
+    opacity: 0.55;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0.25rem 0.5rem;
+    transition: opacity 0.15s;
+  }
+
+  .milestone-dismiss:hover { opacity: 1; }
+
+  @media (max-width: 768px) {
+    .milestone-banner { flex-wrap: wrap; padding: 1rem; }
+    .milestone-dismiss { margin-left: 0; }
   }
 
   /* Empty state */
@@ -980,6 +1102,7 @@
 <nav>
   <a href="/" class="nav-logo">Execution<span>Curve</span></a>
   <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
     <li><a href="#phases">The curve</a></li>
     <li><a href="#log">Your log</a></li>
   </ul>
@@ -999,7 +1122,7 @@
     </p>
     <div class="hero-actions">
       <button class="btn-primary">Log your first entry →</button>
-      <button class="btn-ghost">See how it works</button>
+      <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
     </div>
     <div class="hero-stats">
       <div class="stat-item">
@@ -1067,6 +1190,72 @@
         <strong>No record, no proof</strong>
         <span>Without a log, you have nothing to look back on. A timeline of your work is proof you showed up, even when you didn't feel like it.</span>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS SECTION -->
+<section id="how">
+  <div class="how-header reveal">
+    <span class="section-label">how it works</span>
+    <h2 class="section-heading"> Only Three steps.</h2>
+  </div>
+
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="how-step-top">
+        <span class="how-step-num">01</span>
+        <div class="how-step-visual" aria-hidden="true">
+          <svg viewBox="0 0 120 64" width="100%" height="100%">
+            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
+            <text x="10" y="24" font-family="'DM Mono', monospace" font-size="7" fill="var(--amber)">→ today</text>
+            <line x1="10" y1="34" x2="80" y2="34" stroke="var(--gray-2)" stroke-width="1"/>
+            <rect x="10" y="44" width="46" height="12" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/>
+            <text x="33" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)" text-anchor="middle">stuck</text>
+          </svg>
+        </div>
+      </div>
+      <h3 class="how-step-title">Log a few seconds of honesty</h3>
+      <p class="how-step-body">One line about what you worked on. One tap on how it felt. That's the entire input, no forms, no streak guilt, no pressure to write an essay.</p>
+    </div>
+
+    <div class="how-step reveal reveal-delay-1">
+      <div class="how-step-top">
+        <span class="how-step-num">02</span>
+        <div class="how-step-visual" aria-hidden="true">
+          <svg viewBox="0 0 120 64" width="100%" height="100%">
+            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
+            <line x1="20" y1="12" x2="20" y2="52" stroke="var(--gray-2)" stroke-width="1"/>
+            <circle cx="20" cy="16" r="2.5" fill="var(--black)"/>
+            <circle cx="20" cy="30" r="2.5" fill="var(--amber)"/>
+            <circle cx="20" cy="44" r="2.5" fill="var(--black)"/>
+            <line x1="28" y1="16" x2="95" y2="16" stroke="var(--gray-2)" stroke-width="1"/>
+            <line x1="28" y1="30" x2="100" y2="30" stroke="var(--amber)" stroke-width="1"/>
+            <line x1="28" y1="44" x2="80" y2="44" stroke="var(--gray-2)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+      <h3 class="how-step-title">Watch the timeline build itself</h3>
+      <p class="how-step-body">Every entry stacks into a visible record. The line that felt invisible day to day becomes obvious once you can see ten entries at once.</p>
+    </div>
+
+    <div class="how-step reveal reveal-delay-2">
+      <div class="how-step-top">
+        <span class="how-step-num">03</span>
+        <div class="how-step-visual" aria-hidden="true">
+          <svg viewBox="0 0 120 64" width="100%" height="100%">
+            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
+            <rect x="10" y="10" width="100" height="10" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/>
+            <text x="16" y="17.5" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">"about to quit"</text>
+            <line x1="14" y1="28" x2="14" y2="50" stroke="var(--amber)" stroke-width="1.5"/>
+            <text x="22" y="34" font-family="'DM Mono', monospace" font-size="6" fill="var(--amber)">phase read</text>
+            <text x="22" y="44" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">this feeling peaks right</text>
+            <text x="22" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">before it clicks.</text>
+          </svg>
+        </div>
+      </div>
+      <h3 class="how-step-title">Get a response, not a slogan</h3>
+      <p class="how-step-body">Your input maps to a phase on the curve. The feedback changes based on where you actually are, not a generic quote that means the same thing on day one or day ninety.</p>
     </div>
   </div>
 </section>
@@ -1324,6 +1513,13 @@
     </div>
   </div>
 
+  <!-- Milestone banner -->
+  <div class="milestone-banner" id="milestone-banner">
+    <span class="milestone-num" id="milestone-num"></span>
+    <span class="milestone-text" id="milestone-text"></span>
+    <button class="milestone-dismiss" id="milestone-dismiss">dismiss ×</button>
+  </div>
+
   <!-- Empty state -->
   <div class="log-empty" id="log-empty">
     <div class="log-empty-line"></div>
@@ -1441,7 +1637,7 @@
     document.getElementById('step-' + n).classList.add('active');
   }
 
-  function openBar() {
+  function openEntryBar() {
     bar.classList.add('visible');
     trigger.classList.add('hidden');
     setTimeout(() => entryText.focus(), 100);
@@ -1449,8 +1645,10 @@
 
   trigger.addEventListener('click', openEntryBar);
 
-  // Also open bar from hero CTA
-  document.querySelector('.btn-primary').addEventListener('click', openEntryBar);
+  // Also open bar from hero CTA and nav CTA
+  document.querySelectorAll('.btn-primary').forEach(btn => {
+    btn.addEventListener('click', openEntryBar);
+  });
   document.querySelector('.nav-cta').addEventListener('click', openEntryBar);
 
   // Step 1 → 2
@@ -1497,6 +1695,7 @@
     localStorage.setItem('ec_entries', JSON.stringify(entries));
 
     renderLog();
+    checkMilestone(entries.length);
 
     // Confirm
     confirmPreview.textContent = `"${entryValue.slice(0, 42)}${entryValue.length > 42 ? '…' : ''}" · ${selectedFeeling}`;
@@ -1581,11 +1780,35 @@
 
   renderLog();
 
-  function openEntryBar() {
-    bar.classList.add('visible');
-    trigger.classList.add('hidden');
-    setTimeout(() => entryText.focus(), 100);
+  // ---- MILESTONES ----
+  const MILESTONES = {
+    5:  "Five entries in. The shape of your timeline is starting to show.",
+    10: "Ten entries. This is usually around where people stop comparing day-to-day and start seeing the trend.",
+    25: "Twenty-five entries. Scroll back to your first one — that's the distance you've actually covered.",
+    50: "Fifty entries. Most people never get here. You're building a real record.",
+  };
+
+  function checkMilestone(entryCount) {
+    if (!MILESTONES[entryCount]) return;
+
+    const seen = JSON.parse(localStorage.getItem('ec_milestones_seen') || '[]');
+    if (seen.includes(entryCount)) return;
+
+    const banner = document.getElementById('milestone-banner');
+    const num = document.getElementById('milestone-num');
+    const text = document.getElementById('milestone-text');
+
+    num.textContent = entryCount;
+    text.textContent = MILESTONES[entryCount];
+    banner.classList.add('show');
+
+    seen.push(entryCount);
+    localStorage.setItem('ec_milestones_seen', JSON.stringify(seen));
   }
+
+  document.getElementById('milestone-dismiss').addEventListener('click', () => {
+    document.getElementById('milestone-banner').classList.remove('show');
+  });
 
   // ---- PHASES ----
   const phaseData = {
