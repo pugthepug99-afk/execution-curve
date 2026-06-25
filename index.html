@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1535,41 +1536,41 @@
 </section>
 
 
-<button id="entry-trigger" aria-label="Log an entry">+ log entry</button>
+<button id="entry-trigger" aria-label="Log an entry">+ Log Entry</button>
 
 <!-- QUICK ENTRY BAR -->
 <div id="entry-bar" role="dialog" aria-label="Quick log entry">
 
-  <!-- Step 1: what did you work on -->
+  <!-- Step 1: What did you work on -->
   <div class="entry-step active" id="step-1">
     <div class="entry-input-row">
-      <span class="entry-prompt">→ today</span>
+      <span class="entry-prompt">→ Today</span>
       <input
         type="text"
         id="entry-text"
-        placeholder="what did you work on or think about?"
+        placeholder="What did you work on or think about?"
         autocomplete="off"
         maxlength="120"
       />
-      <button class="entry-next-btn" id="next-btn" aria-label="Next step">next →</button>
+      <button class="entry-next-btn" id="next-btn" aria-label="Next step">Next →</button>
     </div>
   </div>
 
-  <!-- Step 2: how did it feel -->
+  <!-- Step 2: How did it feel -->
   <div class="entry-step" id="step-2">
     <div class="entry-feeling-row">
-      <span class="entry-feeling-label">// how did it feel?</span>
+      <span class="entry-feeling-label"></span>How did it feel?</span>
       <div class="entry-feelings">
-        <button class="feeling-chip" data-feeling="making progress">making progress</button>
-        <button class="feeling-chip" data-feeling="stuck">stuck</button>
-        <button class="feeling-chip" data-feeling="uncertain">uncertain</button>
-        <button class="feeling-chip" data-feeling="energised">energised</button>
-        <button class="feeling-chip" data-feeling="about to quit">about to quit</button>
+        <button class="feeling-chip" data-feeling="making progress">Making progress</button>
+        <button class="feeling-chip" data-feeling="stuck">Stuck</button>
+        <button class="feeling-chip" data-feeling="uncertain">Uncertain</button>
+        <button class="feeling-chip" data-feeling="energised">Energised</button>
+        <button class="feeling-chip" data-feeling="about to quit">About to quit</button>
       </div>
     </div>
     <div class="entry-submit-row">
-      <button class="entry-back" id="back-btn">← back</button>
-      <button class="entry-submit" id="submit-btn" disabled>save entry ↗</button>
+      <button class="entry-back" id="back-btn">←Back</button>
+      <button class="entry-submit" id="submit-btn" disabled>Save Entry ↗</button>
     </div>
   </div>
 
@@ -1577,7 +1578,7 @@
   <div class="entry-step" id="step-3">
     <div class="entry-confirm">
       <div class="entry-confirm-dot"></div>
-      <p class="entry-confirm-text">logged — <strong id="confirm-preview"></strong></p>
+      <p class="entry-confirm-text">Logged — <strong id="confirm-preview"></strong></p>
     </div>
   </div>
 
