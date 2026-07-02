@@ -1,1651 +1,2568 @@
 
+
+
+
+
+
+
+
+Pasted text(1).txt
+Document
+YOOO HOW IS TS THIS IS EXCITING: 
+
+
+Pasted text(2).txt
+Document
+
+
+Pasted text(4).txt
+Document
+
+
+index.html
+File
+
+
+index(1).html
+File
+
+
+index(2).html
+File
+
+
+index(3).html
+File
+
+YES. I actually think this is one of the few features I'd prioritize before trying to get lots of users.
+
+Because this isn't really a "new feature"—it's fixing a fundamental usability issue.
+
+Imagine you told someone:
+
+"Come back in 3 days and look at your progress."
+
+Then they come back and...
+
+💥 Everything is gone.
+
+Most people wouldn't think:
+
+"Oh, it's an early beta."
+
+They'd think:
+
+"This app doesn't work."
+
+I'd actually prioritize your roadmap like this:
+
+Before advertising
+✅ Save entries so they persist
+
+Whether that's localStorage (fine for now) or a simple backend.
+
+Users should never lose their data by refreshing or closing the tab.
+
+✅ Finish the "How it works" section.
+
+✅ Make mobile look good.
+
+✅ Add the streak.
+
+Then stop.
+
+Then test with users.
+Only after getting feedback from multiple people should you start thinking about:
+
+AI analysis
+
+audio/video entries
+
+accounts
+
+multiple projects
+
+social features
+
+One thing though...
+
+If your entries are already in localStorage, they actually shouldn't disappear when you close and reopen the browser. localStorage persists across refreshes and browser restarts unless:
+
+you're accidentally using sessionStorage instead,
+
+you're clearing the data in your code,
+
+or the page isn't loading it back correctly.
+
+If they're disappearing every time you reopen the tab, it's likely a bug rather than a missing feature.
+
+So before building a backend, I'd check:
+
+Are entries being saved to localStorage?
+
+When the page loads, are you reading them back and rendering them?
+
+If you eventually want people to use the app across multiple devices, then you'll need accounts + a backend. But for your first real user tests, a correctly working localStorage implementation is completely reasonable.
+
+Overall, I think your instincts are improving. Notice the difference:
+
+A month ago, the next update you wanted was something like "AI" or "maps."
+
+Now you're saying:
+
+"People need their data to stay."
+
+That's a product decision based on user experience, and it's exactly the kind of thinking that makes an app feel reliable.
+
+
+okay i’ll add JUST that than all the advertising but the thing is vercel is weird cus it’s not accurate w showing how many ppl r live on the website or how many visits there have been. 
+
+I actually wouldn't let this stop you.
+
+Vercel Analytics are useful, but they're not the thing you're trying to learn right now.
+
+Right now your questions are:
+
+Do people understand the app?
+
+Do they make an entry?
+
+Do they come back?
+
+What feedback do they give?
+
+You don't need perfect analytics to answer those.
+
+For your first 10–30 users, I'd track these manually:
+Metric	Goal
+People who visited	___
+People who made at least one entry	___
+People who came back	___
+Common feedback	___
+You can literally keep this in a Google Sheet.
+
+If you want better analytics than Vercel
+There are privacy-friendly analytics tools that are often easier to understand than Vercel's dashboard. They can show things like:
+
+page views
+
+unique visitors
+
+where people came from
+
+session duration
+
+Those are worth adding once you're starting to get a meaningful number of visitors.
+
+Honestly, your biggest source of data won't be analytics.
+Imagine you get:
+
+17 visitors
+
+4 people DM you saying:
+
+"I wish I could log voice notes."
+
+That feedback is worth far more than knowing your bounce rate was 63%.
+
+Early-stage founders often get obsessed with dashboards when they only have a handful of users. At your stage, conversations beat charts.
+
+If I were planning your next two weeks, it'd be:
+This week
+
+✅ Fix saving entries
+
+✅ Make sure the app works reliably
+
+✅ Deploy
+
+Next
+
+Start posting the videos
+
+Share the app with people who are actually building something
+
+Collect feedback
+
+Write down every repeated suggestion
+
+No more feature additions until you start seeing patterns in the feedback.
+
+One more thing because I know you:
+
+Don't wait for the website to feel "finished."
+
+You've already done this cycle before:
+
+"Maybe one more feature..."
+
+"Maybe one more improvement..."
+
+"Maybe AI..."
+
+At some point, you have to let real users tell you what Version 3 should be.
+
+I actually think you're getting very close to that point.
+
+
+I JUST CAME UP W THE COOLEST IDEA AT LIKE 12 AM. i post a tiktok explaining the curve thru love island terms and how the popular couple trinity and bryce went thru each phase. 
+
+😭 WAIT.
+
+This is actually a good content instinct because you're taking an abstract concept and explaining it through something people already know.
+
+That's one of the easiest ways to make an idea stick.
+
+For example:
+
+Hook:
+
+"Bryce and Trinity accidentally demonstrated the Execution Curve."
+
+or
+
+"Everyone is talking about Bryce and Trinity, but nobody realizes they went through every stage of the Execution Curve."
+
+Then you map it:
+
+Stage 1: Excitement
+
+Stage 2: Conflict / doubt
+
+Stage 3: Working through it
+
+Stage 4: Stability (or whatever actually happened)
+
+Then end with:
+
+"This isn't just relationships. The same pattern happens when building a business, learning a skill, creating content, or chasing any long-term goal."
+
+That naturally introduces Execution Curve.
+
+One thing to be careful about:
+
+Don't force the analogy if it doesn't actually fit what happened. People who watched the show will notice if you're stretching it just to fit your framework.
+
+Why I like this idea
+It teaches the concept through something familiar.
+
+People don't remember:
+
+"The execution curve has four phases..."
+
+They remember:
+
+"Oh, that's like Bryce and Trinity."
+
+That's a much stronger mental model.
+
+My only strategic suggestion
+Don't make your account become a Love Island account.
+
+Think of this as a one-off or occasional trend adaptation.
+
+Your account's core identity should still be:
+
+execution psychology
+
+building projects
+
+entrepreneurship
+
+student goals
+
+Then, whenever there's a relevant trend or cultural moment, you can explain it through the Execution Curve.
+
+That's a great way to stay relevant without changing what your brand is about.
+
+Honestly, this is the kind of creative connection you should keep making. It takes a concept you care about and packages it in a way that people are more likely to stop scrolling for.
+
+
+okay now how do i add this into execution curve: Data persistence — this is the most urgent thing. Without it the app functionally doesn't work for a real user. localStorage is honestly fine for a CAC submission, no backend needed. Supabase if you want to go further
+
+I actually think localStorage is exactly what you should use right now.
+
+Not because it's the most advanced solution—but because it solves your current problem with the least complexity.
+
+Why localStorage first?
+Right now your goals are:
+
+Test with users
+
+Keep entries after refreshing or closing the browser
+
+Avoid spending weeks building authentication and databases
+
+localStorage checks all of those boxes.
+
+You only need a backend (like Supabase) when users need to:
+
+log in
+
+access their data on multiple devices
+
+sync between phone and computer
+
+share projects
+
+You don't need any of that to learn whether people like the core idea.
+
+Here's exactly what to tell Codex
+Paste this prompt into Codex:
+
+I want to add persistent storage to my existing project using localStorage.
+
+Requirements:
+
+1. Do NOT redesign the website.
+2. Do NOT change the UI.
+3. Keep my existing log/timeline functionality.
+
+When a user creates an entry:
+- Save every entry into localStorage.
+- Store entries as a JSON array.
+- Each entry should include:
+  - id
+  - timestamp
+  - text
+  - selected feeling (if applicable)
+  - optional image (if already supported)
+
+When the page loads:
+- Automatically read the entries from localStorage.
+- Render them exactly as if they had just been created.
+- Users should never lose their entries after refreshing or closing the browser.
+
+Whenever an entry is edited or deleted:
+- Update localStorage immediately.
+
+Create helper functions:
+
+saveEntries()
+loadEntries()
+renderEntries()
+
+Use JSON.stringify() when saving.
+Use JSON.parse() when loading.
+
+If localStorage is empty, initialize an empty array.
+
+Do not use a backend.
+Do not use Supabase.
+Do not use Firebase.
+Even better structure
+Tell Codex to organize it like this:
+
+let entries = [];
+
+function loadEntries(){}
+
+function saveEntries(){}
+
+function addEntry(){}
+
+function deleteEntry(){}
+
+function renderEntries(){}
+Every time something changes:
+
+entries.push(...)
+
+↓
+
+saveEntries()
+
+↓
+
+renderEntries()
+How it should work
+User types entry
+
+↓
+
+Click Save
+
+↓
+
+Entry added to timeline
+
+↓
+
+Entry saved to localStorage
+
+↓
+
+User closes browser
+
+↓
+
+Comes back tomorrow
+
+↓
+
+Website loads
+
+↓
+
+localStorage loads entries
+
+↓
+
+Timeline appears exactly as before
+Future roadmap
+I actually think your roadmap should now look like this:
+
+Version 2.1 (Now)
+✅ Persistent storage (localStorage)
+
+✅ Mobile polish
+
+✅ How It Works
+
+✅ Streak
+
+Version 2.2 (After user feedback)
+Only build what users repeatedly ask for.
+
+Version 3
+Accounts
+
+Cloud sync
+
+Supabase backend
+
+AI analysis
+
+Audio/video entries
+
+Notice how AI is all the way down here. That's intentional. If 20 people use the app and nobody asks for AI, you'll know not to spend weeks building it. If everyone says, "I wish the app could tell me what my logs mean," then AI becomes a feature with clear demand.
+
+I think this is a much stronger path than trying to make Execution Curve "feel impressive." You're making it reliable first, and reliability is what gets people to come back.
+
+
+im not using codex can u tell me how to do it could u gimme the code or whatever it is and where should i keep it
+
+Yes! And honestly, this is a great opportunity to learn some JavaScript because localStorage is actually pretty simple.
+
+I don't have your full code, so I can't tell you the exact line numbers, but I can show you exactly where everything goes.
+
+Step 1: Create an entries array
+At the very top of your JavaScript, where you define variables, add:
+
+let entries = [];
+Step 2: Load saved entries when the website opens
+Still near the top of your JS, add:
+
+function loadEntries() {
+
+    const saved = localStorage.getItem("entries");
+
+    if (saved) {
+        entries = JSON.parse(saved);
+    }
+
+}
+Step 3: Save entries
+Under that, add:
+
+function saveEntries() {
+
+    localStorage.setItem(
+        "entries",
+        JSON.stringify(entries)
+    );
+
+}
+Step 4: Load everything immediately
+At the bottom of those functions add:
+
+loadEntries();
+Now your entries array will contain everything that was previously saved.
+
+Step 5: When someone makes an entry
+Right now somewhere in your code you probably have something like:
+
+entries.push(newEntry);
+or
+
+timeline.push(...)
+Immediately after that add:
+
+saveEntries();
+Example:
+
+entries.push({
+
+    text: userInput,
+
+    feeling: selectedFeeling,
+
+    date: Date.now()
+
+});
+
+saveEntries();
+Every new entry now gets saved.
+
+Step 6: When the page opens
+Somewhere you probably have a function like
+
+renderTimeline();
+or
+
+displayEntries();
+Right after
+
+loadEntries();
+call it.
+
+Example:
+
+loadEntries();
+
+renderTimeline();
+Now it redraws every saved entry.
+
+Step 7: If users delete entries
+After
+
+entries.splice(index,1);
+or however you delete
+
+add
+
+saveEntries();
+Otherwise it'll delete visually but not in storage.
+
+What's happening?
+When someone creates this:
+
+Worked on my website
+
+😊
+
+June 25
+JavaScript turns it into
+
+{
+
+text:"Worked on my website",
+
+feeling:"😊",
+
+date:"2026-06-25"
+
+}
+and stores it inside
+
+entries
+Then
+
+saveEntries()
+turns the whole array into text and stores it in the browser.
+
+Next time they open the website:
+
+loadEntries();
+reads it back
+
+↓
+
+turns it back into JavaScript
+
+↓
+
+puts it back inside
+
+entries
+↓
+
+your timeline displays it.
+
+I have one question though:
+Is your website all inside one index.html file?
+Or do you have
+
+index.html
+
+style.css
+
+script.js
+
+as three separate files?
+
+That changes exactly where you paste this, and I can give you much more specific instructions.
+
+
+i only have index.html
+
+Perfect. Since everything is in one index.html, this is actually easier.
+
+However, I don't want you to just paste random code I made because I don't know how your current timeline works. If we do that, there's a good chance we'll break something.
+
+Here's what I want you to do instead (takes 30 seconds)
+Open index.html and search (Ctrl + F) for one of these:
+
+entries
+
+timeline
+
+addEntry
+
+logEntry
+
+render
+
+localStorage
+
+Then send me:
+
+The entire <script> section (from <script> to </script>), or
+
+Just paste the JavaScript portion at the bottom of your file.
+
+Why?
+I need to see:
+
+what your entry array is called
+
+how you currently add entries
+
+how you currently render the timeline
+
+Then I can tell you exactly:
+
+Paste these 5 lines after line X.
+
+Replace this function with this one.
+
+Add this one function here.
+
+Instead of giving you generic code that may not match your project.
+
+Since we've been working on Execution Curve for weeks, I'd rather help you implement it correctly than have you spend an hour debugging a broken timeline.
+
+Once you paste the <script> section, I'll make it work with your exact code.
+
+
+
+Pasted text(5).txt
+Document
+
+BRO 😭 YOU ALREADY HAVE IT.
+
+I was reading your code and saw this:
+
+// Save to localStorage
+const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+entries.push({
+  text: entryValue,
+  feeling: selectedFeeling,
+  date: new Date().toISOString()
+});
+localStorage.setItem('ec_entries', JSON.stringify(entries));
+AND this:
+
+function renderLog() {
+    const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]').reverse();
+So your entries are already being saved to localStorage and loaded back in. 
+
+
+That means the problem is somewhere else.
+Question:
+When you say:
+
+"everytime i open the tab and come back it gets deleted"
+
+Do you mean:
+
+Option A
+You refresh the page (F5)
+
+❌ Entries disappear
+
+Option B
+You close Chrome completely and reopen it
+
+❌ Entries disappear
+
+Option C
+You redeploy on Vercel / visit the Vercel site
+
+❌ Entries disappear
+
+Option D
+You open it from
+
+file:///C:/Users/...
+instead of
+
+https://executioncurve.vercel.app
+because those are two completely different localStorage locations.
+
+One thing I noticed
+Your code saves to
+
+localStorage.setItem('ec_entries', ...)
+and reads from
+
+localStorage.getItem('ec_entries')
+Those match perfectly.
+
+So your JavaScript is not the issue. 
+
+
+I think one of these is happening:
+You're testing one version locally and another on Vercel.
+
+You're opening the HTML from different locations.
+
+Your browser is clearing storage.
+
+The page isn't actually reloading the same origin.
+
+I have one question that will probably solve this in 30 seconds:
+Exactly how are you opening the website?
+
+Double-clicking index.html?
+
+Through VS Code Live Server?
+
+Through Vercel?
+
+GitHub Pages?
+
+Tell me which one, because your code already supports persistence. The bug is almost certainly in how you're opening/testing it, not in the code itself.
+
+
+wait ur right im stupid thats my fault bruh. i want to add one thing tho which is deleting an entry or restarting a timeline
+
+LMAOOO 😭😭
+
+This is actually the best outcome because it means you don't have to spend hours implementing persistence—you already did.
+
+Now yes, I would add deletion before advertising. That's a quality-of-life feature people genuinely expect.
+
+I'd add two things:
+1. Delete a single entry ✅
+Every timeline entry gets a small trash can (🗑️) or × button.
+
+When clicked:
+
+Ask: "Delete this entry?"
+
+If yes:
+
+remove it from localStorage
+
+re-render the timeline
+
+This is something users naturally expect.
+
+2. Reset timeline ✅
+In Settings (or at the bottom of the timeline):
+
+Reset Timeline
+When clicked:
+
+⚠️ This will permanently delete all of your entries.
+
+Cancel     Delete Everything
+If they confirm:
+
+localStorage.removeItem('ec_entries');
+renderLog();
+or
+
+localStorage.setItem('ec_entries', '[]');
+renderLog();
+Either works.
+
+I would NOT put "Reset Timeline" on the main page.
+Hide it a little.
+
+Maybe:
+
+⚙️ Settings
+
+↓
+
+Reset Timeline
+or
+
+Need a fresh start?
+
+Reset Timeline
+Another tiny feature (optional)
+Instead of
+
+Delete
+say
+
+Archive
+later on when your app gets bigger.
+
+But for now, deleting is totally fine.
+
+Here's what I'd honestly do before your "advertising phase":
+✅ Data persistence (already done 😂)
+
+✅ Delete one entry
+
+✅ Reset timeline
+
+✅ Mobile polish
+
+✅ How It Works
+
+✅ Streak
+
+Then stop building.
+
+I know you're tempted to keep adding things, but after those, I genuinely think the highest-value work shifts to getting people to use it.
+
+One last thing: I know your instinct is often "just one more feature." This delete/reset addition is different because it's about making the existing experience complete, not expanding what the app does. That's exactly the kind of polish I'd want before putting it in front of more people.
+
+
+so how do i put this stuff in my code
+
+YES. This is actually a pretty easy addition. Since I saw your code earlier, I know you're already storing entries as an array in localStorage called ec_entries.
+
+Step 1: Give every entry an ID
+Find where you push a new entry.
+
+It probably looks something like this:
+
+entries.push({
+    text: entryValue,
+    feeling: selectedFeeling,
+    date: new Date().toISOString()
+});
+Change it to:
+
+entries.push({
+    id: Date.now(),
+    text: entryValue,
+    feeling: selectedFeeling,
+    date: new Date().toISOString()
+});
+Now every entry has its own unique ID.
+
+Step 2: Add a Delete button
+Inside your renderLog() function, where you're creating the HTML for each entry, you'll have something like:
+
+entry.innerHTML = `
+    ...
+`;
+Somewhere inside that HTML (usually at the top right), add:
+
+<button class="delete-btn" onclick="deleteEntry(${entry.id})">
+    🗑️
+</button>
+or
+
+<button class="delete-btn" onclick="deleteEntry(${entry.id})">
+    Delete
+</button>
+Step 3: Create the delete function
+Below your other JavaScript functions, add:
+
+function deleteEntry(id) {
+
+    if (!confirm("Delete this entry?")) return;
+
+    const entries = JSON.parse(localStorage.getItem("ec_entries") || "[]");
+
+    const updatedEntries = entries.filter(entry => entry.id !== id);
+
+    localStorage.setItem(
+        "ec_entries",
+        JSON.stringify(updatedEntries)
+    );
+
+    renderLog();
+
+}
+That's literally all the logic.
+
+Step 4: Add a Reset Timeline button
+Somewhere near the bottom of the timeline page add:
+
+<button onclick="resetTimeline()">
+    Reset Timeline
+</button>
+Step 5: Add this function
+function resetTimeline() {
+
+    if (!confirm("This will delete your entire timeline. Continue?")) return;
+
+    localStorage.removeItem("ec_entries");
+
+    renderLog();
+
+}
+or
+
+function resetTimeline() {
+
+    if (!confirm("Delete everything?")) return;
+
+    localStorage.setItem("ec_entries","[]");
+
+    renderLog();
+
+}
+Either version works.
+
+Step 6 (optional but recommended): Make the delete button look nice
+Add this to your CSS:
+
+.delete-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+    opacity:.6;
+    transition:.2s;
+}
+
+.delete-btn:hover{
+    opacity:1;
+    transform:scale(1.15);
+}
+One thing I recommend changing
+Instead of writing
+
+Reset Timeline
+
+I'd make it sound more friendly.
+
+Maybe:
+
+Start Fresh
+or
+
+Clear Timeline
+It feels less scary while still communicating what it does.
+
+One favor 😭
+Instead of guessing where to paste the delete button, upload your latest index.html again (the newest version). I can point to the exact line in your renderLog() function where the button should go and give you copy-paste-ready code that will work immediately. That'll save you from hunting through a 1,000+ line HTML file.
+
+
+
+Pasted text(6).txt
+Document
+
+I looked through your file, and the good news is you don't need to rewrite much. Here's exactly what to change.
+
+1. Add an ID when saving entries
+Find this:
+
+entries.push({
+    text: entryValue,
+    feeling: selectedFeeling,
+    date: new Date().toISOString()
+});
+Replace it with:
+
+entries.push({
+    id: Date.now(),
+    text: entryValue,
+    feeling: selectedFeeling,
+    date: new Date().toISOString()
+});
+2. Add the delete function
+Scroll to the bottom of your JavaScript (before </script>).
+
+Paste this:
+
+function deleteEntry(id) {
+
+    if (!confirm("Delete this entry?")) return;
+
+    const entries = JSON.parse(localStorage.getItem("ec_entries") || "[]");
+
+    const updatedEntries = entries.filter(entry => entry.id !== id);
+
+    localStorage.setItem(
+        "ec_entries",
+        JSON.stringify(updatedEntries)
+    );
+
+    renderLog();
+
+}
+3. Find your renderLog() function
+Inside you'll see something similar to:
+
+entries.forEach(entry => {
+or
+
+entries.map(entry => {
+Eventually you'll reach something like
+
+entryHTML += `
+or
+
+container.innerHTML += `
+Inside that HTML template you'll see where the entry text and date are displayed.
+
+Add this button in the top-right corner of each card:
+
+<button
+    class="delete-btn"
+    onclick="deleteEntry(${entry.id})">
+    🗑️
+</button>
+For example:
+
+<div class="log-card">
+
+<button
+class="delete-btn"
+onclick="deleteEntry(${entry.id})">
+🗑️
+</button>
+
+<p>${entry.text}</p>
+
+</div>
+4. Add the CSS
+Add this with your other CSS:
+
+.delete-btn{
+    position:absolute;
+    top:12px;
+    right:12px;
+
+    background:none;
+    border:none;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    opacity:.45;
+
+    transition:.2s;
+}
+
+.delete-btn:hover{
+    opacity:1;
+    transform:scale(1.15);
+}
+If your cards don't already have
+
+position:relative;
+add it.
+
+Otherwise the trash can won't know where "top right" is.
+
+5. Reset Timeline
+Near the bottom of your timeline page add:
+
+<button onclick="resetTimeline()">
+Start Fresh
+</button>
+Then add this function:
+
+function resetTimeline(){
+
+    if(!confirm("Delete your entire timeline?")) return;
+
+    localStorage.removeItem("ec_entries");
+
+    renderLog();
+
+}
+⭐ One thing I noticed
+When I looked at your file, I noticed you don't currently have a Settings area.
+
+Instead of putting "Start Fresh" in a random place, I'd make it look intentional:
+
+────────────────────────
+Your Timeline
+
+[ Entries ]
+
+────────────────────────
+
+🗑 Start Fresh
+Or even better, make it a small text link underneath the timeline so people don't accidentally click it.
+
+I have one suggestion that's even better than a trash can.
+Instead of showing a 🗑️ on every entry (which can make the UI look busy), consider a three-dot menu (⋮) in the top-right of each entry.
+
+When clicked:
+
+Delete Entry
+It looks much cleaner and feels more polished. It's a small detail, but it makes the app feel closer to something you'd download rather than a prototype.
+
+
+
+Pasted text(7).txt
+Document
+HELP EVERYTHING IS GONE CHANGE EVEERYTHING FOR ME: 
+
+Hey, we're going to get it back. Don't keep editing it while it's broken.
+
+The fastest recovery depends on one thing:
+
+Did you save the broken file over your original?
+
+If yes, we still have several recovery options.
+
+First, answer these three questions:
+
+Are you editing in VS Code?
+
+Have you committed/pushed to GitHub recently (even before today)?
+
+Is the Vercel website still working, or is that broken too?
+
+If you're in VS Code
+Don't type anything else.
+
+Press:
+
+Ctrl + Z repeatedly until the page comes back.
+
+If you closed VS Code already, tell me.
+
+If you've pushed to GitHub
+We can restore the last working version in about a minute.
+
+If only your local copy is broken
+That's actually good news—we can recover from GitHub or Vercel.
+
+Also, this part is on me: I should have had you make a backup before changing UI code. I'm sorry about that.
+
+Don't panic and don't start deleting random code. We can recover a working version much faster than trying to fix a half-broken one.
+
+Tell me:
+
+VS Code? (yes/no)
+
+GitHub has a working version? (yes/no)
+
+Vercel still works? (yes/no)
+
+We'll restore the working version first, then we'll add the delete menu in a much safer way.
+
+
+
+### If you've pushed to GitHub We can restore the last working version in about a minute.
+
+the LIVE WEBSITE IS BROKEN AND IVE PUSHED TWIVE
+
+Okay, don't panic. If you've pushed to GitHub, your code is almost certainly recoverable. Git keeps the history unless you did something like a force-push that rewrote it.
+
+Step 1: Restore the last working commit
+In VS Code:
+
+Open the Source Control tab (the branch icon on the left).
+
+Or open the integrated terminal (Ctrl + `).
+
+Then run:
+
+git log --oneline
+This will show something like:
+
+8f3a2b1 Added delete menu
+4c9d781 Mobile polish
+91ab4ef Working version before delete menu
+Copy and paste the output here.
+
+Step 2: If you know which commit was working
+Suppose the working commit is 91ab4ef.
+
+To see it without changing anything:
+
+git checkout 91ab4ef
+Or, if you want your current branch to go back to that version:
+
+git reset --hard 91ab4ef
+⚠️ Only use git reset --hard if you're okay discarding the broken changes that came after that commit.
+
+If you already pushed the broken version to GitHub and want GitHub to match the restored version, you'll then do:
+
+git push --force
+Don't do that yet. Let's first identify the correct commit.
+
+Step 3: If you don't know Git commands
+Just send me the output of:
+
+git log --oneline
+I'll tell you exactly which command to run.
+
+After we recover it
+We're not going to touch your renderLog() function again.
+
+Instead, we'll:
+
+Restore the working site.
+
+Commit that working version.
+
+Create a new branch or backup.
+
+Add the delete menu in tiny, testable steps.
+
+That way, if anything breaks, you can get back to a working site in seconds instead of risking the live app.
+
+
+wait i have a working version saved on file explorer
+
+YES. 😭😭 THAT'S THE BEST POSSIBLE NEWS.
+
+Do NOT touch the broken version anymore.
+
+Here's exactly what to do:
+
+Make a copy of your working index.html in File Explorer.
+
+Rename it something like:
+
+index_backup.html
+
+executioncurve_working.html
+
+This way you always have a safety copy.
+
+Replace your broken index.html with the working one.
+
+Open it locally and make sure:
+
+✅ Entries still work
+
+✅ Timeline still works
+
+✅ Buttons work
+
+✅ No errors
+
+Commit and push that working version to GitHub immediately.
+
+git add .
+git commit -m "Restore working version"
+git push
+Then your live Vercel site will go back to working.
+
+After that...
+We're not going to edit your app directly anymore.
+
+We're going to do this the professional way:
+
+Restore the working version.
+
+Make one tiny change.
+
+Test it.
+
+Commit.
+
+Make the next tiny change.
+
+Test it.
+
+Commit.
+
+No more changing 40 lines at once.
+
+One thing I learned from this
+I should not have had you manually splice a dropdown menu into a template string. That's error-prone, especially in a single index.html file.
+
+From now on, if we add a feature, I'll either:
+
+give you one isolated function at a time, or
+
+have you upload the file and I'll tell you the exact minimal edit.
+
+My recommendation
+Forget the three-dot menu for now.
+
+Before you advertise, a simple Delete button is completely fine. Users care much more that the app works than whether the menu is fancy.
+
+Once your site is restored, if you upload the working index.html, I'll help you add delete in the safest possible way with about 10–15 lines of code—not a big UI refactor. That way you can keep building instead of recovering from broken changes.
+
+
+
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Execution Curve</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --black: #0A0A0A;
-    --white: #FAFAFA;
-    --amber: #C8873F;
-    --amber-dim: #8A5C28;
-    --gray-1: #6B6B6B;
-    --gray-2: #D4D4D4;
-    --gray-3: #F0F0F0;
-    --display: 'Syne', sans-serif;
-    --mono: 'DM Mono', monospace;
-    --body: 'IBM Plex Sans', sans-serif;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--white);
-    color: var(--black);
-    font-family: var(--body);
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.25rem 3rem;
-    background: var(--white);
-    border-bottom: 1px solid var(--gray-2);
-  }
-
-  .nav-logo {
-    font-family: var(--mono);
-    font-weight: 500;
-    font-size: 0.9rem;
-    letter-spacing: -0.01em;
-    color: var(--black);
-    text-decoration: none;
-  }
-
-  .nav-logo span {
-    color: var(--amber);
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-family: var(--body);
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--gray-1);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .nav-links a:hover { color: var(--black); }
-
-  .nav-cta {
-    font-family: var(--body);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.5rem 1.25rem;
-    cursor: pointer;
-    letter-spacing: -0.01em;
-    transition: background 0.2s;
-  }
-
-  .nav-cta:hover { background: var(--amber); }
-
-  /* HERO */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-end;
-    padding: 0 3rem 5rem;
-    padding-top: 6rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-inner {
-    max-width: 860px;
-  }
-
-  .hero-eyebrow {
-    font-family: var(--mono);
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--amber);
-    margin-bottom: 2rem;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .hero-heading {
-    font-family: var(--display);
-    font-size: clamp(2.8rem, 6vw, 5.5rem);
-    font-weight: 700;
-    line-height: 1.0;
-    letter-spacing: -0.04em;
-    color: var(--black);
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s;
-  }
-
-  .hero-heading em {
-    font-style: normal;
-    color: var(--amber);
-  }
-
-  .hero-sub {
-    font-family: var(--body);
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
-    font-weight: 400;
-    color: var(--gray-1);
-    line-height: 1.7;
-    max-width: 520px;
-    margin-bottom: 3rem;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
-  }
-
-  .hero-actions {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.8s ease 0.32s, transform 0.8s ease 0.32s;
-  }
-
-  .btn-primary {
-    font-family: var(--body);
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.85rem 2rem;
-    cursor: pointer;
-    letter-spacing: -0.01em;
-    transition: background 0.2s, transform 0.15s;
-  }
-
-  .btn-primary:hover {
-    background: var(--amber);
-    transform: translateY(-1px);
-  }
-
-  .btn-ghost {
-    font-family: var(--body);
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--gray-1);
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color 0.2s;
-  }
-
-  .btn-ghost:hover { color: var(--black); }
-
-  /* Large background numeral — signature element */
-  .hero-bg-numeral {
-    position: absolute;
-    right: -2rem;
-    bottom: -4rem;
-    font-family: var(--display);
-    font-size: clamp(14rem, 22vw, 22rem);
-    font-weight: 700;
-    letter-spacing: -0.06em;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--gray-2);
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 1.2s ease 0.4s;
-  }
-
-  /* REVEAL states */
-  .revealed .hero-eyebrow,
-  .revealed .hero-heading,
-  .revealed .hero-sub,
-  .revealed .hero-actions,
-  .revealed .hero-bg-numeral {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* SCROLL HINT */
-  .scroll-hint {
-    position: absolute;
-    bottom: 2rem;
-    left: 3rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    opacity: 0;
-    transition: opacity 0.8s ease 0.8s;
-  }
-
-  .revealed .scroll-hint { opacity: 1; }
-
-  .scroll-hint-line {
-    width: 32px;
-    height: 1px;
-    background: var(--gray-2);
-  }
-
-  .scroll-hint span {
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gray-1);
-    font-family: var(--body);
-  }
-
-  /* STAT ROW */
-  .hero-stats {
-    display: flex;
-    gap: 3rem;
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--gray-2);
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s;
-  }
-
-  .revealed .hero-stats { opacity: 1; transform: translateY(0); }
-
-  .stat-item {}
-
-  .stat-num {
-    font-family: var(--display);
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--black);
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 0.78rem;
-    color: var(--gray-1);
-    font-family: var(--body);
-    letter-spacing: 0.01em;
-  }
-
-  /* ---- SECTION 2: THE PROBLEM ---- */
-  #problem {
-    padding: 8rem 3rem;
-    border-top: 1px solid var(--gray-2);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-  }
-
-  .section-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--amber);
-    font-family: var(--body);
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    display: block;
-  }
-
-  .section-heading {
-    font-family: var(--display);
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    color: var(--black);
-    margin-bottom: 1.5rem;
-  }
-
-  .section-body {
-    font-family: var(--body);
-    font-size: 1rem;
-    color: var(--gray-1);
-    line-height: 1.8;
-  }
-
-  .section-body p + p { margin-top: 1rem; }
-
-  /* Problem blocks */
-  .problem-blocks {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .problem-block {
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--gray-2);
-    display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    gap: 1rem;
-    align-items: start;
-  }
-
-  .problem-block:first-child { border-top: 1px solid var(--gray-2); }
-
-  .problem-num {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    color: var(--amber);
-    padding-top: 0.2rem;
-  }
-
-  .problem-text {
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--black);
-    line-height: 1.6;
-  }
-
-  .problem-text strong {
-    font-weight: 500;
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-
-  .problem-text span {
-    color: var(--gray-1);
-    font-size: 0.875rem;
-  }
-
-  /* SCROLL REVEAL for sections */
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.75s ease, transform 0.75s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-  .reveal-delay-4 { transition-delay: 0.4s; }
-
-  /* FOOTER placeholder */
-  footer {
-    padding: 3rem;
-    border-top: 1px solid var(--gray-2);
-    font-size: 0.8rem;
-    color: var(--gray-1);
-    font-family: var(--body);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  footer a {
-    color: var(--gray-1);
-    text-decoration: none;
-  }
-
-  footer a:hover { color: var(--black); }
-
-  /* ---- YOUR LOG SECTION ---- */
-  #log {
-    padding: 8rem 3rem 6rem;
-    border-top: 1px solid var(--gray-2);
-  }
-
-  .log-header {
-    margin-bottom: 4rem;
-  }
-
-  .log-header-row {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .log-meta {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--gray-1);
-    letter-spacing: 0.04em;
-    padding-bottom: 0.4rem;
-  }
-
-  /* Empty state */
-  .log-empty {
-    display: flex;
-    gap: 3rem;
-    align-items: flex-start;
-    padding: 3rem 0;
-  }
-
-  .log-empty-line {
-    width: 1px;
-    min-height: 120px;
-    background: var(--gray-2);
-    flex-shrink: 0;
-    margin-top: 0.25rem;
-  }
-
-  .log-empty-prompt {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .log-empty-mono {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--gray-1);
-    letter-spacing: 0.02em;
-  }
-
-  .log-empty-prompt p {
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--gray-1);
-    line-height: 1.7;
-    max-width: 420px;
-  }
-
-  /* Timeline */
-  .log-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding-left: 0;
-  }
-
-  .timeline-entry {
-    display: grid;
-    grid-template-columns: 3rem 1px 1fr;
-    gap: 0 1.5rem;
-    align-items: start;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-
-  .timeline-entry.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .timeline-date {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--gray-1);
-    letter-spacing: 0.02em;
-    text-align: right;
-    padding-top: 1.6rem;
-    line-height: 1.4;
-  }
-
-  .timeline-spine {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-
-  .timeline-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--black);
-    flex-shrink: 0;
-    margin-top: 1.5rem;
-    position: relative;
-    z-index: 1;
-    transition: background 0.2s;
-  }
-
-  .timeline-entry:hover .timeline-dot {
-    background: var(--amber);
-  }
-
-  .timeline-line {
-    width: 1px;
-    flex: 1;
-    min-height: 2rem;
-    background: var(--gray-2);
-  }
-
-  .timeline-entry:last-child .timeline-line {
-    background: linear-gradient(to bottom, var(--gray-2), transparent);
-  }
-
-  .timeline-content {
-    padding: 1.25rem 0 2rem;
-    border-bottom: 1px solid var(--gray-3);
-  }
-
-  .timeline-entry:last-child .timeline-content {
-    border-bottom: none;
-  }
-
-  .timeline-text {
-    font-family: var(--body);
-    font-size: 1rem;
-    color: var(--black);
-    line-height: 1.6;
-    margin-bottom: 0.6rem;
-  }
-
-  .timeline-feeling {
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.04em;
-    padding: 0.2rem 0.65rem;
-    border: 1px solid var(--gray-2);
-    color: var(--gray-1);
-    display: inline-block;
-  }
-
-  .timeline-feeling[data-feeling="making progress"] { border-color: #4a7c59; color: #4a7c59; }
-  .timeline-feeling[data-feeling="energised"] { border-color: #4a7c59; color: #4a7c59; }
-  .timeline-feeling[data-feeling="stuck"] { border-color: #b85c38; color: #b85c38; }
-  .timeline-feeling[data-feeling="about to quit"] { border-color: #b85c38; color: #b85c38; }
-  .timeline-feeling[data-feeling="uncertain"] { border-color: #8a7340; color: #8a7340; }
-
-  /* Phase insight card */
-  .timeline-insight {
-    margin-top: 0.75rem;
-    padding: 0.85rem 1rem;
-    background: var(--gray-3);
-    border-left: 2px solid var(--amber);
-  }
-
-  .timeline-insight-label {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    color: var(--amber);
-    letter-spacing: 0.06em;
-    display: block;
-    margin-bottom: 0.35rem;
-  }
-
-  .timeline-insight p {
-    font-family: var(--body);
-    font-size: 0.85rem;
-    color: var(--gray-1);
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    #log { padding: 5rem 1.25rem 4rem; }
-    .log-header-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-    .timeline-entry { grid-template-columns: 2.5rem 1px 1fr; gap: 0 1rem; }
-    .timeline-date { font-size: 0.6rem; }
-  }
-
-  /* ---- PHASES SECTION ---- */
-  #phases {
-    background: var(--black);
-    padding: 8rem 3rem 6rem;
-    overflow: hidden;
-  }
-
-  .phases-header { margin-bottom: 5rem; }
-  .phases-header .section-label { color: var(--amber); opacity: 0.8; }
-  .phases-header .section-heading { color: var(--white); max-width: 560px; }
-  .phases-header .section-body { color: #999; max-width: 480px; margin-top: 1rem; }
-
-  .curve-wrap {
-    width: 100%;
-    margin-bottom: 0;
-    position: relative;
-  }
-
-  .curve-wrap svg { width: 100%; height: auto; overflow: visible; }
-
-  .phase-nav {
-    display: flex;
-    gap: 0;
-    border-top: 1px solid #1e1e1e;
-  }
-
-  .phase-pill {
-    flex: 1;
-    padding: 1.1rem 1.25rem;
-    background: none;
-    border: none;
-    border-right: 1px solid #1e1e1e;
-    cursor: pointer;
-    text-align: left;
-    transition: background 0.2s;
-    position: relative;
-  }
-
-  .phase-pill:last-child { border-right: none; }
-  .phase-pill:hover { background: #111; }
-  .phase-pill.active { background: #111; }
-
-  .phase-pill.active::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--amber);
-  }
-
-  .phase-pill-num {
-    font-family: var(--mono);
-    font-size: 0.58rem;
-    color: #444;
-    letter-spacing: 0.06em;
-    display: block;
-    margin-bottom: 0.3rem;
-  }
-
-  .phase-pill-name {
-    font-family: var(--display);
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #555;
-    transition: color 0.2s;
-    letter-spacing: -0.01em;
-    display: block;
-  }
-
-  .phase-pill.active .phase-pill-name { color: var(--white); }
-  .phase-pill:hover .phase-pill-name { color: #aaa; }
-
-  .phase-detail {
-    border-top: 1px solid #1e1e1e;
-    padding: 2.5rem 0 1rem;
-    display: none;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 3rem;
-  }
-
-  .phase-detail.active { display: grid; }
-
-  .phase-detail-label {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 0.85rem;
-  }
-
-  .phase-detail-col ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
-
-  .phase-detail-col ul li {
-    font-family: var(--body);
-    font-size: 0.88rem;
-    color: #777;
-    padding-left: 1.1rem;
-    position: relative;
-    line-height: 1.55;
-  }
-
-  .phase-detail-col ul li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: #333;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    top: 0.1rem;
-  }
-
-  .phase-next-step {
-    grid-column: 1 / -1;
-    padding: 1rem 1.25rem;
-    border: 1px solid #1e1e1e;
-    border-left: 2px solid var(--amber);
-    display: flex;
-    align-items: baseline;
-    gap: 1.5rem;
-  }
-
-  .phase-next-step-label {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    flex-shrink: 0;
-  }
-
-  .phase-next-step p {
-    font-family: var(--body);
-    font-size: 0.88rem;
-    color: #777;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    #phases { padding: 5rem 1.25rem 4rem; }
-    .phase-nav { flex-wrap: wrap; }
-    .phase-pill { flex: none; width: 50%; border-bottom: 1px solid #1e1e1e; }
-    .phase-detail { grid-template-columns: 1fr; gap: 2rem; }
-    .phase-next-step { flex-direction: column; gap: 0.5rem; }
-  }
-
-  #entry-bar {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    z-index: 200;
-    background: var(--amber);
-    border: 1px solid var(--amber-dim);
-    width: min(640px, calc(100vw - 2rem));
-    padding: 0;
-    opacity: 0;
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
-  }
-
-  #entry-bar.visible {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
-
-  .entry-step {
-    display: none;
-    flex-direction: column;
-  }
-
-  .entry-step.active { display: flex; }
-
-  /* Step 1: text input */
-  .entry-input-row {
-    display: flex;
-    align-items: center;
-    gap: 0;
-  }
-
-  .entry-prompt {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--black);
-    padding: 0 1rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-    letter-spacing: 0.02em;
-  }
-
-  #entry-text {
-    flex: 1;
-    background: none;
-    border: none;
-    outline: none;
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--black);
-    padding: 1.1rem 0.5rem 1.1rem 0;
-    caret-color: var(--black);
-    min-width: 0;
-  }
-
-  #entry-text::placeholder {
-    color: var(--amber-dim);
-  }
-
-  .entry-next-btn {
-    background: none;
-    border: none;
-    border-left: 1px solid var(--amber-dim);
-    color: var(--black);
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    padding: 0 1.25rem;
-    height: 100%;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s;
-    align-self: stretch;
-    display: flex;
-    align-items: center;
-  }
-
-  .entry-next-btn:hover { background: var(--amber-dim); }
-
-  /* Step 2: feeling picker */
-  .entry-feeling-row {
-    padding: 0.85rem 1rem;
-    border-top: 1px solid var(--amber-dim);
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .entry-feeling-label {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--black);
-    letter-spacing: 0.04em;
-    opacity: 0.6;
-  }
-
-  .entry-feelings {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .feeling-chip {
-    font-family: var(--body);
-    font-size: 0.8rem;
-    color: var(--black);
-    background: transparent;
-    border: 1px solid var(--amber-dim);
-    padding: 0.35rem 0.85rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-
-  .feeling-chip:hover {
-    background: var(--amber-dim);
-    border-color: var(--black);
-  }
-
-  .feeling-chip.selected {
-    color: var(--white);
-    background: var(--black);
-    border-color: var(--black);
-  }
-
-  .entry-submit-row {
-    padding: 0.75rem 1rem;
-    border-top: 1px solid var(--amber-dim);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .entry-back {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--black);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.15s;
-    letter-spacing: 0.02em;
-    opacity: 0.5;
-  }
-
-  .entry-back:hover { opacity: 1; }
-
-  .entry-submit {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.5rem 1.25rem;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    transition: opacity 0.15s;
-  }
-
-  .entry-submit:disabled {
-    opacity: 0.3;
-    cursor: default;
-  }
-
-  /* Step 3: confirmation */
-  .entry-confirm {
-    padding: 1.25rem 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .entry-confirm-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--black);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .entry-confirm-text {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    color: var(--black);
-    letter-spacing: 0.02em;
-    opacity: 0.7;
-  }
-
-  .entry-confirm-text strong {
-    color: var(--black);
-    font-weight: 500;
-    opacity: 1;
-  }
-
-  /* toggle open button (visible before bar is triggered) */
-  #entry-trigger {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 199;
-    background: var(--black);
-    border: 1px solid #2a2a2a;
-    color: var(--amber);
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    padding: 0.7rem 1.25rem;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    transition: border-color 0.2s, transform 0.15s;
-  }
-
-  #entry-trigger:hover {
-    border-color: var(--amber);
-    transform: translateY(-1px);
-  }
-
-  #entry-trigger.hidden { display: none; }
-
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.25rem; }
-    #hero { padding: 7rem 1.25rem 4rem; }
-    #problem { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.25rem; }
-    .scroll-hint { left: 1.25rem; }
-    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
-    #entry-bar { bottom: 1rem; }
-    #entry-trigger { bottom: 1rem; right: 1rem; }
-  }
+
+<html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>Execution Curve</title> <link rel="preconnect" href="https://fonts.googleapis.com" /> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" /> <style> *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+{
+--black: #0A0A0A;
+--white: #FAFAFA;
+--amber: #C8873F;
+--amber-dim: #8A5C28;
+--gray-1: #6B6B6B;
+--gray-2: #D4D4D4;
+--gray-3: #F0F0F0;
+--display: 'Syne', sans-serif;
+--mono: 'DM Mono', monospace;
+--body: 'IBM Plex Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(--white);
+color: var(--black);
+font-family: var(--body);
+font-size: 16px;
+line-height: 1.6;
+-webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 1.25rem 3rem;
+background: var(--white);
+border-bottom: 1px solid var(--gray-2);
+}
+
+.nav-logo {
+font-family: var(--mono);
+font-weight: 500;
+font-size: 0.9rem;
+letter-spacing: -0.01em;
+color: var(--black);
+text-decoration: none;
+}
+
+.nav-logo span {
+color: var(--amber);
+}
+
+.nav-links {
+display: flex;
+gap: 2rem;
+list-style: none;
+}
+
+.nav-links a {
+font-family: var(--body);
+font-size: 0.875rem;
+font-weight: 400;
+color: var(--gray-1);
+text-decoration: none;
+transition: color 0.2s;
+}
+
+.nav-links a { color: var(--black); }
+
+@media (max-width: 768px) {
+.nav-links { display: none; }
+}
+
+.nav-cta {
+font-family: var(--body);
+font-size: 0.875rem;
+font-weight: 500;
+color: var(--white);
+background: var(--black);
+border: none;
+padding: 0.5rem 1.25rem;
+cursor: pointer;
+letter-spacing: -0.01em;
+transition: background 0.2s;
+}
+
+.nav-cta { background: var(--amber); }
+
+/* HERO */
+#hero {
+min-height: 100vh;
+display: flex;
+align-items: flex-end;
+padding: 0 3rem 5rem;
+padding-top: 6rem;
+position: relative;
+overflow: hidden;
+}
+
+.hero-inner {
+max-width: 860px;
+}
+
+.hero-eyebrow {
+font-family: var(--mono);
+font-size: 1rem;
+font-weight: 500;
+letter-spacing: 0.04em;
+color: var(--amber);
+margin-bottom: 2rem;
+opacity: 0;
+transform: translateY(16px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.hero-heading {
+font-family: var(--display);
+font-size: clamp(2.8rem, 6vw, 5.5rem);
+font-weight: 700;
+line-height: 1.0;
+letter-spacing: -0.04em;
+color: var(--black);
+margin-bottom: 2.5rem;
+opacity: 0;
+transform: translateY(24px);
+transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s;
+}
+
+.hero-heading em {
+font-style: normal;
+color: var(--amber);
+}
+
+.hero-sub {
+font-family: var(--body);
+font-size: clamp(1rem, 1.5vw, 1.2rem);
+font-weight: 400;
+color: var(--gray-1);
+line-height: 1.7;
+max-width: 520px;
+margin-bottom: 3rem;
+opacity: 0;
+transform: translateY(16px);
+transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+}
+
+.hero-actions {
+display: flex;
+align-items: center;
+gap: 1.5rem;
+opacity: 0;
+transform: translateY(16px);
+transition: opacity 0.8s ease 0.32s, transform 0.8s ease 0.32s;
+}
+
+.btn-primary {
+font-family: var(--body);
+font-size: 0.95rem;
+font-weight: 500;
+color: var(--white);
+background: var(--black);
+border: none;
+padding: 0.85rem 2rem;
+cursor: pointer;
+letter-spacing: -0.01em;
+transition: background 0.2s, transform 0.15s;
+}
+
+.btn-primary {
+background: var(--amber);
+transform: translateY(-1px);
+}
+
+.btn-ghost {
+font-family: var(--body);
+font-size: 0.875rem;
+font-weight: 400;
+color: var(--gray-1);
+background: none;
+border: none;
+cursor: pointer;
+text-decoration: underline;
+text-underline-offset: 3px;
+transition: color 0.2s;
+}
+
+.btn-ghost { color: var(--black); }
+
+/* Large background numeral — signature element */
+.hero-bg-numeral {
+position: absolute;
+right: -2rem;
+bottom: -4rem;
+font-family: var(--display);
+font-size: clamp(14rem, 22vw, 22rem);
+font-weight: 700;
+letter-spacing: -0.06em;
+color: transparent;
+-webkit-text-stroke: 1px var(--gray-2);
+line-height: 1;
+user-select: none;
+pointer-events: none;
+opacity: 0;
+transition: opacity 1.2s ease 0.4s;
+}
+
+/* REVEAL states */
+.revealed .hero-eyebrow,
+.revealed .hero-heading,
+.revealed .hero-sub,
+.revealed .hero-actions,
+.revealed .hero-bg-numeral {
+opacity: 1;
+transform: translateY(0);
+}
+
+/* SCROLL HINT */
+.scroll-hint {
+position: absolute;
+bottom: 2rem;
+left: 3rem;
+display: flex;
+align-items: center;
+gap: 0.75rem;
+opacity: 0;
+transition: opacity 0.8s ease 0.8s;
+}
+
+.revealed .scroll-hint { opacity: 1; }
+
+.scroll-hint-line {
+width: 32px;
+height: 1px;
+background: var(--gray-2);
+}
+
+.scroll-hint span {
+font-size: 0.7rem;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--gray-1);
+font-family: var(--body);
+}
+
+/* STAT ROW */
+.hero-stats {
+display: flex;
+gap: 3rem;
+margin-top: 4rem;
+padding-top: 2rem;
+border-top: 1px solid var(--gray-2);
+opacity: 0;
+transform: translateY(12px);
+transition: opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s;
+}
+
+.revealed .hero-stats { opacity: 1; transform: translateY(0); }
+
+.stat-item {}
+
+.stat-num {
+font-family: var(--display);
+font-size: 1.6rem;
+font-weight: 700;
+letter-spacing: -0.03em;
+color: var(--black);
+display: block;
+}
+
+.stat-label {
+font-size: 0.78rem;
+color: var(--gray-1);
+font-family: var(--body);
+letter-spacing: 0.01em;
+}
+
+/* ---- SECTION 2: THE PROBLEM ---- */
+#problem {
+padding: 8rem 3rem;
+border-top: 1px solid var(--gray-2);
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 6rem;
+align-items: center;
+}
+
+.section-label {
+font-size: 0.7rem;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: var(--amber);
+font-family: var(--body);
+font-weight: 500;
+margin-bottom: 1.5rem;
+display: block;
+}
+
+.section-heading {
+font-family: var(--display);
+font-size: clamp(1.8rem, 3vw, 2.8rem);
+font-weight: 700;
+letter-spacing: -0.03em;
+line-height: 1.1;
+color: var(--black);
+margin-bottom: 1.5rem;
+}
+
+.section-body {
+font-family: var(--body);
+font-size: 1rem;
+color: var(--gray-1);
+line-height: 1.8;
+}
+
+.section-body p + p { margin-top: 1rem; }
+
+/* Problem blocks */
+.problem-blocks {
+display: flex;
+flex-direction: column;
+gap: 0;
+}
+
+.problem-block {
+padding: 1.75rem 0;
+border-bottom: 1px solid var(--gray-2);
+display: grid;
+grid-template-columns: 2.5rem 1fr;
+gap: 1rem;
+align-items: start;
+}
+
+.problem-block { border-top: 1px solid var(--gray-2); }
+
+.problem-num {
+font-family: var(--mono);
+font-size: 0.7rem;
+font-weight: 400;
+letter-spacing: 0.04em;
+color: var(--amber);
+padding-top: 0.2rem;
+}
+
+.problem-text {
+font-family: var(--body);
+font-size: 0.95rem;
+color: var(--black);
+line-height: 1.6;
+}
+
+.problem-text strong {
+font-weight: 500;
+display: block;
+margin-bottom: 0.25rem;
+}
+
+.problem-text span {
+color: var(--gray-1);
+font-size: 0.875rem;
+}
+
+/* SCROLL REVEAL for sections */
+.reveal {
+opacity: 0;
+transform: translateY(32px);
+transition: opacity 0.75s ease, transform 0.75s ease;
+}
+
+.reveal.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* FOOTER placeholder */
+footer {
+padding: 3rem;
+border-top: 1px solid var(--gray-2);
+font-size: 0.8rem;
+color: var(--gray-1);
+font-family: var(--body);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+footer a {
+color: var(--gray-1);
+text-decoration: none;
+}
+
+footer a { color: var(--black); }
+
+/* ---- HOW IT WORKS SECTION ---- */
+#how {
+padding: 8rem 3rem;
+border-top: 1px solid var(--gray-2);
+}
+
+.how-header { margin-bottom: 4rem; }
+.how-header .section-heading { max-width: 500px; }
+
+.how-steps {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 3.5rem;
+}
+
+.how-step {
+display: flex;
+flex-direction: column;
+}
+
+.how-step-top {
+display: flex;
+flex-direction: column;
+gap: 1.25rem;
+margin-bottom: 1.5rem;
+}
+
+.how-step-num {
+font-family: var(--mono);
+font-size: 0.7rem;
+color: var(--amber);
+letter-spacing: 0.04em;
+}
+
+.how-step-visual {
+width: 100%;
+aspect-ratio: 120 / 64;
+background: var(--gray-3);
+}
+
+.how-step-title {
+font-family: var(--display);
+font-size: 1.15rem;
+font-weight: 700;
+letter-spacing: -0.02em;
+color: var(--black);
+margin-bottom: 0.75rem;
+line-height: 1.25;
+}
+
+.how-step-body {
+font-family: var(--body);
+font-size: 0.9rem;
+color: var(--gray-1);
+line-height: 1.65;
+}
+
+@media (max-width: 768px) {
+#how { padding: 5rem 1.25rem; }
+.how-steps { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+/* ---- YOUR LOG SECTION ---- */
+#log {
+padding: 8rem 3rem 6rem;
+border-top: 1px solid var(--gray-2);
+}
+
+.log-header {
+margin-bottom: 4rem;
+}
+
+.log-header-row {
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+gap: 2rem;
+}
+
+.log-meta {
+font-family: var(--mono);
+font-size: 0.72rem;
+color: var(--gray-1);
+letter-spacing: 0.04em;
+padding-bottom: 0.4rem;
+}
+
+/* Milestone banner */
+.milestone-banner {
+display: none;
+align-items: center;
+gap: 1rem;
+padding: 1rem 1.25rem;
+background: var(--amber);
+margin-bottom: 2.5rem;
+opacity: 0;
+transform: translateY(-8px);
+transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.milestone-banner.show {
+display: flex;
+opacity: 1;
+transform: translateY(0);
+}
+
+.milestone-num {
+font-family: var(--display);
+font-size: 1.4rem;
+font-weight: 700;
+color: var(--black);
+letter-spacing: -0.02em;
+flex-shrink: 0;
+}
+
+.milestone-text {
+font-family: var(--body);
+font-size: 0.88rem;
+color: var(--black);
+line-height: 1.5;
+}
+
+.milestone-dismiss {
+margin-left: auto;
+background: none;
+border: none;
+font-family: var(--mono);
+font-size: 0.7rem;
+color: var(--black);
+opacity: 0.55;
+cursor: pointer;
+flex-shrink: 0;
+padding: 0.25rem 0.5rem;
+transition: opacity 0.15s;
+}
+
+.milestone-dismiss { opacity: 1; }
+
+@media (max-width: 768px) {
+.milestone-banner { flex-wrap: wrap; padding: 1rem; }
+.milestone-dismiss { margin-left: 0; }
+}
+
+/* Empty state */
+.log-empty {
+display: flex;
+gap: 3rem;
+align-items: flex-start;
+padding: 3rem 0;
+}
+
+.log-empty-line {
+width: 1px;
+min-height: 120px;
+background: var(--gray-2);
+flex-shrink: 0;
+margin-top: 0.25rem;
+}
+
+.log-empty-prompt {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+
+.log-empty-mono {
+font-family: var(--mono);
+font-size: 0.75rem;
+color: var(--gray-1);
+letter-spacing: 0.02em;
+}
+
+.log-empty-prompt p {
+font-family: var(--body);
+font-size: 0.95rem;
+color: var(--gray-1);
+line-height: 1.7;
+max-width: 420px;
+}
+
+/* Timeline */
+.log-timeline {
+display: flex;
+flex-direction: column;
+gap: 0;
+padding-left: 0;
+}
+
+.timeline-entry {
+display: grid;
+grid-template-columns: 3rem 1px 1fr;
+gap: 0 1.5rem;
+align-items: start;
+opacity: 0;
+transform: translateY(16px);
+transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.timeline-entry.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+.timeline-date {
+font-family: var(--mono);
+font-size: 0.65rem;
+color: var(--gray-1);
+letter-spacing: 0.02em;
+text-align: right;
+padding-top: 1.6rem;
+line-height: 1.4;
+}
+
+.timeline-spine {
+display: flex;
+flex-direction: column;
+align-items: center;
+position: relative;
+}
+
+.timeline-dot {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: var(--black);
+flex-shrink: 0;
+margin-top: 1.5rem;
+position: relative;
+z-index: 1;
+transition: background 0.2s;
+}
+
+.timeline-entry .timeline-dot {
+background: var(--amber);
+}
+
+.timeline-line {
+width: 1px;
+flex: 1;
+min-height: 2rem;
+background: var(--gray-2);
+}
+
+.timeline-entry .timeline-line {
+background: linear-gradient(to bottom, var(--gray-2), transparent);
+}
+
+.timeline-content {
+padding: 1.25rem 0 2rem;
+border-bottom: 1px solid var(--gray-3);
+}
+
+.timeline-entry .timeline-content {
+border-bottom: none;
+}
+
+.timeline-text {
+font-family: var(--body);
+font-size: 1rem;
+color: var(--black);
+line-height: 1.6;
+margin-bottom: 0.6rem;
+}
+
+.timeline-feeling {
+font-family: var(--mono);
+font-size: 0.68rem;
+letter-spacing: 0.04em;
+padding: 0.2rem 0.65rem;
+border: 1px solid var(--gray-2);
+color: var(--gray-1);
+display: inline-block;
+}
+
+.timeline-feeling[data-feeling="making progress"] { border-color: #4a7c59; color: #4a7c59; }
+.timeline-feeling[data-feeling="energised"] { border-color: #4a7c59; color: #4a7c59; }
+.timeline-feeling[data-feeling="stuck"] { border-color: #b85c38; color: #b85c38; }
+.timeline-feeling[data-feeling="about to quit"] { border-color: #b85c38; color: #b85c38; }
+.timeline-feeling[data-feeling="uncertain"] { border-color: #8a7340; color: #8a7340; }
+
+/* Phase insight card */
+.timeline-insight {
+margin-top: 0.75rem;
+padding: 0.85rem 1rem;
+background: var(--gray-3);
+border-left: 2px solid var(--amber);
+}
+
+.timeline-insight-label {
+font-family: var(--mono);
+font-size: 0.62rem;
+color: var(--amber);
+letter-spacing: 0.06em;
+display: block;
+margin-bottom: 0.35rem;
+}
+
+.timeline-insight p {
+font-family: var(--body);
+font-size: 0.85rem;
+color: var(--gray-1);
+line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+#log { padding: 5rem 1.25rem 4rem; }
+.log-header-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+.timeline-entry { grid-template-columns: 2.5rem 1px 1fr; gap: 0 1rem; }
+.timeline-date { font-size: 0.6rem; }
+}
+
+/* ---- PHASES SECTION ---- */
+#phases {
+background: var(--black);
+padding: 8rem 3rem 6rem;
+overflow: hidden;
+}
+
+.phases-header { margin-bottom: 5rem; }
+.phases-header .section-label { color: var(--amber); opacity: 0.8; }
+.phases-header .section-heading { color: var(--white); max-width: 560px; }
+.phases-header .section-body { color: #999; max-width: 480px; margin-top: 1rem; }
+
+.curve-wrap {
+width: 100%;
+margin-bottom: 0;
+position: relative;
+}
+
+.curve-wrap svg { width: 100%; height: auto; overflow: visible; }
+
+.phase-nav {
+display: flex;
+gap: 0;
+border-top: 1px solid #1e1e1e;
+}
+
+.phase-pill {
+flex: 1;
+padding: 1.1rem 1.25rem;
+background: none;
+border: none;
+border-right: 1px solid #1e1e1e;
+cursor: pointer;
+text-align: left;
+transition: background 0.2s;
+position: relative;
+}
+
+.phase-pill { border-right: none; }
+.phase-pill { background: #111; }
+.phase-pill.active { background: #111; }
+
+.phase-pill.active::after {
+content: '';
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: var(--amber);
+}
+
+.phase-pill-num {
+font-family: var(--mono);
+font-size: 0.58rem;
+color: #444;
+letter-spacing: 0.06em;
+display: block;
+margin-bottom: 0.3rem;
+}
+
+.phase-pill-name {
+font-family: var(--display);
+font-size: 0.82rem;
+font-weight: 700;
+color: #555;
+transition: color 0.2s;
+letter-spacing: -0.01em;
+display: block;
+}
+
+.phase-pill.active .phase-pill-name { color: var(--white); }
+.phase-pill .phase-pill-name { color: #aaa; }
+
+.phase-detail {
+border-top: 1px solid #1e1e1e;
+padding: 2.5rem 0 1rem;
+display: none;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 3rem;
+}
+
+.phase-detail.active { display: grid; }
+
+.phase-detail-label {
+font-family: var(--mono);
+font-size: 0.6rem;
+color: var(--amber);
+letter-spacing: 0.08em;
+display: block;
+margin-bottom: 0.85rem;
+}
+
+.phase-detail-col ul {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 0.55rem;
+}
+
+.phase-detail-col ul li {
+font-family: var(--body);
+font-size: 0.88rem;
+color: #777;
+padding-left: 1.1rem;
+position: relative;
+line-height: 1.55;
+}
+
+.phase-detail-col ul li::before {
+content: '—';
+position: absolute;
+left: 0;
+color: #333;
+font-family: var(--mono);
+font-size: 0.65rem;
+top: 0.1rem;
+}
+
+.phase-next-step {
+grid-column: 1 / -1;
+padding: 1rem 1.25rem;
+border: 1px solid #1e1e1e;
+border-left: 2px solid var(--amber);
+display: flex;
+align-items: baseline;
+gap: 1.5rem;
+}
+
+.phase-next-step-label {
+font-family: var(--mono);
+font-size: 0.6rem;
+color: var(--amber);
+letter-spacing: 0.08em;
+flex-shrink: 0;
+}
+
+.phase-next-step p {
+font-family: var(--body);
+font-size: 0.88rem;
+color: #777;
+line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+#phases { padding: 5rem 1.25rem 4rem; }
+.phase-nav { flex-wrap: wrap; }
+.phase-pill { flex: none; width: 50%; border-bottom: 1px solid #1e1e1e; }
+.phase-detail { grid-template-columns: 1fr; gap: 2rem; }
+.phase-next-step { flex-direction: column; gap: 0.5rem; }
+}
+
+#entry-bar {
+position: fixed;
+bottom: 2rem;
+left: 50%;
+transform: translateX(-50%) translateY(80px);
+z-index: 200;
+background: var(--amber);
+border: 1px solid var(--amber-dim);
+width: min(640px, calc(100vw - 2rem));
+padding: 0;
+opacity: 0;
+transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+#entry-bar.visible {
+transform: translateX(-50%) translateY(0);
+opacity: 1;
+}
+
+.entry-step {
+display: none;
+flex-direction: column;
+}
+
+.entry-step.active { display: flex; }
+
+/* Step 1: text input */
+.entry-input-row {
+display: flex;
+align-items: center;
+gap: 0;
+}
+
+.entry-prompt {
+font-family: var(--mono);
+font-size: 0.7rem;
+color: var(--black);
+padding: 0 1rem;
+white-space: nowrap;
+flex-shrink: 0;
+letter-spacing: 0.02em;
+}
+
+#entry-text {
+flex: 1;
+background: none;
+border: none;
+outline: none;
+font-family: var(--body);
+font-size: 0.95rem;
+color: var(--black);
+padding: 1.1rem 0.5rem 1.1rem 0;
+caret-color: var(--black);
+min-width: 0;
+}
+
+#entry-text::placeholder {
+color: var(--amber-dim);
+}
+
+.entry-next-btn {
+background: none;
+border: none;
+border-left: 1px solid var(--amber-dim);
+color: var(--black);
+font-family: var(--mono);
+font-size: 0.75rem;
+padding: 0 1.25rem;
+height: 100%;
+cursor: pointer;
+white-space: nowrap;
+transition: background 0.15s;
+align-self: stretch;
+display: flex;
+align-items: center;
+}
+
+.entry-next-btn { background: var(--amber-dim); }
+
+/* Step 2: feeling picker */
+.entry-feeling-row {
+padding: 0.85rem 1rem;
+border-top: 1px solid var(--amber-dim);
+display: flex;
+flex-direction: column;
+gap: 0.6rem;
+}
+
+.entry-feeling-label {
+font-family: var(--mono);
+font-size: 0.65rem;
+color: var(--black);
+letter-spacing: 0.04em;
+opacity: 0.6;
+}
+
+.entry-feelings {
+display: flex;
+gap: 0.5rem;
+flex-wrap: wrap;
+}
+
+.feeling-chip {
+font-family: var(--body);
+font-size: 0.8rem;
+color: var(--black);
+background: transparent;
+border: 1px solid var(--amber-dim);
+padding: 0.35rem 0.85rem;
+cursor: pointer;
+transition: all 0.15s;
+white-space: nowrap;
+}
+
+.feeling-chip {
+background: var(--amber-dim);
+border-color: var(--black);
+}
+
+.feeling-chip.selected {
+color: var(--white);
+background: var(--black);
+border-color: var(--black);
+}
+
+.entry-submit-row {
+padding: 0.75rem 1rem;
+border-top: 1px solid var(--amber-dim);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.entry-back {
+font-family: var(--mono);
+font-size: 0.7rem;
+color: var(--black);
+background: none;
+border: none;
+cursor: pointer;
+transition: opacity 0.15s;
+letter-spacing: 0.02em;
+opacity: 0.5;
+}
+
+.entry-back { opacity: 1; }
+
+.entry-submit {
+font-family: var(--mono);
+font-size: 0.75rem;
+color: var(--white);
+background: var(--black);
+border: none;
+padding: 0.5rem 1.25rem;
+cursor: pointer;
+letter-spacing: 0.02em;
+transition: opacity 0.15s;
+}
+
+.entry-submit {
+opacity: 0.3;
+cursor: default;
+}
+
+/* Step 3: confirmation */
+.entry-confirm {
+padding: 1.25rem 1.25rem;
+display: flex;
+align-items: center;
+gap: 1rem;
+}
+
+.entry-confirm-dot {
+width: 6px;
+height: 6px;
+background: var(--black);
+border-radius: 50%;
+flex-shrink: 0;
+}
+
+.entry-confirm-text {
+font-family: var(--mono);
+font-size: 0.78rem;
+color: var(--black);
+letter-spacing: 0.02em;
+opacity: 0.7;
+}
+
+.entry-confirm-text strong {
+color: var(--black);
+font-weight: 500;
+opacity: 1;
+}
+
+/* toggle open button (visible before bar is triggered) */
+#entry-trigger {
+position: fixed;
+bottom: 2rem;
+right: 2rem;
+z-index: 199;
+background: var(--black);
+border: 1px solid #2a2a2a;
+color: var(--amber);
+font-family: var(--mono);
+font-size: 0.75rem;
+padding: 0.7rem 1.25rem;
+cursor: pointer;
+letter-spacing: 0.04em;
+transition: border-color 0.2s, transform 0.15s;
+}
+
+#entry-trigger {
+border-color: var(--amber);
+transform: translateY(-1px);
+}
+
+#entry-trigger.hidden { display: none; }
+
+@media (max-width: 768px) {
+nav { padding: 1rem 1.25rem; }
+#hero { padding: 7rem 1.25rem 4rem; }
+#problem { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.25rem; }
+.scroll-hint { left: 1.25rem; }
+.hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+#entry-bar { bottom: 1rem; }
+#entry-trigger { bottom: 1rem; right: 1rem; }
+}
 </style>
-</head>
-<body>
+
+</head> <body>
 
 <!-- NAV -->
-<nav>
-  <a href="/" class="nav-logo">Execution<span>Curve</span></a>
-  <ul class="nav-links">
-    <li><a href="#phases">The curve</a></li>
-    <li><a href="#log">Your log</a></li>
-  </ul>
-  <button class="nav-cta">Start logging</button>
-</nav>
+
+<nav> <a href="/" class="nav-logo">Execution<span>Curve</span></a> <ul class="nav-links"> <li><a href="#how">How it works</a></li> <li><a href="#phases">The curve</a></li> <li><a href="#log">Your log</a></li> </ul> <button class="nav-cta">Start Logging</button> </nav>
 
 <!-- HERO -->
-<section id="hero">
-  <div class="hero-inner">
-    <p class="hero-eyebrow">For builders who don't quit</p>
-    <h1 class="hero-heading">
-      You started.<br/>
-      Now <em>stay in it.</em>
-    </h1>
-    <p class="hero-sub">
-      Anyone can start something now. The hard part is pushing through when progress feels invisible. Execution Curve gives you a log, a timeline, and honest feedback, so you always know where you are and what to do next.
-    </p>
-    <div class="hero-actions">
-      <button class="btn-primary">Log your first entry →</button>
-      <button class="btn-ghost">See how it works</button>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-num">92%</span>
-        <span class="stat-label">of people quit before the breakthrough</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">30 sec</span>
-        <span class="stat-label">to log an entry and get feedback</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">0</span>
-        <span class="stat-label">generic advice. Everything is based on your input</span>
-      </div>
-    </div>
-  </div>
 
-  <div class="hero-bg-numeral" aria-hidden="true">EC</div>
+<section id="hero"> <div class="hero-inner"> <p class="hero-eyebrow">For builders who don't quit</p> <h1 class="hero-heading"> You started.<br/> Now <em>stay in it.</em> </h1> <p class="hero-sub"> Anyone can start something now. The hard part is pushing through when progress feels invisible. Execution Curve gives you a log, a timeline, and honest feedback, so you always know where you are and what to do next. </p> <div class="hero-actions"> <button class="btn-primary">Log your first entry →</button> <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button> </div> <div class="hero-stats"> <div class="stat-item"> <span class="stat-num">92%</span> <span class="stat-label">of people quit before the breakthrough</span> </div> <div class="stat-item"> <span class="stat-num">30 sec</span> <span class="stat-label">to log an entry and get feedback</span> </div> <div class="stat-item"> <span class="stat-num">0</span> <span class="stat-label">generic advice. Everything is based on your input</span> </div> </div> </div>
 
-  <div class="scroll-hint">
-    <div class="scroll-hint-line"></div>
-    <span>scroll</span>
-  </div>
-</section>
+<div class="hero-bg-numeral" aria-hidden="true">EC</div>
+
+<div class="scroll-hint"> <div class="scroll-hint-line"></div> <span>scroll</span> </div> </section>
 
 <!-- PROBLEM SECTION -->
-<section id="problem">
-  <div>
-    <span class="section-label reveal">The real reason people quit</span>
-    <h2 class="section-heading reveal reveal-delay-1">
-      Tools to start are everywhere.<br/>
-      Tools to <em style="font-style:normal; color: var(--amber);">persist</em> aren't.
-    </h2>
-    <p class="section-body reveal reveal-delay-2">
-      <p>Tech has made it easier than ever to build something whether it's an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
-      <p>The messy middle is where most people quit. Not because they failed, but because progress felt invisible and they had no way to know if what they were doing was working.</p>
-    </p>
-  </div>
 
-  <div class="problem-blocks">
-    <div class="problem-block reveal">
-      <span class="problem-num">01</span>
-      <div class="problem-text">
-        <strong>Progress feels invisible</strong>
-        <span>Real progress is slow and uneven. Without a log, you can't see how far you've come, so you assume you haven't moved at all.</span>
-      </div>
-    </div>
-    <div class="problem-block reveal reveal-delay-1">
-      <span class="problem-num">02</span>
-      <div class="problem-text">
-        <strong>Difficulty reads as failure</strong>
-        <span>When things get hard, most people interpret it as a sign they're doing something wrong, not that they're exactly where they should be.</span>
-      </div>
-    </div>
-    <div class="problem-block reveal reveal-delay-2">
-      <span class="problem-num">03</span>
-      <div class="problem-text">
-        <strong>Generic advice doesn't help</strong>
-        <span>"Just keep going" means nothing without context. What you need is feedback based on where you actually are, not a motivational quote.</span>
-      </div>
-    </div>
-    <div class="problem-block reveal reveal-delay-3">
-      <span class="problem-num">04</span>
-      <div class="problem-text">
-        <strong>No record, no proof</strong>
-        <span>Without a log, you have nothing to look back on. A timeline of your work is proof you showed up, even when you didn't feel like it.</span>
-      </div>
+<section id="problem"> <div> <span class="section-label reveal">The real reason people quit</span> <h2 class="section-heading reveal reveal-delay-1"> Tools to start are everywhere.<br/> Tools to <em style="font-style:normal; color: var(--amber);">persist</em> aren't. </h2> <p class="section-body reveal reveal-delay-2"> <p>Tech has made it easier than ever to build something whether it's an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p> <p>The messy middle is where most people quit. Not because they failed, but because progress felt invisible and they had no way to know if what they were doing was working.</p> </p> </div>
+
+<div class="problem-blocks"> <div class="problem-block reveal"> <span class="problem-num">01</span> <div class="problem-text"> <strong>Progress feels invisible</strong> <span>Real progress is slow and uneven. Without a log, you can't see how far you've come, so you assume you haven't moved at all.</span> </div> </div> <div class="problem-block reveal reveal-delay-1"> <span class="problem-num">02</span> <div class="problem-text"> <strong>Difficulty reads as failure</strong> <span>When things get hard, most people interpret it as a sign they're doing something wrong, not that they're exactly where they should be.</span> </div> </div> <div class="problem-block reveal reveal-delay-2"> <span class="problem-num">03</span> <div class="problem-text"> <strong>Generic advice doesn't help</strong> <span>"Just keep going" means nothing without context. What you need is feedback based on where you actually are, not a motivational quote.</span> </div> </div> <div class="problem-block reveal reveal-delay-3"> <span class="problem-num">04</span> <div class="problem-text"> <strong>No record, no proof</strong> <span>Without a log, you have nothing to look back on. A timeline of your work is proof you showed up, even when you didn't feel like it.</span> </div> </div> </div> </section>
+
+<!-- HOW IT WORKS SECTION -->
+
+<section id="how"> <div class="how-header reveal"> <span class="section-label">how it works</span> <h2 class="section-heading"> Only Three steps.</h2> </div>
+
+<div class="how-steps"> <div class="how-step reveal"> <div class="how-step-top"> <span class="how-step-num">01</span> <div class="how-step-visual" aria-hidden="true"> <svg viewBox="0 0 120 64" width="100%" height="100%"> <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/> <text x="10" y="24" font-family="'DM Mono', monospace" font-size="7" fill="var(--amber)">→ today</text> <line x1="10" y1="34" x2="80" y2="34" stroke="var(--gray-2)" stroke-width="1"/> <rect x="10" y="44" width="46" height="12" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/> <text x="33" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)" text-anchor="middle">stuck</text> </svg> </div> </div> <h3 class="how-step-title">Log a few seconds of honesty</h3> <p class="how-step-body">One line about what you worked on. One tap on how it felt. That's the entire input, no forms, no streak guilt, no pressure to write an essay.</p> </div>
+
+<div class="how-step reveal reveal-delay-1">
+  <div class="how-step-top">
+    <span class="how-step-num">02</span>
+    <div class="how-step-visual" aria-hidden="true">
+      <svg viewBox="0 0 120 64" width="100%" height="100%">
+        <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
+        <line x1="20" y1="12" x2="20" y2="52" stroke="var(--gray-2)" stroke-width="1"/>
+        <circle cx="20" cy="16" r="2.5" fill="var(--black)"/>
+        <circle cx="20" cy="30" r="2.5" fill="var(--amber)"/>
+        <circle cx="20" cy="44" r="2.5" fill="var(--black)"/>
+        <line x1="28" y1="16" x2="95" y2="16" stroke="var(--gray-2)" stroke-width="1"/>
+        <line x1="28" y1="30" x2="100" y2="30" stroke="var(--amber)" stroke-width="1"/>
+        <line x1="28" y1="44" x2="80" y2="44" stroke="var(--gray-2)" stroke-width="1"/>
+      </svg>
     </div>
   </div>
-</section>
+  <h3 class="how-step-title">Watch the timeline build itself</h3>
+  <p class="how-step-body">Every entry stacks into a visible record. The line that felt invisible day to day becomes obvious once you can see ten entries at once.</p>
+</div>
+
+<div class="how-step reveal reveal-delay-2">
+  <div class="how-step-top">
+    <span class="how-step-num">03</span>
+    <div class="how-step-visual" aria-hidden="true">
+      <svg viewBox="0 0 120 64" width="100%" height="100%">
+        <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
+        <rect x="10" y="10" width="100" height="10" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/>
+        <text x="16" y="17.5" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">"about to quit"</text>
+        <line x1="14" y1="28" x2="14" y2="50" stroke="var(--amber)" stroke-width="1.5"/>
+        <text x="22" y="34" font-family="'DM Mono', monospace" font-size="6" fill="var(--amber)">phase read</text>
+        <text x="22" y="44" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">this feeling peaks right</text>
+        <text x="22" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">before it clicks.</text>
+      </svg>
+    </div>
+  </div>
+  <h3 class="how-step-title">Get a response, not a slogan</h3>
+  <p class="how-step-body">Your input maps to a phase on the curve. The feedback changes based on where you actually are, not a generic quote that means the same thing on day one or day ninety.</p>
+</div>
+</div> </section>
 
 <!-- PHASES SECTION -->
-<section id="phases">
-  <div class="phases-header reveal">
-    <span class="section-label">the execution curve</span>
-    <h2 class="section-heading">Every project follows<br/>the same shape.</h2>
-    <p class="section-body">Most people quit in phase 2, not because they failed, but because they don't know they're in it. Knowing the phase changes everything.</p>
-  </div>
 
-  <!-- SVG Curve -->
-  <div class="curve-wrap reveal">
-    <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" aria-label="The execution curve showing 5 phases of a project">
+<section id="phases"> <div class="phases-header reveal"> <span class="section-label">the execution curve</span> <h2 class="section-heading">Every project follows<br/>the same shape.</h2> <p class="section-body">Most people quit in phase 2, not because they failed, but because they don't know they're in it. Knowing the phase changes everything.</p> </div>
 
-      <!-- Grid lines -->
-      <line x1="0" y1="200" x2="900" y2="200" stroke="#1e1e1e" stroke-width="1"/>
+<!-- SVG Curve -->
 
-      <!-- The curve path: starts high (excitement), dips deep (messy middle), climbs to mastery -->
-      <path
-        d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15"
-        fill="none"
-        stroke="#2a2a2a"
-        stroke-width="1.5"
-        id="curve-bg"
-      />
-      <path
-        d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15"
-        fill="none"
-        stroke="#C8873F"
-        stroke-width="2"
-        stroke-dasharray="820"
-        stroke-dashoffset="820"
-        id="curve-draw"
-        opacity="0.9"
-      />
+<div class="curve-wrap reveal"> <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" aria-label="The execution curve showing 5 phases of a project">
 
-      <!-- Phase markers: dot + label -->
-      <!-- Phase 1: Ignition ~x=40 -->
-      <circle cx="40" cy="60" r="4" fill="#C8873F" class="phase-dot" data-phase="0" style="cursor:pointer"/>
-      <text x="40" y="50" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">01</text>
+  <!-- Grid lines -->
+  <line x1="0" y1="200" x2="900" y2="200" stroke="#1e1e1e" stroke-width="1"/>
 
-      <!-- Phase 2: The Dip ~x=340 -->
-      <circle cx="340" cy="188" r="4" fill="#555" class="phase-dot" data-phase="1" style="cursor:pointer"/>
-      <text x="340" y="205" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">02</text>
+  <!-- The curve path: starts high (excitement), dips deep (messy middle), climbs to mastery -->
+  <path
+    d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15"
+    fill="none"
+    stroke="#2a2a2a"
+    stroke-width="1.5"
+    id="curve-bg"
+  />
+  <path
+    d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15"
+    fill="none"
+    stroke="#C8873F"
+    stroke-width="2"
+    stroke-dasharray="820"
+    stroke-dashoffset="820"
+    id="curve-draw"
+    opacity="0.9"
+  />
 
-      <!-- Phase 3: Grind ~x=450 -->
-      <circle cx="450" cy="152" r="4" fill="#555" class="phase-dot" data-phase="2" style="cursor:pointer"/>
-      <text x="450" y="143" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">03</text>
+  <!-- Phase markers: dot + label -->
+  <!-- Phase 1: Ignition ~x=40 -->
+  <circle cx="40" cy="60" r="4" fill="#C8873F" class="phase-dot" data-phase="0" style="cursor:pointer"/>
+  <text x="40" y="50" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">01</text>
 
-      <!-- Phase 4: Traction ~x=620 -->
-      <circle cx="620" cy="72" r="4" fill="#555" class="phase-dot" data-phase="3" style="cursor:pointer"/>
-      <text x="620" y="62" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">04</text>
+  <!-- Phase 2: The Dip ~x=340 -->
+  <circle cx="340" cy="188" r="4" fill="#555" class="phase-dot" data-phase="1" style="cursor:pointer"/>
+  <text x="340" y="205" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">02</text>
 
-      <!-- Phase 5: Compounding ~x=860 -->
-      <circle cx="860" cy="15" r="4" fill="#555" class="phase-dot" data-phase="4" style="cursor:pointer"/>
-      <text x="860" y="8" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">05</text>
+  <!-- Phase 3: Grind ~x=450 -->
+  <circle cx="450" cy="152" r="4" fill="#555" class="phase-dot" data-phase="2" style="cursor:pointer"/>
+  <text x="450" y="143" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">03</text>
 
-      <!-- Quit zone annotation -->
-      <line x1="240" y1="200" x2="420" y2="200" stroke="#b85c38" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
-      <text x="330" y="218" text-anchor="middle" font-family="'DM Mono', monospace" font-size="8" fill="#b85c38" opacity="0.6">most people quit here</text>
+  <!-- Phase 4: Traction ~x=620 -->
+  <circle cx="620" cy="72" r="4" fill="#555" class="phase-dot" data-phase="3" style="cursor:pointer"/>
+  <text x="620" y="62" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">04</text>
 
-    </svg>
-  </div>
+  <!-- Phase 5: Compounding ~x=860 -->
+  <circle cx="860" cy="15" r="4" fill="#555" class="phase-dot" data-phase="4" style="cursor:pointer"/>
+  <text x="860" y="8" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">05</text>
 
-  <!-- Phase selector pills -->
-  <div class="phase-nav" id="phase-nav">
-    <button class="phase-pill active" data-phase="0">
-      <span class="phase-pill-num">01</span>
-      <span class="phase-pill-name">Ignition</span>
-    </button>
-    <button class="phase-pill" data-phase="1">
-      <span class="phase-pill-num">02</span>
-      <span class="phase-pill-name">The Dip</span>
-    </button>
-    <button class="phase-pill" data-phase="2">
-      <span class="phase-pill-num">03</span>
-      <span class="phase-pill-name">Grind</span>
-    </button>
-    <button class="phase-pill" data-phase="3">
-      <span class="phase-pill-num">04</span>
-      <span class="phase-pill-name">Traction</span>
-    </button>
-    <button class="phase-pill" data-phase="4">
-      <span class="phase-pill-num">05</span>
-      <span class="phase-pill-name">Compounding</span>
-    </button>
-  </div>
+  <!-- Quit zone annotation -->
+  <line x1="240" y1="200" x2="420" y2="200" stroke="#b85c38" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
+  <text x="330" y="218" text-anchor="middle" font-family="'DM Mono', monospace" font-size="8" fill="#b85c38" opacity="0.6">most people quit here</text>
 
-  <!-- Phase detail panels -->
-  <div class="phase-detail active" id="phase-0">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>Energy is high, direction is unclear</li>
-        <li>Everything feels possible right now</li>
-        <li>You're generating more ideas than actions</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Planning forever instead of starting</li>
-        <li>Switching ideas before testing the first</li>
-        <li>Waiting to feel "ready"</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Excited but scattered</li>
-        <li>Slightly overwhelmed by options</li>
-        <li>Comparing your idea to others already built</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next step</span>
-      <p>Write your idea in one sentence. Then do the smallest possible version of it today, not next week.</p>
-    </div>
-  </div>
+</svg>
+</div>
 
-  <div class="phase-detail" id="phase-1">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>Progress is real but invisible</li>
-        <li>The gap between your vision and output feels huge</li>
-        <li>Novelty has worn off, difficulty has set in</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Restarting from scratch instead continuing</li>
-        <li>Interpreting difficulty as a sign you're wrong</li>
-        <li>Comparing your early work to others' polished output</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Like you're moving backwards</li>
-        <li>Wanting to quit and start something new</li>
-        <li>Secretly wondering if you picked the wrong thing</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next step</span>
-      <p>Improve one small thing. Don't restart. 1% better is still better than nothing. Small improvements compound in ways you can't see yet.</p>
-    </div>
-  </div>
+<!-- Phase selector pills -->
 
-  <div class="phase-detail" id="phase-2">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>You're building real capability</li>
-        <li>Work is slower and less exciting than expected</li>
-        <li>The process has become repetitive</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Chasing motivation instead of building discipline</li>
-        <li>Overthinking the next move instead of shipping</li>
-        <li>Measuring too early and quitting on bad data</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Bored or numb to your own work</li>
-        <li>Stuck thinking instead of doing</li>
-        <li>Not sure if what you're doing is even working</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">// next step</span>
-      <p>Work for 5 minutes. Starting is the hardest part. Once you're moving, momentum usually carries you further than 5 minutes.</p>
-    </div>
-  </div>
+<div class="phase-nav" id="phase-nav"> <button class="phase-pill active" data-phase="0"> <span class="phase-pill-num">01</span> <span class="phase-pill-name">Ignition</span> </button> <button class="phase-pill" data-phase="1"> <span class="phase-pill-num">02</span> <span class="phase-pill-name">The Dip</span> </button> <button class="phase-pill" data-phase="2"> <span class="phase-pill-num">03</span> <span class="phase-pill-name">Grind</span> </button> <button class="phase-pill" data-phase="3"> <span class="phase-pill-num">04</span> <span class="phase-pill-name">Traction</span> </button> <button class="phase-pill" data-phase="4"> <span class="phase-pill-num">05</span> <span class="phase-pill-name">Compounding</span> </button> </div>
 
-  <div class="phase-detail" id="phase-3">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>Effort is starting to produce visible results</li>
-        <li>Feedback loops are getting shorter</li>
-        <li>You're developing ideas about what works</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Getting distracted by early success signals</li>
-        <li>Expanding too quickly</li>
-        <li>Losing the focus that got you here</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Finally seeing signs it's working</li>
-        <li>Tempted to add more before solidifying the core</li>
-        <li>Energy returning after a long flat stretch</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next step</span>
-      <p>Double down on what's working. Resist the urge to pivot or expand, consolidate the thing that's producing results first.</p>
-    </div>
-  </div>
+<!-- Phase detail panels -->
 
-  <div class="phase-detail" id="phase-4">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>Previous work is paying off now</li>
-        <li>Progress accelerates with the same effort</li>
-        <li>Your log shows how far you've actually come</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Forgetting the habits that built this</li>
-        <li>Taking on too much and burning out at the top</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Like things are finally clicking</li>
-        <li>Hard to believe you almost quit in phase 2</li>
-        <li>Clearer sense of what the next level looks like</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next step</span>
-      <p>Look back at your earliest log entries. That distance is proof of what persistence actually produces. Now set the next target.</p>
-    </div>
-  </div>
+<div class="phase-detail active" id="phase-0"> <div class="phase-detail-col"> <span class="phase-detail-label">What's happening</span> <ul> <li>Energy is high, direction is unclear</li> <li>Everything feels possible right now</li> <li>You're generating more ideas than actions</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">Common traps</span> <ul> <li>Planning forever instead of starting</li> <li>Switching ideas before testing the first</li> <li>Waiting to feel "ready"</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">What it feels like</span> <ul> <li>Excited but scattered</li> <li>Slightly overwhelmed by options</li> <li>Comparing your idea to others already built</li> </ul> </div> <div class="phase-next-step"> <span class="phase-next-step-label">Next step</span> <p>Write your idea in one sentence. Then do the smallest possible version of it today, not next week.</p> </div> </div>
+
+<div class="phase-detail" id="phase-1"> <div class="phase-detail-col"> <span class="phase-detail-label">What's happening</span> <ul> <li>Progress is real but invisible</li> <li>The gap between your vision and output feels huge</li> <li>Novelty has worn off, difficulty has set in</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">Common traps</span> <ul> <li>Restarting from scratch instead continuing</li> <li>Interpreting difficulty as a sign you're wrong</li> <li>Comparing your early work to others' polished output</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">What it feels like</span> <ul> <li>Like you're moving backwards</li> <li>Wanting to quit and start something new</li> <li>Secretly wondering if you picked the wrong thing</li> </ul> </div> <div class="phase-next-step"> <span class="phase-next-step-label">Next step</span> <p>Improve one small thing. Don't restart. 1% better is still better than nothing. Small improvements compound in ways you can't see yet.</p> </div> </div>
+
+<div class="phase-detail" id="phase-2"> <div class="phase-detail-col"> <span class="phase-detail-label">What's happening</span> <ul> <li>You're building real capability</li> <li>Work is slower and less exciting than expected</li> <li>The process has become repetitive</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">Common traps</span> <ul> <li>Chasing motivation instead of building discipline</li> <li>Overthinking the next move instead of shipping</li> <li>Measuring too early and quitting on bad data</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">What it feels like</span> <ul> <li>Bored or numb to your own work</li> <li>Stuck thinking instead of doing</li> <li>Not sure if what you're doing is even working</li> </ul> </div> <div class="phase-next-step"> <span class="phase-next-step-label">// next step</span> <p>Work for 5 minutes. Starting is the hardest part. Once you're moving, momentum usually carries you further than 5 minutes.</p> </div> </div>
+
+<div class="phase-detail" id="phase-3"> <div class="phase-detail-col"> <span class="phase-detail-label">What's happening</span> <ul> <li>Effort is starting to produce visible results</li> <li>Feedback loops are getting shorter</li> <li>You're developing ideas about what works</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">Common traps</span> <ul> <li>Getting distracted by early success signals</li> <li>Expanding too quickly</li> <li>Losing the focus that got you here</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">What it feels like</span> <ul> <li>Finally seeing signs it's working</li> <li>Tempted to add more before solidifying the core</li> <li>Energy returning after a long flat stretch</li> </ul> </div> <div class="phase-next-step"> <span class="phase-next-step-label">Next step</span> <p>Double down on what's working. Resist the urge to pivot or expand, consolidate the thing that's producing results first.</p> </div> </div>
+
+<div class="phase-detail" id="phase-4"> <div class="phase-detail-col"> <span class="phase-detail-label">What's happening</span> <ul> <li>Previous work is paying off now</li> <li>Progress accelerates with the same effort</li> <li>Your log shows how far you've actually come</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">Common traps</span> <ul> <li>Forgetting the habits that built this</li> <li>Taking on too much and burning out at the top</li> </ul> </div> <div class="phase-detail-col"> <span class="phase-detail-label">What it feels like</span> <ul> <li>Like things are finally clicking</li> <li>Hard to believe you almost quit in phase 2</li> <li>Clearer sense of what the next level looks like</li> </ul> </div> <div class="phase-next-step"> <span class="phase-next-step-label">Next step</span> <p>Look back at your earliest log entries. That distance is proof of what persistence actually produces. Now set the next target.</p> </div> </div>
 
 </section>
 
 <!-- YOUR LOG SECTION -->
-<section id="log">
-  <div class="log-header reveal">
-    <span class="section-label">your log</span>
-    <div class="log-header-row">
-      <h2 class="section-heading">Every entry.<br/>The whole picture.</h2>
-      <div class="log-meta" id="log-meta">0 entries</div>
-    </div>
-  </div>
 
-  <!-- Empty state -->
-  <div class="log-empty" id="log-empty">
-    <div class="log-empty-line"></div>
-    <div class="log-empty-prompt">
-      <span class="log-empty-mono">Nothing here yet</span>
-      <p>Your first entry starts the timeline. Log something, even one sentence, and it appears here.</p>
-      <button class="btn-primary" onclick="openEntryBar()">Log your first entry →</button>
-    </div>
-  </div>
+<section id="log"> <div class="log-header reveal"> <span class="section-label">your log</span> <div class="log-header-row"> <h2 class="section-heading">Every entry.<br/>The whole picture.</h2> <div class="log-meta" id="log-meta">0 entries</div> </div> </div>
 
-  <!-- Timeline (populated by JS) -->
-  <div class="log-timeline" id="log-timeline"></div>
-</section>
+<!-- Milestone banner -->
 
+<div class="milestone-banner" id="milestone-banner"> <span class="milestone-num" id="milestone-num"></span> <span class="milestone-text" id="milestone-text"></span> <button class="milestone-dismiss" id="milestone-dismiss">dismiss ×</button> </div>
 
-<button id="entry-trigger" aria-label="Log an entry">+ log entry</button>
+<!-- Empty state -->
+
+<div class="log-empty" id="log-empty"> <div class="log-empty-line"></div> <div class="log-empty-prompt"> <span class="log-empty-mono">Nothing here yet</span> <p>Your first entry starts the timeline. Log something, even one sentence, and it appears here.</p> <button class="btn-primary" onclick="openEntryBar()">Log your first entry →</button> </div> </div>
+
+<!-- Timeline (populated by JS) -->
+
+<div class="log-timeline" id="log-timeline"></div> </section>
+
+<button id="entry-trigger" aria-label="Log an entry">+ Log Entry</button>
 
 <!-- QUICK ENTRY BAR -->
+
 <div id="entry-bar" role="dialog" aria-label="Quick log entry">
 
-  <!-- Step 1: what did you work on -->
-  <div class="entry-step active" id="step-1">
-    <div class="entry-input-row">
-      <span class="entry-prompt">→ today</span>
-      <input
-        type="text"
-        id="entry-text"
-        placeholder="what did you work on or think about?"
-        autocomplete="off"
-        maxlength="120"
-      />
-      <button class="entry-next-btn" id="next-btn" aria-label="Next step">next →</button>
-    </div>
-  </div>
+<!-- Step 1: What did you work on -->
 
-  <!-- Step 2: how did it feel -->
-  <div class="entry-step" id="step-2">
-    <div class="entry-feeling-row">
-      <span class="entry-feeling-label">// how did it feel?</span>
-      <div class="entry-feelings">
-        <button class="feeling-chip" data-feeling="making progress">making progress</button>
-        <button class="feeling-chip" data-feeling="stuck">stuck</button>
-        <button class="feeling-chip" data-feeling="uncertain">uncertain</button>
-        <button class="feeling-chip" data-feeling="energised">energised</button>
-        <button class="feeling-chip" data-feeling="about to quit">about to quit</button>
-      </div>
-    </div>
-    <div class="entry-submit-row">
-      <button class="entry-back" id="back-btn">← back</button>
-      <button class="entry-submit" id="submit-btn" disabled>save entry ↗</button>
-    </div>
-  </div>
+<div class="entry-step active" id="step-1"> <div class="entry-input-row"> <span class="entry-prompt">→ Today</span> <input type="text" id="entry-text" placeholder="What did you work on or think about?" autocomplete="off" maxlength="120" /> <button class="entry-next-btn" id="next-btn" aria-label="Next step">Next →</button> </div> </div>
 
-  <!-- Step 3: logged confirmation -->
-  <div class="entry-step" id="step-3">
-    <div class="entry-confirm">
-      <div class="entry-confirm-dot"></div>
-      <p class="entry-confirm-text">logged — <strong id="confirm-preview"></strong></p>
-    </div>
-  </div>
+<!-- Step 2: How did it feel -->
+
+<div class="entry-step" id="step-2"> <div class="entry-feeling-row"> <span class="entry-feeling-label"></span>How did it feel?</span> <div class="entry-feelings"> <button class="feeling-chip" data-feeling="making progress">Making progress</button> <button class="feeling-chip" data-feeling="stuck">Stuck</button> <button class="feeling-chip" data-feeling="uncertain">Uncertain</button> <button class="feeling-chip" data-feeling="energised">Energised</button> <button class="feeling-chip" data-feeling="about to quit">About to quit</button> </div> </div> <div class="entry-submit-row"> <button class="entry-back" id="back-btn">←Back</button> <button class="entry-submit" id="submit-btn" disabled>Save Entry ↗</button> </div> </div>
+
+<!-- Step 3: logged confirmation -->
+
+<div class="entry-step" id="step-3"> <div class="entry-confirm"> <div class="entry-confirm-dot"></div> <p class="entry-confirm-text">Logged — <strong id="confirm-preview"></strong></p> </div> </div>
 
 </div>
 
 <!-- FOOTER placeholder -->
-<footer>
-  <span>© 2025 Execution Curve</span>
-  <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>
-</footer>
 
-<script>
-  // Hero entrance
-  window.addEventListener('load', () => {
-    document.getElementById('hero').classList.add('revealed');
-  });
+<footer> <span>© 2025 Execution Curve</span> <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a> </footer>
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach(el => observer.observe(el));
+<script> // Hero entrance window.addEventListener('load', () => { document.getElementById('hero').classList.add('revealed'); }); // Scroll reveal const reveals = document.querySelectorAll('.reveal'); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }); }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }); reveals.forEach(el => observer.observe(el)); // Reduced motion if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { document.querySelectorAll('.reveal, .hero-eyebrow, .hero-heading, .hero-sub, .hero-actions, .hero-stats, .hero-bg-numeral').forEach(el => { el.style.transition = 'none'; el.style.opacity = '1'; el.style.transform = 'none'; }); } // ---- ENTRY BAR ---- const bar = document.getElementById('entry-bar'); const trigger = document.getElementById('entry-trigger'); const step1 = document.getElementById('step-1'); const step2 = document.getElementById('step-2'); const step3 = document.getElementById('step-3'); const entryText = document.getElementById('entry-text'); const nextBtn = document.getElementById('next-btn'); const backBtn = document.getElementById('back-btn'); const submitBtn = document.getElementById('submit-btn'); const confirmPreview = document.getElementById('confirm-preview'); const feelingChips = document.querySelectorAll('.feeling-chip'); let selectedFeeling = null; let entryValue = ''; function showStep(n) { [step1, step2, step3].forEach(s => s.classList.remove('active')); document.getElementById('step-' + n).classList.add('active'); } function openEntryBar() { bar.classList.add('visible'); trigger.classList.add('hidden'); setTimeout(() => entryText.focus(), 100); } trigger.addEventListener('click', openEntryBar); // Also open bar from hero CTA and nav CTA document.querySelectorAll('.btn-primary').forEach(btn => { btn.addEventListener('click', openEntryBar); }); document.querySelector('.nav-cta').addEventListener('click', openEntryBar); // Step 1 → 2 nextBtn.addEventListener('click', () => { entryValue = entryText.value.trim(); if (!entryValue) return; showStep(2); }); entryText.addEventListener('keydown', e => { if (e.key === 'Enter') { entryValue = entryText.value.trim(); if (entryValue) showStep(2); } if (e.key === 'Escape') closeBar(); }); // Step 2: feeling chips feelingChips.forEach(chip => { chip.addEventListener('click', () => { feelingChips.forEach(c => c.classList.remove('selected')); chip.classList.add('selected'); selectedFeeling = chip.dataset.feeling; submitBtn.disabled = false; }); }); backBtn.addEventListener('click', () => { showStep(1); setTimeout(() => entryText.focus(), 50); }); // Submit submitBtn.addEventListener('click', () => { if (!selectedFeeling) return; // Save to localStorage const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]'); entries.push({ text: entryValue, feeling: selectedFeeling, date: new Date().toISOString() }); localStorage.setItem('ec_entries', JSON.stringify(entries)); renderLog(); checkMilestone(entries.length); // Confirm confirmPreview.textContent = `"${entryValue.slice(0, 42)}${entryValue.length > 42 ? '…' : ''}" · ${selectedFeeling}`; showStep(3); setTimeout(() => closeBar(), 2800); }); function closeBar() { bar.classList.remove('visible'); trigger.classList.remove('hidden'); setTimeout(() => { showStep(1); entryText.value = ''; selectedFeeling = null; submitBtn.disabled = true; feelingChips.forEach(c => c.classList.remove('selected')); }, 400); } // ---- LOG TIMELINE ---- const INSIGHTS = { 'making progress': { label: '// phase read', text: 'Momentum is building. This is the compound phase — what you do now stacks. Keep the streak alive.' }, 'energised': { label: '// phase read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' }, 'stuck': { label: '// phase read', text: 'Stuck is normal at this stage. It usually means you\'re past the easy part. Shrink the next action to something tiny.' }, 'uncertain': { label: '// phase read', text: 'Uncertainty isn\'t stalling — it\'s processing. Write down the one thing you\'d need to know to move forward.' }, 'about to quit': { label: '// phase read', text: 'This feeling peaks right before things start to click. Look back at your earliest entries — you\'ve already come further than it feels.' }, }; function formatDate(iso) { const d = new Date(iso); const now = new Date(); const diffDays = Math.floor((now - d) / 86400000); if (diffDays === 0) return 'today'; if (diffDays === 1) return 'yesterday'; return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); } function renderLog() { const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]').reverse(); const empty = document.getElementById('log-empty'); const timeline = document.getElementById('log-timeline'); const meta = document.getElementById('log-meta'); meta.textContent = entries.length === 1 ? '1 entry' : `${entries.length} entries`; if (entries.length === 0) { empty.style.display = 'flex'; timeline.innerHTML = ''; return; } empty.style.display = 'none'; timeline.innerHTML = entries.map((entry, i) => { const insight = INSIGHTS[entry.feeling] || null; return ` <div class="timeline-entry" style="transition-delay: ${i * 0.06}s"> <div class="timeline-date">${formatDate(entry.date)}</div> <div class="timeline-spine"> <div class="timeline-dot"></div> <div class="timeline-line"></div> </div> <div class="timeline-content"> <p class="timeline-text">${entry.text}</p> <span class="timeline-feeling" data-feeling="${entry.feeling}">${entry.feeling}</span> ${insight ? ` <div class="timeline-insight"> <span class="timeline-insight-label">${insight.label}</span> <p>${insight.text}</p> </div>` : ''} </div> </div>`; }).join(''); // Animate entries in requestAnimationFrame(() => { timeline.querySelectorAll('.timeline-entry').forEach(el => { setTimeout(() => el.classList.add('visible'), 50); }); }); } renderLog(); // ---- MILESTONES ---- const MILESTONES = { 5: "Five entries in. The shape of your timeline is starting to show.", 10: "Ten entries. This is usually around where people stop comparing day-to-day and start seeing the trend.", 25: "Twenty-five entries. Scroll back to your first one — that's the distance you've actually covered.", 50: "Fifty entries. Most people never get here. You're building a real record.", }; function checkMilestone(entryCount) { if (!MILESTONES[entryCount]) return; const seen = JSON.parse(localStorage.getItem('ec_milestones_seen') || '[]'); if (seen.includes(entryCount)) return; const banner = document.getElementById('milestone-banner'); const num = document.getElementById('milestone-num'); const text = document.getElementById('milestone-text'); num.textContent = entryCount; text.textContent = MILESTONES[entryCount]; banner.classList.add('show'); seen.push(entryCount); localStorage.setItem('ec_milestones_seen', JSON.stringify(seen)); } document.getElementById('milestone-dismiss').addEventListener('click', () => { document.getElementById('milestone-banner').classList.remove('show'); }); // ---- PHASES ---- const phaseData = { 0: { dotColor: '#C8873F' }, 1: { dotColor: '#b85c38' }, 2: { dotColor: '#8a7340' }, 3: { dotColor: '#4a7c59' }, 4: { dotColor: '#C8873F' }, }; const pills = document.querySelectorAll('.phase-pill'); const dots = document.querySelectorAll('.phase-dot'); function activatePhase(n) { // Pills pills.forEach(p => p.classList.remove('active')); document.querySelector(`.phase-pill[data-phase="${n}"]`).classList.add('active'); // Detail panels document.querySelectorAll('.phase-detail').forEach(d => d.classList.remove('active')); document.getElementById(`phase-${n}`).classList.add('active'); // Dots dots.forEach(d => { d.setAttribute('fill', '#333'); d.setAttribute('r', '4'); }); const activeDot = document.querySelector(`.phase-dot[data-phase="${n}"]`); if (activeDot) { activeDot.setAttribute('fill', '#C8873F'); activeDot.setAttribute('r', '5'); } } pills.forEach(pill => { pill.addEventListener('click', () => activatePhase(+pill.dataset.phase)); }); dots.forEach(dot => { dot.addEventListener('click', () => activatePhase(+dot.dataset.phase)); }); // Animate curve draw on scroll into view const curvePath = document.getElementById('curve-draw'); const curveSectionObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { curvePath.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(0.4, 0, 0.2, 1)'; curvePath.style.strokeDashoffset = '0'; curveSectionObserver.unobserve(entry.target); } }); }, { threshold: 0.3 }); const curveSvg = document.querySelector('.curve-wrap'); if (curveSvg) curveSectionObserver.observe(curveSvg); // Init first dot active activatePhase(0); </script>
 
-  // Reduced motion
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll('.reveal, .hero-eyebrow, .hero-heading, .hero-sub, .hero-actions, .hero-stats, .hero-bg-numeral').forEach(el => {
-      el.style.transition = 'none';
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-    });
-  }
+</body> </html>
 
-  // ---- ENTRY BAR ----
-  const bar = document.getElementById('entry-bar');
-  const trigger = document.getElementById('entry-trigger');
-  const step1 = document.getElementById('step-1');
-  const step2 = document.getElementById('step-2');
-  const step3 = document.getElementById('step-3');
-  const entryText = document.getElementById('entry-text');
-  const nextBtn = document.getElementById('next-btn');
-  const backBtn = document.getElementById('back-btn');
-  const submitBtn = document.getElementById('submit-btn');
-  const confirmPreview = document.getElementById('confirm-preview');
-  const feelingChips = document.querySelectorAll('.feeling-chip');
 
-  let selectedFeeling = null;
-  let entryValue = '';
-
-  function showStep(n) {
-    [step1, step2, step3].forEach(s => s.classList.remove('active'));
-    document.getElementById('step-' + n).classList.add('active');
-  }
-
-  function openBar() {
-    bar.classList.add('visible');
-    trigger.classList.add('hidden');
-    setTimeout(() => entryText.focus(), 100);
-  }
-
-  trigger.addEventListener('click', openEntryBar);
-
-  // Also open bar from hero CTA
-  document.querySelector('.btn-primary').addEventListener('click', openEntryBar);
-  document.querySelector('.nav-cta').addEventListener('click', openEntryBar);
-
-  // Step 1 → 2
-  nextBtn.addEventListener('click', () => {
-    entryValue = entryText.value.trim();
-    if (!entryValue) return;
-    showStep(2);
-  });
-
-  entryText.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      entryValue = entryText.value.trim();
-      if (entryValue) showStep(2);
-    }
-    if (e.key === 'Escape') closeBar();
-  });
-
-  // Step 2: feeling chips
-  feelingChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      feelingChips.forEach(c => c.classList.remove('selected'));
-      chip.classList.add('selected');
-      selectedFeeling = chip.dataset.feeling;
-      submitBtn.disabled = false;
-    });
-  });
-
-  backBtn.addEventListener('click', () => {
-    showStep(1);
-    setTimeout(() => entryText.focus(), 50);
-  });
-
-  // Submit
-  submitBtn.addEventListener('click', () => {
-    if (!selectedFeeling) return;
-
-    // Save to localStorage
-    const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-    entries.push({
-      text: entryValue,
-      feeling: selectedFeeling,
-      date: new Date().toISOString()
-    });
-    localStorage.setItem('ec_entries', JSON.stringify(entries));
-
-    renderLog();
-
-    // Confirm
-    confirmPreview.textContent = `"${entryValue.slice(0, 42)}${entryValue.length > 42 ? '…' : ''}" · ${selectedFeeling}`;
-    showStep(3);
-
-    setTimeout(() => closeBar(), 2800);
-  });
-
-  function closeBar() {
-    bar.classList.remove('visible');
-    trigger.classList.remove('hidden');
-    setTimeout(() => {
-      showStep(1);
-      entryText.value = '';
-      selectedFeeling = null;
-      submitBtn.disabled = true;
-      feelingChips.forEach(c => c.classList.remove('selected'));
-    }, 400);
-  }
-
-  // ---- LOG TIMELINE ----
-  const INSIGHTS = {
-    'making progress': { label: '// phase read', text: 'Momentum is building. This is the compound phase — what you do now stacks. Keep the streak alive.' },
-    'energised':       { label: '// phase read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
-    'stuck':           { label: '// phase read', text: 'Stuck is normal at this stage. It usually means you\'re past the easy part. Shrink the next action to something tiny.' },
-    'uncertain':       { label: '// phase read', text: 'Uncertainty isn\'t stalling — it\'s processing. Write down the one thing you\'d need to know to move forward.' },
-    'about to quit':   { label: '// phase read', text: 'This feeling peaks right before things start to click. Look back at your earliest entries — you\'ve already come further than it feels.' },
-  };
-
-  function formatDate(iso) {
-    const d = new Date(iso);
-    const now = new Date();
-    const diffDays = Math.floor((now - d) / 86400000);
-    if (diffDays === 0) return 'today';
-    if (diffDays === 1) return 'yesterday';
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  }
-
-  function renderLog() {
-    const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]').reverse();
-    const empty = document.getElementById('log-empty');
-    const timeline = document.getElementById('log-timeline');
-    const meta = document.getElementById('log-meta');
-
-    meta.textContent = entries.length === 1 ? '1 entry' : `${entries.length} entries`;
-
-    if (entries.length === 0) {
-      empty.style.display = 'flex';
-      timeline.innerHTML = '';
-      return;
-    }
-
-    empty.style.display = 'none';
-    timeline.innerHTML = entries.map((entry, i) => {
-      const insight = INSIGHTS[entry.feeling] || null;
-      return `
-        <div class="timeline-entry" style="transition-delay: ${i * 0.06}s">
-          <div class="timeline-date">${formatDate(entry.date)}</div>
-          <div class="timeline-spine">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
-          </div>
-          <div class="timeline-content">
-            <p class="timeline-text">${entry.text}</p>
-            <span class="timeline-feeling" data-feeling="${entry.feeling}">${entry.feeling}</span>
-            ${insight ? `
-            <div class="timeline-insight">
-              <span class="timeline-insight-label">${insight.label}</span>
-              <p>${insight.text}</p>
-            </div>` : ''}
-          </div>
-        </div>`;
-    }).join('');
-
-    // Animate entries in
-    requestAnimationFrame(() => {
-      timeline.querySelectorAll('.timeline-entry').forEach(el => {
-        setTimeout(() => el.classList.add('visible'), 50);
-      });
-    });
-  }
-
-  renderLog();
-
-  function openEntryBar() {
-    bar.classList.add('visible');
-    trigger.classList.add('hidden');
-    setTimeout(() => entryText.focus(), 100);
-  }
-
-  // ---- PHASES ----
-  const phaseData = {
-    0: { dotColor: '#C8873F' },
-    1: { dotColor: '#b85c38' },
-    2: { dotColor: '#8a7340' },
-    3: { dotColor: '#4a7c59' },
-    4: { dotColor: '#C8873F' },
-  };
-
-  const pills = document.querySelectorAll('.phase-pill');
-  const dots = document.querySelectorAll('.phase-dot');
-
-  function activatePhase(n) {
-    // Pills
-    pills.forEach(p => p.classList.remove('active'));
-    document.querySelector(`.phase-pill[data-phase="${n}"]`).classList.add('active');
-
-    // Detail panels
-    document.querySelectorAll('.phase-detail').forEach(d => d.classList.remove('active'));
-    document.getElementById(`phase-${n}`).classList.add('active');
-
-    // Dots
-    dots.forEach(d => {
-      d.setAttribute('fill', '#333');
-      d.setAttribute('r', '4');
-    });
-    const activeDot = document.querySelector(`.phase-dot[data-phase="${n}"]`);
-    if (activeDot) {
-      activeDot.setAttribute('fill', '#C8873F');
-      activeDot.setAttribute('r', '5');
-    }
-  }
-
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => activatePhase(+pill.dataset.phase));
-  });
-
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => activatePhase(+dot.dataset.phase));
-  });
-
-  // Animate curve draw on scroll into view
-  const curvePath = document.getElementById('curve-draw');
-  const curveSectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        curvePath.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(0.4, 0, 0.2, 1)';
-        curvePath.style.strokeDashoffset = '0';
-        curveSectionObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  const curveSvg = document.querySelector('.curve-wrap');
-  if (curveSvg) curveSectionObserver.observe(curveSvg);
-
-  // Init first dot active
-  activatePhase(0);
-
-</script>
-</body>
-</html>
+Close
