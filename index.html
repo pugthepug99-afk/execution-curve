@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,10 +77,6 @@
   }
 
   .nav-links a:hover { color: var(--black); }
-
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-  }
 
   .nav-cta {
     font-family: var(--body);
@@ -407,68 +402,6 @@
 
   footer a:hover { color: var(--black); }
 
-  /* ---- HOW IT WORKS SECTION ---- */
-  #how {
-    padding: 8rem 3rem;
-    border-top: 1px solid var(--gray-2);
-  }
-
-  .how-header { margin-bottom: 4rem; }
-  .how-header .section-heading { max-width: 500px; }
-
-  .how-steps {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3.5rem;
-  }
-
-  .how-step {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .how-step-top {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .how-step-num {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--amber);
-    letter-spacing: 0.04em;
-  }
-
-  .how-step-visual {
-    width: 100%;
-    aspect-ratio: 120 / 64;
-    background: var(--gray-3);
-  }
-
-  .how-step-title {
-    font-family: var(--display);
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--black);
-    margin-bottom: 0.75rem;
-    line-height: 1.25;
-  }
-
-  .how-step-body {
-    font-family: var(--body);
-    font-size: 0.9rem;
-    color: var(--gray-1);
-    line-height: 1.65;
-  }
-
-  @media (max-width: 768px) {
-    #how { padding: 5rem 1.25rem; }
-    .how-steps { grid-template-columns: 1fr; gap: 2.5rem; }
-  }
-
   /* ---- YOUR LOG SECTION ---- */
   #log {
     padding: 8rem 3rem 6rem;
@@ -492,62 +425,6 @@
     color: var(--gray-1);
     letter-spacing: 0.04em;
     padding-bottom: 0.4rem;
-  }
-
-  /* Milestone banner */
-  .milestone-banner {
-    display: none;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: var(--amber);
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    transform: translateY(-8px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-
-  .milestone-banner.show {
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .milestone-num {
-    font-family: var(--display);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--black);
-    letter-spacing: -0.02em;
-    flex-shrink: 0;
-  }
-
-  .milestone-text {
-    font-family: var(--body);
-    font-size: 0.88rem;
-    color: var(--black);
-    line-height: 1.5;
-  }
-
-  .milestone-dismiss {
-    margin-left: auto;
-    background: none;
-    border: none;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--black);
-    opacity: 0.55;
-    cursor: pointer;
-    flex-shrink: 0;
-    padding: 0.25rem 0.5rem;
-    transition: opacity 0.15s;
-  }
-
-  .milestone-dismiss:hover { opacity: 1; }
-
-  @media (max-width: 768px) {
-    .milestone-banner { flex-wrap: wrap; padding: 1rem; }
-    .milestone-dismiss { margin-left: 0; }
   }
 
   /* Empty state */
@@ -1095,92 +972,6 @@
     #entry-bar { bottom: 1rem; }
     #entry-trigger { bottom: 1rem; right: 1rem; }
   }
- .timeline-content{
-
-    position:relative;
-
-}
- .entry-menu-btn{
-
-    position:absolute;
-
-    top:12px;
-
-    right:12px;
-
-    background:none;
-
-    border:none;
-
-    cursor:pointer;
-
-    font-size:22px;
-
-    color:#777;
-
-    transition:.2s;
-
-}
-
-.entry-menu-btn:hover{
-
-    color:#222;
-
-}
- .entry-menu{
-
-    position:absolute;
-
-    top:40px;
-
-    right:12px;
-
-    background:white;
-
-    border:1px solid #ddd;
-
-    border-radius:12px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-    min-width:160px;
-
-    display:none;
-
-    overflow:hidden;
-
-    z-index:100;
-
-}
-
-.entry-menu.show{
-
-    display:block;
-
-}
- .entry-menu button{
-
-    width:100%;
-
-    padding:12px 16px;
-
-    border:none;
-
-    background:white;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    font-size:15px;
-
-}
-
-.entry-menu button:hover{
-
-    background:#f5f5f5;
-
-}
 </style>
 </head>
 <body>
@@ -1189,11 +980,10 @@
 <nav>
   <a href="/" class="nav-logo">Execution<span>Curve</span></a>
   <ul class="nav-links">
-    <li><a href="#how">How it works</a></li>
     <li><a href="#phases">The curve</a></li>
     <li><a href="#log">Your log</a></li>
   </ul>
-  <button class="nav-cta">Start Logging</button>
+  <button class="nav-cta">Start logging</button>
 </nav>
 
 <!-- HERO -->
@@ -1209,7 +999,7 @@
     </p>
     <div class="hero-actions">
       <button class="btn-primary">Log your first entry →</button>
-      <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
+      <button class="btn-ghost">See how it works</button>
     </div>
     <div class="hero-stats">
       <div class="stat-item">
@@ -1277,72 +1067,6 @@
         <strong>No record, no proof</strong>
         <span>Without a log, you have nothing to look back on. A timeline of your work is proof you showed up, even when you didn't feel like it.</span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS SECTION -->
-<section id="how">
-  <div class="how-header reveal">
-    <span class="section-label">how it works</span>
-    <h2 class="section-heading"> Only Three steps.</h2>
-  </div>
-
-  <div class="how-steps">
-    <div class="how-step reveal">
-      <div class="how-step-top">
-        <span class="how-step-num">01</span>
-        <div class="how-step-visual" aria-hidden="true">
-          <svg viewBox="0 0 120 64" width="100%" height="100%">
-            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
-            <text x="10" y="24" font-family="'DM Mono', monospace" font-size="7" fill="var(--amber)">→ today</text>
-            <line x1="10" y1="34" x2="80" y2="34" stroke="var(--gray-2)" stroke-width="1"/>
-            <rect x="10" y="44" width="46" height="12" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/>
-            <text x="33" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)" text-anchor="middle">stuck</text>
-          </svg>
-        </div>
-      </div>
-      <h3 class="how-step-title">Log a few seconds of honesty</h3>
-      <p class="how-step-body">One line about what you worked on. One tap on how it felt. That's the entire input, no forms, no streak guilt, no pressure to write an essay.</p>
-    </div>
-
-    <div class="how-step reveal reveal-delay-1">
-      <div class="how-step-top">
-        <span class="how-step-num">02</span>
-        <div class="how-step-visual" aria-hidden="true">
-          <svg viewBox="0 0 120 64" width="100%" height="100%">
-            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
-            <line x1="20" y1="12" x2="20" y2="52" stroke="var(--gray-2)" stroke-width="1"/>
-            <circle cx="20" cy="16" r="2.5" fill="var(--black)"/>
-            <circle cx="20" cy="30" r="2.5" fill="var(--amber)"/>
-            <circle cx="20" cy="44" r="2.5" fill="var(--black)"/>
-            <line x1="28" y1="16" x2="95" y2="16" stroke="var(--gray-2)" stroke-width="1"/>
-            <line x1="28" y1="30" x2="100" y2="30" stroke="var(--amber)" stroke-width="1"/>
-            <line x1="28" y1="44" x2="80" y2="44" stroke="var(--gray-2)" stroke-width="1"/>
-          </svg>
-        </div>
-      </div>
-      <h3 class="how-step-title">Watch the timeline build itself</h3>
-      <p class="how-step-body">Every entry stacks into a visible record. The line that felt invisible day to day becomes obvious once you can see ten entries at once.</p>
-    </div>
-
-    <div class="how-step reveal reveal-delay-2">
-      <div class="how-step-top">
-        <span class="how-step-num">03</span>
-        <div class="how-step-visual" aria-hidden="true">
-          <svg viewBox="0 0 120 64" width="100%" height="100%">
-            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
-            <rect x="10" y="10" width="100" height="10" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/>
-            <text x="16" y="17.5" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">"about to quit"</text>
-            <line x1="14" y1="28" x2="14" y2="50" stroke="var(--amber)" stroke-width="1.5"/>
-            <text x="22" y="34" font-family="'DM Mono', monospace" font-size="6" fill="var(--amber)">phase read</text>
-            <text x="22" y="44" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">this feeling peaks right</text>
-            <text x="22" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">before it clicks.</text>
-          </svg>
-        </div>
-      </div>
-      <h3 class="how-step-title">Get a response, not a slogan</h3>
-      <p class="how-step-body">Your input maps to a phase on the curve. The feedback changes based on where you actually are, not a generic quote that means the same thing on day one or day ninety.</p>
     </div>
   </div>
 </section>
@@ -1600,13 +1324,6 @@
     </div>
   </div>
 
-  <!-- Milestone banner -->
-  <div class="milestone-banner" id="milestone-banner">
-    <span class="milestone-num" id="milestone-num"></span>
-    <span class="milestone-text" id="milestone-text"></span>
-    <button class="milestone-dismiss" id="milestone-dismiss">dismiss ×</button>
-  </div>
-
   <!-- Empty state -->
   <div class="log-empty" id="log-empty">
     <div class="log-empty-line"></div>
@@ -1622,41 +1339,41 @@
 </section>
 
 
-<button id="entry-trigger" aria-label="Log an entry">+ Log Entry</button>
+<button id="entry-trigger" aria-label="Log an entry">+ log entry</button>
 
 <!-- QUICK ENTRY BAR -->
 <div id="entry-bar" role="dialog" aria-label="Quick log entry">
 
-  <!-- Step 1: What did you work on -->
+  <!-- Step 1: what did you work on -->
   <div class="entry-step active" id="step-1">
     <div class="entry-input-row">
-      <span class="entry-prompt">→ Today</span>
+      <span class="entry-prompt">→ today</span>
       <input
         type="text"
         id="entry-text"
-        placeholder="What did you work on or think about?"
+        placeholder="what did you work on or think about?"
         autocomplete="off"
         maxlength="120"
       />
-      <button class="entry-next-btn" id="next-btn" aria-label="Next step">Next →</button>
+      <button class="entry-next-btn" id="next-btn" aria-label="Next step">next →</button>
     </div>
   </div>
 
-  <!-- Step 2: How did it feel -->
+  <!-- Step 2: how did it feel -->
   <div class="entry-step" id="step-2">
     <div class="entry-feeling-row">
-      <span class="entry-feeling-label"></span>How did it feel?</span>
+      <span class="entry-feeling-label">// how did it feel?</span>
       <div class="entry-feelings">
-        <button class="feeling-chip" data-feeling="making progress">Making progress</button>
-        <button class="feeling-chip" data-feeling="stuck">Stuck</button>
-        <button class="feeling-chip" data-feeling="uncertain">Uncertain</button>
-        <button class="feeling-chip" data-feeling="energised">Energised</button>
-        <button class="feeling-chip" data-feeling="about to quit">About to quit</button>
+        <button class="feeling-chip" data-feeling="making progress">making progress</button>
+        <button class="feeling-chip" data-feeling="stuck">stuck</button>
+        <button class="feeling-chip" data-feeling="uncertain">uncertain</button>
+        <button class="feeling-chip" data-feeling="energised">energised</button>
+        <button class="feeling-chip" data-feeling="about to quit">about to quit</button>
       </div>
     </div>
     <div class="entry-submit-row">
-      <button class="entry-back" id="back-btn">←Back</button>
-      <button class="entry-submit" id="submit-btn" disabled>Save Entry ↗</button>
+      <button class="entry-back" id="back-btn">← back</button>
+      <button class="entry-submit" id="submit-btn" disabled>save entry ↗</button>
     </div>
   </div>
 
@@ -1664,7 +1381,7 @@
   <div class="entry-step" id="step-3">
     <div class="entry-confirm">
       <div class="entry-confirm-dot"></div>
-      <p class="entry-confirm-text">Logged — <strong id="confirm-preview"></strong></p>
+      <p class="entry-confirm-text">logged — <strong id="confirm-preview"></strong></p>
     </div>
   </div>
 
@@ -1724,7 +1441,7 @@
     document.getElementById('step-' + n).classList.add('active');
   }
 
-  function openEntryBar() {
+  function openBar() {
     bar.classList.add('visible');
     trigger.classList.add('hidden');
     setTimeout(() => entryText.focus(), 100);
@@ -1732,10 +1449,8 @@
 
   trigger.addEventListener('click', openEntryBar);
 
-  // Also open bar from hero CTA and nav CTA
-  document.querySelectorAll('.btn-primary').forEach(btn => {
-    btn.addEventListener('click', openEntryBar);
-  });
+  // Also open bar from hero CTA
+  document.querySelector('.btn-primary').addEventListener('click', openEntryBar);
   document.querySelector('.nav-cta').addEventListener('click', openEntryBar);
 
   // Step 1 → 2
@@ -1775,7 +1490,6 @@
     // Save to localStorage
     const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
     entries.push({
-      id: Date.now(),
       text: entryValue,
       feeling: selectedFeeling,
       date: new Date().toISOString()
@@ -1783,7 +1497,6 @@
     localStorage.setItem('ec_entries', JSON.stringify(entries));
 
     renderLog();
-    checkMilestone(entries.length);
 
     // Confirm
     confirmPreview.textContent = `"${entryValue.slice(0, 42)}${entryValue.length > 42 ? '…' : ''}" · ${selectedFeeling}`;
@@ -1847,29 +1560,6 @@
             <div class="timeline-line"></div>
           </div>
           <div class="timeline-content">
-
-    <button class="entry-menu-btn" onclick="toggleEntryMenu(${entry.id})">
-        ⋮
-    </button>
-
-    <div class="entry-menu" id="menu-${entry.id}">
-        <button onclick="deleteEntry(${entry.id})">
-            🗑 Delete Entry
-        </button>
-    </div>
-    
-    if(!e.target.closest(".entry-menu") &&
-       !e.target.closest(".entry-menu-btn")){
-
-        document.querySelectorAll(".entry-menu").forEach(menu=>{
-
-            menu.classList.remove("show");
-
-        });
-
-    }
-
-});
             <p class="timeline-text">${entry.text}</p>
             <span class="timeline-feeling" data-feeling="${entry.feeling}">${entry.feeling}</span>
             ${insight ? `
@@ -1891,35 +1581,11 @@
 
   renderLog();
 
-  // ---- MILESTONES ----
-  const MILESTONES = {
-    5:  "Five entries in. The shape of your timeline is starting to show.",
-    10: "Ten entries. This is usually around where people stop comparing day-to-day and start seeing the trend.",
-    25: "Twenty-five entries. Scroll back to your first one — that's the distance you've actually covered.",
-    50: "Fifty entries. Most people never get here. You're building a real record.",
-  };
-
-  function checkMilestone(entryCount) {
-    if (!MILESTONES[entryCount]) return;
-
-    const seen = JSON.parse(localStorage.getItem('ec_milestones_seen') || '[]');
-    if (seen.includes(entryCount)) return;
-
-    const banner = document.getElementById('milestone-banner');
-    const num = document.getElementById('milestone-num');
-    const text = document.getElementById('milestone-text');
-
-    num.textContent = entryCount;
-    text.textContent = MILESTONES[entryCount];
-    banner.classList.add('show');
-
-    seen.push(entryCount);
-    localStorage.setItem('ec_milestones_seen', JSON.stringify(seen));
+  function openEntryBar() {
+    bar.classList.add('visible');
+    trigger.classList.add('hidden');
+    setTimeout(() => entryText.focus(), 100);
   }
-
-  document.getElementById('milestone-dismiss').addEventListener('click', () => {
-    document.getElementById('milestone-banner').classList.remove('show');
-  });
 
   // ---- PHASES ----
   const phaseData = {
@@ -1979,52 +1645,7 @@
 
   // Init first dot active
   activatePhase(0);
-function deleteEntry(id) {
- function toggleEntryMenu(id){
 
-    document.querySelectorAll(".entry-menu").forEach(menu=>{
-
-        if(menu.id !== `menu-${id}`){
-            menu.classList.remove("show");
-        }
-
-    });
-
-    document.getElementById(`menu-${id}`).classList.toggle("show");
-
-}
-
-document.addEventListener("click",function(e){
-
-    if(
-        !e.target.closest(".entry-menu") &&
-        !e.target.closest(".entry-menu-btn")
-    ){
-
-        document.querySelectorAll(".entry-menu").forEach(menu=>{
-
-            menu.classList.remove("show");
-
-        });
-
-    }
-
-});
-
-    if (!confirm("Delete this entry?")) return;
-
-    const entries = JSON.parse(localStorage.getItem("ec_entries") || "[]");
-
-    const updatedEntries = entries.filter(entry => entry.id !== id);
-
-    localStorage.setItem(
-        "ec_entries",
-        JSON.stringify(updatedEntries)
-    );
-
-    renderLog();
-
-}
 </script>
 </body>
 </html>
