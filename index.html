@@ -1857,21 +1857,7 @@
             🗑 Delete Entry
         </button>
     </div>
-    function toggleEntryMenu(id){
-
-    document.querySelectorAll(".entry-menu").forEach(menu=>{
-
-        if(menu.id !== `menu-${id}`){
-            menu.classList.remove("show");
-        }
-
-    });
-
-    document.getElementById(`menu-${id}`).classList.toggle("show");
-
-}
-document.addEventListener("click", function(e){
-
+    
     if(!e.target.closest(".entry-menu") &&
        !e.target.closest(".entry-menu-btn")){
 
@@ -1994,6 +1980,36 @@ document.addEventListener("click", function(e){
   // Init first dot active
   activatePhase(0);
 function deleteEntry(id) {
+ function toggleEntryMenu(id){
+
+    document.querySelectorAll(".entry-menu").forEach(menu=>{
+
+        if(menu.id !== `menu-${id}`){
+            menu.classList.remove("show");
+        }
+
+    });
+
+    document.getElementById(`menu-${id}`).classList.toggle("show");
+
+}
+
+document.addEventListener("click",function(e){
+
+    if(
+        !e.target.closest(".entry-menu") &&
+        !e.target.closest(".entry-menu-btn")
+    ){
+
+        document.querySelectorAll(".entry-menu").forEach(menu=>{
+
+            menu.classList.remove("show");
+
+        });
+
+    }
+
+});
 
     if (!confirm("Delete this entry?")) return;
 
