@@ -806,7 +806,7 @@
   }
 
   .timeline-feeling[data-feeling="making progress"] { border-color: #4a7c59; color: #4a7c59; }
-  .timeline-feeling[data-feeling="energised"] { border-color: #4a7c59; color: #4a7c59; }
+  .timeline-feeling[data-feeling="Energized"] { border-color: #4a7c59; color: #4a7c59; }
   .timeline-feeling[data-feeling="stuck"] { border-color: #b85c38; color: #b85c38; }
   .timeline-feeling[data-feeling="about to quit"] { border-color: #b85c38; color: #b85c38; }
   .timeline-feeling[data-feeling="uncertain"] { border-color: #8a7340; color: #8a7340; }
@@ -1323,7 +1323,7 @@
 <section id="how">
   <div class="how-header reveal">
     <span class="section-label">how it works</span>
-    <h2 class="section-heading">Three steps. No app to learn.</h2>
+    <h2 class="section-heading">Three steps.</h2>
   </div>
 
   <div class="how-steps">
@@ -1729,7 +1729,7 @@
         <button class="feeling-chip" data-feeling="making progress">Making Progress</button>
         <button class="feeling-chip" data-feeling="stuck">Stuck</button>
         <button class="feeling-chip" data-feeling="uncertain">Uncertain</button>
-        <button class="feeling-chip" data-feeling="energised">Energised</button>
+        <button class="feeling-chip" data-feeling="energized">Energized</button>
         <button class="feeling-chip" data-feeling="about to quit">About To Quit</button>
       </div>
     </div>
@@ -1885,7 +1885,7 @@
   // ---- LOG TIMELINE ----
   const INSIGHTS = {
     'making progress': { label: 'Phase Read', text: 'Momentum is building. This is the compound phase — what you do now stacks. Keep the streak alive.' },
-    'energised':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
+    'Energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
     'stuck':           { label: 'Phase Read', text: 'Stuck is normal at this stage. It usually means you\'re past the easy part. Shrink the next action to something tiny.' },
     'uncertain':       { label: 'Phase Read', text: 'Uncertainty isn\'t stalling — it\'s processing. Write down the one thing you\'d need to know to move forward.' },
     'about to quit':   { label: 'Phase Read', text: 'This feeling peaks right before things start to click. Look back at your earliest entries — you\'ve already come further than it feels.' },
@@ -1905,7 +1905,7 @@
   // and the corresponding x,y on the SVG path
   const CURVE_POINTS = {
     // [progress 0-1, x, y] — sampled from the path at each phase
-    'energised':       [0.08,  20,  55],  // Ignition
+    'Energized':       [0.08,  20,  55],  // Ignition
     'making progress': [0.35, 255, 140],  // Deep in dip but moving
     'stuck':           [0.28, 220, 148],  // The Dip
     'uncertain':       [0.42, 340, 149],  // Grind start
@@ -1918,7 +1918,7 @@
     const last5 = entries.slice(-5);
     const counts = { positive: 0, struggling: 0, uncertain: 0 };
     last5.forEach(e => {
-      if (['energised','making progress'].includes(e.feeling)) counts.positive++;
+      if (['Energized','making progress'].includes(e.feeling)) counts.positive++;
       else if (['stuck','about to quit'].includes(e.feeling)) counts.struggling++;
       else counts.uncertain++;
     });
