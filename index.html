@@ -57,9 +57,7 @@
     text-decoration: none;
   }
 
-  .nav-logo span {
-    color: var(--amber);
-  }
+  .nav-logo span { color: var(--amber); }
 
   .nav-links {
     display: flex;
@@ -108,9 +106,7 @@
     overflow: hidden;
   }
 
-  .hero-inner {
-    max-width: 860px;
-  }
+  .hero-inner { max-width: 860px; }
 
   .hero-eyebrow {
     font-family: var(--mono);
@@ -137,10 +133,7 @@
     transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s;
   }
 
-  .hero-heading em {
-    font-style: normal;
-    color: var(--amber);
-  }
+  .hero-heading em { font-style: normal; color: var(--amber); }
 
   .hero-sub {
     font-family: var(--body);
@@ -177,10 +170,7 @@
     transition: background 0.2s, transform 0.15s;
   }
 
-  .btn-primary:hover {
-    background: var(--amber);
-    transform: translateY(-1px);
-  }
+  .btn-primary:hover { background: var(--amber); transform: translateY(-1px); }
 
   .btn-ghost {
     font-family: var(--body);
@@ -197,7 +187,6 @@
 
   .btn-ghost:hover { color: var(--black); }
 
-  /* Large background numeral — signature element */
   .hero-bg-numeral {
     position: absolute;
     right: -2rem;
@@ -215,17 +204,12 @@
     transition: opacity 1.2s ease 0.4s;
   }
 
-  /* REVEAL states */
   .revealed .hero-eyebrow,
   .revealed .hero-heading,
   .revealed .hero-sub,
   .revealed .hero-actions,
-  .revealed .hero-bg-numeral {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .revealed .hero-bg-numeral { opacity: 1; transform: translateY(0); }
 
-  /* SCROLL HINT */
   .scroll-hint {
     position: absolute;
     bottom: 2rem;
@@ -239,11 +223,7 @@
 
   .revealed .scroll-hint { opacity: 1; }
 
-  .scroll-hint-line {
-    width: 32px;
-    height: 1px;
-    background: var(--gray-2);
-  }
+  .scroll-hint-line { width: 32px; height: 1px; background: var(--gray-2); }
 
   .scroll-hint span {
     font-size: 0.7rem;
@@ -253,7 +233,6 @@
     font-family: var(--body);
   }
 
-  /* STAT ROW */
   .hero-stats {
     display: flex;
     gap: 3rem;
@@ -266,8 +245,6 @@
   }
 
   .revealed .hero-stats { opacity: 1; transform: translateY(0); }
-
-  .stat-item {}
 
   .stat-num {
     font-family: var(--display);
@@ -285,7 +262,6 @@
     letter-spacing: 0.01em;
   }
 
-  /* ---- SECTION 2: THE PROBLEM ---- */
   #problem {
     padding: 8rem 3rem;
     border-top: 1px solid var(--gray-2);
@@ -325,12 +301,7 @@
 
   .section-body p + p { margin-top: 1rem; }
 
-  /* Problem blocks */
-  .problem-blocks {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+  .problem-blocks { display: flex; flex-direction: column; gap: 0; }
 
   .problem-block {
     padding: 1.75rem 0;
@@ -352,42 +323,23 @@
     padding-top: 0.2rem;
   }
 
-  .problem-text {
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--black);
-    line-height: 1.6;
-  }
+  .problem-text { font-family: var(--body); font-size: 0.95rem; color: var(--black); line-height: 1.6; }
+  .problem-text strong { font-weight: 500; display: block; margin-bottom: 0.25rem; }
+  .problem-text span { color: var(--gray-1); font-size: 0.875rem; }
 
-  .problem-text strong {
-    font-weight: 500;
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-
-  .problem-text span {
-    color: var(--gray-1);
-    font-size: 0.875rem;
-  }
-
-  /* SCROLL REVEAL for sections */
   .reveal {
     opacity: 0;
     transform: translateY(32px);
     transition: opacity 0.75s ease, transform 0.75s ease;
   }
 
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 
   .reveal-delay-1 { transition-delay: 0.1s; }
   .reveal-delay-2 { transition-delay: 0.2s; }
   .reveal-delay-3 { transition-delay: 0.3s; }
   .reveal-delay-4 { transition-delay: 0.4s; }
 
-  /* FOOTER placeholder */
   footer {
     padding: 3rem;
     border-top: 1px solid var(--gray-2);
@@ -399,82 +351,29 @@
     align-items: center;
   }
 
-  footer a {
-    color: var(--gray-1);
-    text-decoration: none;
-  }
-
+  footer a { color: var(--gray-1); text-decoration: none; }
   footer a:hover { color: var(--black); }
 
-  /* ---- HOW IT WORKS SECTION ---- */
-  #how {
-    padding: 8rem 3rem;
-    border-top: 1px solid var(--gray-2);
-  }
-
+  /* HOW IT WORKS */
+  #how { padding: 8rem 3rem; border-top: 1px solid var(--gray-2); }
   .how-header { margin-bottom: 4rem; }
   .how-header .section-heading { max-width: 500px; }
-
-  .how-steps {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3.5rem;
-  }
-
-  .how-step {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .how-step-top {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .how-step-num {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--amber);
-    letter-spacing: 0.04em;
-  }
-
-  .how-step-visual {
-    width: 100%;
-    aspect-ratio: 120 / 64;
-    background: var(--gray-3);
-  }
-
-  .how-step-title {
-    font-family: var(--display);
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--black);
-    margin-bottom: 0.75rem;
-    line-height: 1.25;
-  }
-
-  .how-step-body {
-    font-family: var(--body);
-    font-size: 0.9rem;
-    color: var(--gray-1);
-    line-height: 1.65;
-  }
+  .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.5rem; }
+  .how-step { display: flex; flex-direction: column; }
+  .how-step-top { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 1.5rem; }
+  .how-step-num { font-family: var(--mono); font-size: 0.7rem; color: var(--amber); letter-spacing: 0.04em; }
+  .how-step-visual { width: 100%; aspect-ratio: 120 / 64; background: var(--gray-3); }
+  .how-step-title { font-family: var(--display); font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); margin-bottom: 0.75rem; line-height: 1.25; }
+  .how-step-body { font-family: var(--body); font-size: 0.9rem; color: var(--gray-1); line-height: 1.65; }
 
   @media (max-width: 768px) {
     #how { padding: 5rem 1.25rem; }
     .how-steps { grid-template-columns: 1fr; gap: 2.5rem; }
   }
 
-  /* ---- YOUR LOG SECTION ---- */
-  #log {
-    padding: 8rem 3rem 6rem;
-    border-top: 1px solid var(--gray-2);
-  }
+  /* YOUR LOG SECTION */
+  #log { padding: 8rem 3rem 6rem; border-top: 1px solid var(--gray-2); }
 
-  /* Personal curve visualization */
   .user-curve-wrap {
     margin-bottom: 3.5rem;
     background: var(--black);
@@ -495,18 +394,9 @@
 
   .user-curve-wrap svg { width: 100%; height: auto; overflow: visible; }
 
-  .user-curve-phase-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 8px;
-    fill: #555;
-  }
+  .user-curve-phase-label { font-family: 'DM Mono', monospace; font-size: 8px; fill: #555; }
 
-  /* Delete controls */
-  .log-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1.5rem;
-  }
+  .log-actions { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; }
 
   .btn-start-fresh {
     font-family: var(--mono);
@@ -522,6 +412,7 @@
 
   .btn-start-fresh:hover { color: #b85c38; border-color: #b85c38; }
 
+  /* FIX 1: delete button moves below the insight card, full left alignment */
   .btn-delete-entry {
     font-family: var(--mono);
     font-size: 0.6rem;
@@ -530,15 +421,14 @@
     border: none;
     cursor: pointer;
     letter-spacing: 0.02em;
-    margin-top: 0.75rem;
+    margin-top: 0.85rem;
     padding: 0;
-    display: inline-block;
+    display: block;
     transition: color 0.15s;
   }
 
   .btn-delete-entry:hover { color: #b85c38; }
 
-  /* Confirmation popup */
   .confirm-overlay {
     position: fixed;
     inset: 0;
@@ -567,11 +457,7 @@
     margin-bottom: 1.5rem;
   }
 
-  .confirm-box-actions {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
+  .confirm-box-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
 
   .btn-confirm-cancel {
     font-family: var(--mono);
@@ -599,9 +485,7 @@
 
   .btn-confirm-delete:hover { opacity: 0.85; }
 
-  .log-header {
-    margin-bottom: 4rem;
-  }
+  .log-header { margin-bottom: 4rem; }
 
   .log-header-row {
     display: flex;
@@ -618,7 +502,6 @@
     padding-bottom: 0.4rem;
   }
 
-  /* Milestone banner */
   .milestone-banner {
     display: none;
     align-items: center;
@@ -631,11 +514,7 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
   }
 
-  .milestone-banner.show {
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .milestone-banner.show { display: flex; opacity: 1; transform: translateY(0); }
 
   .milestone-num {
     font-family: var(--display);
@@ -646,12 +525,7 @@
     flex-shrink: 0;
   }
 
-  .milestone-text {
-    font-family: var(--body);
-    font-size: 0.88rem;
-    color: var(--black);
-    line-height: 1.5;
-  }
+  .milestone-text { font-family: var(--body); font-size: 0.88rem; color: var(--black); line-height: 1.5; }
 
   .milestone-dismiss {
     margin-left: auto;
@@ -674,50 +548,13 @@
     .milestone-dismiss { margin-left: 0; }
   }
 
-  /* Empty state */
-  .log-empty {
-    display: flex;
-    gap: 3rem;
-    align-items: flex-start;
-    padding: 3rem 0;
-  }
+  .log-empty { display: flex; gap: 3rem; align-items: flex-start; padding: 3rem 0; }
+  .log-empty-line { width: 1px; min-height: 120px; background: var(--gray-2); flex-shrink: 0; margin-top: 0.25rem; }
+  .log-empty-prompt { display: flex; flex-direction: column; gap: 1rem; }
+  .log-empty-mono { font-family: var(--mono); font-size: 0.75rem; color: var(--gray-1); letter-spacing: 0.02em; }
+  .log-empty-prompt p { font-family: var(--body); font-size: 0.95rem; color: var(--gray-1); line-height: 1.7; max-width: 420px; }
 
-  .log-empty-line {
-    width: 1px;
-    min-height: 120px;
-    background: var(--gray-2);
-    flex-shrink: 0;
-    margin-top: 0.25rem;
-  }
-
-  .log-empty-prompt {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .log-empty-mono {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--gray-1);
-    letter-spacing: 0.02em;
-  }
-
-  .log-empty-prompt p {
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--gray-1);
-    line-height: 1.7;
-    max-width: 420px;
-  }
-
-  /* Timeline */
-  .log-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding-left: 0;
-  }
+  .log-timeline { display: flex; flex-direction: column; gap: 0; padding-left: 0; }
 
   .timeline-entry {
     display: grid;
@@ -729,10 +566,7 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
   }
 
-  .timeline-entry.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .timeline-entry.visible { opacity: 1; transform: translateY(0); }
 
   .timeline-date {
     font-family: var(--mono);
@@ -744,12 +578,7 @@
     line-height: 1.4;
   }
 
-  .timeline-spine {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
+  .timeline-spine { display: flex; flex-direction: column; align-items: center; position: relative; }
 
   .timeline-dot {
     width: 8px;
@@ -763,38 +592,17 @@
     transition: background 0.2s;
   }
 
-  .timeline-entry:hover .timeline-dot {
-    background: var(--amber);
-  }
+  .timeline-entry:hover .timeline-dot { background: var(--amber); }
 
-  .timeline-line {
-    width: 1px;
-    flex: 1;
-    min-height: 2rem;
-    background: var(--gray-2);
-  }
+  .timeline-line { width: 1px; flex: 1; min-height: 2rem; background: var(--gray-2); }
+  .timeline-entry:last-child .timeline-line { background: linear-gradient(to bottom, var(--gray-2), transparent); }
 
-  .timeline-entry:last-child .timeline-line {
-    background: linear-gradient(to bottom, var(--gray-2), transparent);
-  }
+  .timeline-content { padding: 1.25rem 0 2rem; border-bottom: 1px solid var(--gray-3); }
+  .timeline-entry:last-child .timeline-content { border-bottom: none; }
 
-  .timeline-content {
-    padding: 1.25rem 0 2rem;
-    border-bottom: 1px solid var(--gray-3);
-  }
+  .timeline-text { font-family: var(--body); font-size: 1rem; color: var(--black); line-height: 1.6; margin-bottom: 0.6rem; }
 
-  .timeline-entry:last-child .timeline-content {
-    border-bottom: none;
-  }
-
-  .timeline-text {
-    font-family: var(--body);
-    font-size: 1rem;
-    color: var(--black);
-    line-height: 1.6;
-    margin-bottom: 0.6rem;
-  }
-
+  /* FIX 2: uppercase feeling tags */
   .timeline-feeling {
     font-family: var(--mono);
     font-size: 0.68rem;
@@ -803,15 +611,15 @@
     border: 1px solid var(--gray-2);
     color: var(--gray-1);
     display: inline-block;
+    text-transform: uppercase;
   }
 
-  .timeline-feeling[data-feeling="Making Progress"] { border-color: #4a7c59; color: #4a7c59; }
-  .timeline-feeling[data-feeling="Energized"] { border-color: #4a7c59; color: #4a7c59; }
-  .timeline-feeling[data-feeling="Stuck"] { border-color: #b85c38; color: #b85c38; }
-  .timeline-feeling[data-feeling="About to Quit"] { border-color: #b85c38; color: #b85c38; }
-  .timeline-feeling[data-feeling="Uncertain"] { border-color: #8a7340; color: #8a7340; }
+  .timeline-feeling[data-feeling="making progress"] { border-color: #4a7c59; color: #4a7c59; }
+  .timeline-feeling[data-feeling="energized"]        { border-color: #4a7c59; color: #4a7c59; }
+  .timeline-feeling[data-feeling="stuck"]            { border-color: #b85c38; color: #b85c38; }
+  .timeline-feeling[data-feeling="about to quit"]    { border-color: #b85c38; color: #b85c38; }
+  .timeline-feeling[data-feeling="uncertain"]        { border-color: #8a7340; color: #8a7340; }
 
-  /* Phase insight card */
   .timeline-insight {
     margin-top: 0.75rem;
     padding: 0.85rem 1rem;
@@ -828,12 +636,7 @@
     margin-bottom: 0.35rem;
   }
 
-  .timeline-insight p {
-    font-family: var(--body);
-    font-size: 0.85rem;
-    color: var(--gray-1);
-    line-height: 1.6;
-  }
+  .timeline-insight p { font-family: var(--body); font-size: 0.85rem; color: var(--gray-1); line-height: 1.6; }
 
   @media (max-width: 768px) {
     #log { padding: 5rem 1.25rem 4rem; }
@@ -842,31 +645,17 @@
     .timeline-date { font-size: 0.6rem; }
   }
 
-  /* ---- PHASES SECTION ---- */
-  #phases {
-    background: var(--black);
-    padding: 8rem 3rem 6rem;
-    overflow: hidden;
-  }
-
+  /* PHASES SECTION */
+  #phases { background: var(--black); padding: 8rem 3rem 6rem; overflow: hidden; }
   .phases-header { margin-bottom: 5rem; }
   .phases-header .section-label { color: var(--amber); opacity: 0.8; }
   .phases-header .section-heading { color: var(--white); max-width: 560px; }
   .phases-header .section-body { color: #999; max-width: 480px; margin-top: 1rem; }
 
-  .curve-wrap {
-    width: 100%;
-    margin-bottom: 0;
-    position: relative;
-  }
-
+  .curve-wrap { width: 100%; margin-bottom: 0; position: relative; }
   .curve-wrap svg { width: 100%; height: auto; overflow: visible; }
 
-  .phase-nav {
-    display: flex;
-    gap: 0;
-    border-top: 1px solid #1e1e1e;
-  }
+  .phase-nav { display: flex; gap: 0; border-top: 1px solid #1e1e1e; }
 
   .phase-pill {
     flex: 1;
@@ -892,53 +681,17 @@
     background: var(--amber);
   }
 
-  .phase-pill-num {
-    font-family: var(--mono);
-    font-size: 0.58rem;
-    color: #444;
-    letter-spacing: 0.06em;
-    display: block;
-    margin-bottom: 0.3rem;
-  }
-
-  .phase-pill-name {
-    font-family: var(--display);
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #555;
-    transition: color 0.2s;
-    letter-spacing: -0.01em;
-    display: block;
-  }
-
+  .phase-pill-num { font-family: var(--mono); font-size: 0.58rem; color: #444; letter-spacing: 0.06em; display: block; margin-bottom: 0.3rem; }
+  .phase-pill-name { font-family: var(--display); font-size: 0.82rem; font-weight: 700; color: #555; transition: color 0.2s; letter-spacing: -0.01em; display: block; }
   .phase-pill.active .phase-pill-name { color: var(--white); }
   .phase-pill:hover .phase-pill-name { color: #aaa; }
 
-  .phase-detail {
-    border-top: 1px solid #1e1e1e;
-    padding: 2.5rem 0 1rem;
-    display: none;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 3rem;
-  }
-
+  .phase-detail { border-top: 1px solid #1e1e1e; padding: 2.5rem 0 1rem; display: none; grid-template-columns: 1fr 1fr 1fr; gap: 3rem; }
   .phase-detail.active { display: grid; }
 
-  .phase-detail-label {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 0.85rem;
-  }
+  .phase-detail-label { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.85rem; }
 
-  .phase-detail-col ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
+  .phase-detail-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
 
   .phase-detail-col ul li {
     font-family: var(--body);
@@ -949,15 +702,7 @@
     line-height: 1.55;
   }
 
-  .phase-detail-col ul li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: #333;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    top: 0.1rem;
-  }
+  .phase-detail-col ul li::before { content: '—'; position: absolute; left: 0; color: #333; font-family: var(--mono); font-size: 0.65rem; top: 0.1rem; }
 
   .phase-next-step {
     grid-column: 1 / -1;
@@ -969,20 +714,8 @@
     gap: 1.5rem;
   }
 
-  .phase-next-step-label {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    flex-shrink: 0;
-  }
-
-  .phase-next-step p {
-    font-family: var(--body);
-    font-size: 0.88rem;
-    color: #777;
-    line-height: 1.6;
-  }
+  .phase-next-step-label { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); letter-spacing: 0.08em; flex-shrink: 0; }
+  .phase-next-step p { font-family: var(--body); font-size: 0.88rem; color: #777; line-height: 1.6; }
 
   @media (max-width: 768px) {
     #phases { padding: 5rem 1.25rem 4rem; }
@@ -992,6 +725,7 @@
     .phase-next-step { flex-direction: column; gap: 0.5rem; }
   }
 
+  /* ENTRY BAR */
   #entry-bar {
     position: fixed;
     bottom: 2rem;
@@ -1006,34 +740,14 @@
     transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
   }
 
-  #entry-bar.visible {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
+  #entry-bar.visible { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  .entry-step {
-    display: none;
-    flex-direction: column;
-  }
-
+  .entry-step { display: none; flex-direction: column; }
   .entry-step.active { display: flex; }
 
-  /* Step 1: text input */
-  .entry-input-row {
-    display: flex;
-    align-items: center;
-    gap: 0;
-  }
+  .entry-input-row { display: flex; align-items: center; gap: 0; }
 
-  .entry-prompt {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--black);
-    padding: 0 1rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-    letter-spacing: 0.02em;
-  }
+  .entry-prompt { font-family: var(--mono); font-size: 0.7rem; color: var(--black); padding: 0 1rem; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em; }
 
   #entry-text {
     flex: 1;
@@ -1048,9 +762,7 @@
     min-width: 0;
   }
 
-  #entry-text::placeholder {
-    color: var(--amber-dim);
-  }
+  #entry-text::placeholder { color: var(--amber-dim); }
 
   .entry-next-btn {
     background: none;
@@ -1071,28 +783,9 @@
 
   .entry-next-btn:hover { background: var(--amber-dim); }
 
-  /* Step 2: feeling picker */
-  .entry-feeling-row {
-    padding: 0.85rem 1rem;
-    border-top: 1px solid var(--amber-dim);
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .entry-feeling-label {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--black);
-    letter-spacing: 0.04em;
-    opacity: 0.6;
-  }
-
-  .entry-feelings {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
+  .entry-feeling-row { padding: 0.85rem 1rem; border-top: 1px solid var(--amber-dim); display: flex; flex-direction: column; gap: 0.6rem; }
+  .entry-feeling-label { font-family: var(--mono); font-size: 0.65rem; color: var(--black); letter-spacing: 0.04em; opacity: 0.6; }
+  .entry-feelings { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
   .feeling-chip {
     font-family: var(--body);
@@ -1106,87 +799,22 @@
     white-space: nowrap;
   }
 
-  .feeling-chip:hover {
-    background: var(--amber-dim);
-    border-color: var(--black);
-  }
+  .feeling-chip:hover { background: var(--amber-dim); border-color: var(--black); }
+  .feeling-chip.selected { color: var(--white); background: var(--black); border-color: var(--black); }
 
-  .feeling-chip.selected {
-    color: var(--white);
-    background: var(--black);
-    border-color: var(--black);
-  }
+  .entry-submit-row { padding: 0.75rem 1rem; border-top: 1px solid var(--amber-dim); display: flex; justify-content: space-between; align-items: center; }
 
-  .entry-submit-row {
-    padding: 0.75rem 1rem;
-    border-top: 1px solid var(--amber-dim);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .entry-back {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--black);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.15s;
-    letter-spacing: 0.02em;
-    opacity: 0.5;
-  }
-
+  .entry-back { font-family: var(--mono); font-size: 0.7rem; color: var(--black); background: none; border: none; cursor: pointer; transition: opacity 0.15s; letter-spacing: 0.02em; opacity: 0.5; }
   .entry-back:hover { opacity: 1; }
 
-  .entry-submit {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.5rem 1.25rem;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    transition: opacity 0.15s;
-  }
+  .entry-submit { font-family: var(--mono); font-size: 0.75rem; color: var(--white); background: var(--black); border: none; padding: 0.5rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: opacity 0.15s; }
+  .entry-submit:disabled { opacity: 0.3; cursor: default; }
 
-  .entry-submit:disabled {
-    opacity: 0.3;
-    cursor: default;
-  }
+  .entry-confirm { padding: 1.25rem 1.25rem; display: flex; align-items: center; gap: 1rem; }
+  .entry-confirm-dot { width: 6px; height: 6px; background: var(--black); border-radius: 50%; flex-shrink: 0; }
+  .entry-confirm-text { font-family: var(--mono); font-size: 0.78rem; color: var(--black); letter-spacing: 0.02em; opacity: 0.7; }
+  .entry-confirm-text strong { color: var(--black); font-weight: 500; opacity: 1; }
 
-  /* Step 3: confirmation */
-  .entry-confirm {
-    padding: 1.25rem 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .entry-confirm-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--black);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .entry-confirm-text {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    color: var(--black);
-    letter-spacing: 0.02em;
-    opacity: 0.7;
-  }
-
-  .entry-confirm-text strong {
-    color: var(--black);
-    font-weight: 500;
-    opacity: 1;
-  }
-
-  /* toggle open button (visible before bar is triggered) */
   #entry-trigger {
     position: fixed;
     bottom: 2rem;
@@ -1203,11 +831,7 @@
     transition: border-color 0.2s, transform 0.15s;
   }
 
-  #entry-trigger:hover {
-    border-color: var(--amber);
-    transform: translateY(-1px);
-  }
-
+  #entry-trigger:hover { border-color: var(--amber); transform: translateY(-1px); }
   #entry-trigger.hidden { display: none; }
 
   @media (max-width: 768px) {
@@ -1246,7 +870,7 @@
       Anyone can start something now. The hard part is pushing through when progress feels invisible. Execution Curve gives you a log, a timeline, and honest feedback, so you always know where you are and what to do next.
     </p>
     <div class="hero-actions">
-      <button class="btn-primary">Log your first entry →</button>
+      <button class="btn-primary" onclick="openEntryBar()">Log your first entry →</button>
       <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
     </div>
     <div class="hero-stats">
@@ -1264,9 +888,7 @@
       </div>
     </div>
   </div>
-
   <div class="hero-bg-numeral" aria-hidden="true">EC</div>
-
   <div class="scroll-hint">
     <div class="scroll-hint-line"></div>
     <span>scroll</span>
@@ -1281,12 +903,11 @@
       Tools to start are everywhere.<br/>
       Tools to <em style="font-style:normal; color: var(--amber);">persist</em> aren't.
     </h2>
-    <p class="section-body reveal reveal-delay-2">
+    <div class="section-body reveal reveal-delay-2">
       <p>Tech has made it easier than ever to build something whether it's an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
       <p>The messy middle is where most people quit. Not because they failed, but because progress felt invisible and they had no way to know if what they were doing was working.</p>
-    </p>
+    </div>
   </div>
-
   <div class="problem-blocks">
     <div class="problem-block reveal">
       <span class="problem-num">01</span>
@@ -1325,7 +946,6 @@
     <span class="section-label">how it works</span>
     <h2 class="section-heading">Three steps.</h2>
   </div>
-
   <div class="how-steps">
     <div class="how-step reveal">
       <div class="how-step-top">
@@ -1336,14 +956,13 @@
             <text x="10" y="24" font-family="'DM Mono', monospace" font-size="7" fill="var(--amber)">Today</text>
             <line x1="10" y1="34" x2="80" y2="34" stroke="var(--gray-2)" stroke-width="1"/>
             <rect x="10" y="44" width="46" height="12" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/>
-            <text x="33" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)" text-anchor="middle">stuck</text>
+            <text x="33" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)" text-anchor="middle">Stuck</text>
           </svg>
         </div>
       </div>
       <h3 class="how-step-title">Log a few seconds of honesty</h3>
       <p class="how-step-body">One line about what you worked on. One tap on how it felt. That's the entire input, no forms, no streak guilt, no pressure to write an essay.</p>
     </div>
-
     <div class="how-step reveal reveal-delay-1">
       <div class="how-step-top">
         <span class="how-step-num">02</span>
@@ -1363,7 +982,6 @@
       <h3 class="how-step-title">Watch the timeline build itself</h3>
       <p class="how-step-body">Every entry stacks into a visible record. The line that felt invisible day to day becomes obvious once you can see ten entries at once.</p>
     </div>
-
     <div class="how-step reveal reveal-delay-2">
       <div class="how-step-top">
         <span class="how-step-num">03</span>
@@ -1392,240 +1010,62 @@
     <h2 class="section-heading">Every project follows<br/>the same shape.</h2>
     <p class="section-body">Most people quit in phase 2, not because they failed, but because they don't know they're in it. Knowing the phase changes everything.</p>
   </div>
-
-  <!-- SVG Curve -->
   <div class="curve-wrap reveal">
     <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" aria-label="The execution curve showing 5 phases of a project">
-
-      <!-- Grid lines -->
       <line x1="0" y1="200" x2="900" y2="200" stroke="#1e1e1e" stroke-width="1"/>
-
-      <!-- The curve path: starts high (excitement), dips deep (messy middle), climbs to mastery -->
-      <path
-        d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15"
-        fill="none"
-        stroke="#2a2a2a"
-        stroke-width="1.5"
-        id="curve-bg"
-      />
-      <path
-        d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15"
-        fill="none"
-        stroke="#C8873F"
-        stroke-width="2"
-        stroke-dasharray="820"
-        stroke-dashoffset="820"
-        id="curve-draw"
-        opacity="0.9"
-      />
-
-      <!-- Phase markers: dot + label -->
-      <!-- Phase 1: Ignition ~x=40 -->
+      <path d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15" fill="none" stroke="#2a2a2a" stroke-width="1.5" id="curve-bg"/>
+      <path d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15" fill="none" stroke="#C8873F" stroke-width="2" stroke-dasharray="820" stroke-dashoffset="820" id="curve-draw" opacity="0.9"/>
       <circle cx="40" cy="60" r="4" fill="#C8873F" class="phase-dot" data-phase="0" style="cursor:pointer"/>
       <text x="40" y="50" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">01</text>
-
-      <!-- Phase 2: The Dip ~x=340 -->
       <circle cx="340" cy="188" r="4" fill="#555" class="phase-dot" data-phase="1" style="cursor:pointer"/>
       <text x="340" y="205" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">02</text>
-
-      <!-- Phase 3: Grind ~x=450 -->
       <circle cx="450" cy="152" r="4" fill="#555" class="phase-dot" data-phase="2" style="cursor:pointer"/>
       <text x="450" y="143" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">03</text>
-
-      <!-- Phase 4: Traction ~x=620 -->
       <circle cx="620" cy="72" r="4" fill="#555" class="phase-dot" data-phase="3" style="cursor:pointer"/>
       <text x="620" y="62" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">04</text>
-
-      <!-- Phase 5: Compounding ~x=860 -->
       <circle cx="860" cy="15" r="4" fill="#555" class="phase-dot" data-phase="4" style="cursor:pointer"/>
       <text x="860" y="8" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">05</text>
-
-      <!-- Quit zone annotation -->
       <line x1="240" y1="200" x2="420" y2="200" stroke="#b85c38" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
       <text x="330" y="218" text-anchor="middle" font-family="'DM Mono', monospace" font-size="8" fill="#b85c38" opacity="0.6">most people quit here</text>
-
     </svg>
   </div>
-
-  <!-- Phase selector pills -->
   <div class="phase-nav" id="phase-nav">
-    <button class="phase-pill active" data-phase="0">
-      <span class="phase-pill-num">01</span>
-      <span class="phase-pill-name">Ignition</span>
-    </button>
-    <button class="phase-pill" data-phase="1">
-      <span class="phase-pill-num">02</span>
-      <span class="phase-pill-name">The Dip</span>
-    </button>
-    <button class="phase-pill" data-phase="2">
-      <span class="phase-pill-num">03</span>
-      <span class="phase-pill-name">Grind</span>
-    </button>
-    <button class="phase-pill" data-phase="3">
-      <span class="phase-pill-num">04</span>
-      <span class="phase-pill-name">Traction</span>
-    </button>
-    <button class="phase-pill" data-phase="4">
-      <span class="phase-pill-num">05</span>
-      <span class="phase-pill-name">Compounding</span>
-    </button>
+    <button class="phase-pill active" data-phase="0"><span class="phase-pill-num">01</span><span class="phase-pill-name">Ignition</span></button>
+    <button class="phase-pill" data-phase="1"><span class="phase-pill-num">02</span><span class="phase-pill-name">The Dip</span></button>
+    <button class="phase-pill" data-phase="2"><span class="phase-pill-num">03</span><span class="phase-pill-name">Grind</span></button>
+    <button class="phase-pill" data-phase="3"><span class="phase-pill-num">04</span><span class="phase-pill-name">Traction</span></button>
+    <button class="phase-pill" data-phase="4"><span class="phase-pill-num">05</span><span class="phase-pill-name">Compounding</span></button>
   </div>
-
-  <!-- Phase detail panels -->
   <div class="phase-detail active" id="phase-0">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>Energy is high, direction is unclear</li>
-        <li>Everything feels possible right now</li>
-        <li>You're generating more ideas than actions</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Planning forever instead of starting</li>
-        <li>Switching ideas before testing the first</li>
-        <li>Waiting to feel "ready"</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Excited but scattered</li>
-        <li>Slightly overwhelmed by options</li>
-        <li>Comparing your idea to others already built</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next step</span>
-      <p>Write your idea in one sentence. Then do the smallest possible version of it today, not next week.</p>
-    </div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What's happening</span><ul><li>Energy is high, direction is unclear</li><li>Everything feels possible right now</li><li>You're generating more ideas than actions</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">Common traps</span><ul><li>Planning forever instead of starting</li><li>Switching ideas before testing the first</li><li>Waiting to feel "ready"</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What it feels like</span><ul><li>Excited but scattered</li><li>Slightly overwhelmed by options</li><li>Comparing your idea to others already built</li></ul></div>
+    <div class="phase-next-step"><span class="phase-next-step-label">Next Step</span><p>Write your idea in one sentence. Then do the smallest possible version of it today, not next week.</p></div>
   </div>
-
   <div class="phase-detail" id="phase-1">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>Progress is real but invisible</li>
-        <li>The gap between your vision and output feels huge</li>
-        <li>Novelty has worn off, difficulty has set in</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Restarting from scratch instead continuing</li>
-        <li>Interpreting difficulty as a sign you're wrong</li>
-        <li>Comparing your early work to others' polished output</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Like you're moving backwards</li>
-        <li>Wanting to quit and start something new</li>
-        <li>Secretly wondering if you picked the wrong thing</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next step</span>
-      <p>Improve one small thing. Don't restart. 1% better is still better than nothing. Small improvements compound in ways you can't see yet.</p>
-    </div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What's happening</span><ul><li>Progress is real but invisible</li><li>The gap between your vision and output feels huge</li><li>Novelty has worn off, difficulty has set in</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">Common traps</span><ul><li>Restarting from scratch instead continuing</li><li>Interpreting difficulty as a sign you're wrong</li><li>Comparing your early work to others' polished output</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What it feels like</span><ul><li>Like you're moving backwards</li><li>Wanting to quit and start something new</li><li>Secretly wondering if you picked the wrong thing</li></ul></div>
+    <div class="phase-next-step"><span class="phase-next-step-label">Next Step</span><p>Improve one small thing. Don't restart. 1% better is still better than nothing. Small improvements compound in ways you can't see yet.</p></div>
   </div>
-
   <div class="phase-detail" id="phase-2">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>You're building real capability</li>
-        <li>Work is slower and less exciting than expected</li>
-        <li>The process has become repetitive</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Chasing motivation instead of building discipline</li>
-        <li>Overthinking the next move instead of shipping</li>
-        <li>Measuring too early and quitting on bad data</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Bored or numb to your own work</li>
-        <li>Stuck thinking instead of doing</li>
-        <li>Not sure if what you're doing is even working</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next Step</span>
-      <p>Work for 5 minutes. Starting is the hardest part. Once you're moving, momentum usually carries you further than 5 minutes.</p>
-    </div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What's happening</span><ul><li>You're building real capability</li><li>Work is slower and less exciting than expected</li><li>The process has become repetitive</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">Common traps</span><ul><li>Chasing motivation instead of building discipline</li><li>Overthinking the next move instead of shipping</li><li>Measuring too early and quitting on bad data</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What it feels like</span><ul><li>Bored or numb to your own work</li><li>Stuck thinking instead of doing</li><li>Not sure if what you're doing is even working</li></ul></div>
+    <div class="phase-next-step"><span class="phase-next-step-label">Next Step</span><p>Work for 5 minutes. Starting is the hardest part. Once you're moving, momentum usually carries you further than 5 minutes.</p></div>
   </div>
-
   <div class="phase-detail" id="phase-3">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>Effort is starting to produce visible results</li>
-        <li>Feedback loops are getting shorter</li>
-        <li>You're developing ideas about what works</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Getting distracted by early success signals</li>
-        <li>Expanding too quickly</li>
-        <li>Losing the focus that got you here</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Finally seeing signs it's working</li>
-        <li>Tempted to add more before solidifying the core</li>
-        <li>Energy returning after a long flat stretch</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next step</span>
-      <p>Double down on what's working. Resist the urge to pivot or expand, consolidate the thing that's producing results first.</p>
-    </div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What's happening</span><ul><li>Effort is starting to produce visible results</li><li>Feedback loops are getting shorter</li><li>You're developing ideas about what works</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">Common traps</span><ul><li>Getting distracted by early success signals</li><li>Expanding too quickly</li><li>Losing the focus that got you here</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What it feels like</span><ul><li>Finally seeing signs it's working</li><li>Tempted to add more before solidifying the core</li><li>Energy returning after a long flat stretch</li></ul></div>
+    <div class="phase-next-step"><span class="phase-next-step-label">Next Step</span><p>Double down on what's working. Resist the urge to pivot or expand, consolidate the thing that's producing results first.</p></div>
   </div>
-
   <div class="phase-detail" id="phase-4">
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What's happening</span>
-      <ul>
-        <li>Previous work is paying off now</li>
-        <li>Progress accelerates with the same effort</li>
-        <li>Your log shows how far you've actually come</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">Common traps</span>
-      <ul>
-        <li>Forgetting the habits that built this</li>
-        <li>Taking on too much and burning out at the top</li>
-      </ul>
-    </div>
-    <div class="phase-detail-col">
-      <span class="phase-detail-label">What it feels like</span>
-      <ul>
-        <li>Like things are finally clicking</li>
-        <li>Hard to believe you almost quit in phase 2</li>
-        <li>Clearer sense of what the next level looks like</li>
-      </ul>
-    </div>
-    <div class="phase-next-step">
-      <span class="phase-next-step-label">Next step</span>
-      <p>Look back at your earliest log entries. That distance is proof of what persistence actually produces. Now set the next target.</p>
-    </div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What's happening</span><ul><li>Previous work is paying off now</li><li>Progress accelerates with the same effort</li><li>Your log shows how far you've actually come</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">Common traps</span><ul><li>Forgetting the habits that built this</li><li>Taking on too much and burning out at the top</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">What it feels like</span><ul><li>Like things are finally clicking</li><li>Hard to believe you almost quit in phase 2</li><li>Clearer sense of what the next level looks like</li></ul></div>
+    <div class="phase-next-step"><span class="phase-next-step-label">Next Step</span><p>Look back at your earliest log entries. That distance is proof of what persistence actually produces. Now set the next target.</p></div>
   </div>
-
 </section>
 
 <!-- YOUR LOG SECTION -->
@@ -1637,31 +1077,18 @@
       <div class="log-meta" id="log-meta">0 entries</div>
     </div>
   </div>
-
-  <!-- Milestone banner -->
   <div class="milestone-banner" id="milestone-banner">
     <span class="milestone-num" id="milestone-num"></span>
     <span class="milestone-text" id="milestone-text"></span>
     <button class="milestone-dismiss" id="milestone-dismiss">Dismiss</button>
   </div>
-
-  <!-- Personal curve visualization -->
   <div class="user-curve-wrap" id="user-curve-wrap">
     <span class="user-curve-label">Your Position On The Curve</span>
     <svg id="user-curve-svg" viewBox="0 0 860 130" xmlns="http://www.w3.org/2000/svg">
-      <!-- Base curve dim -->
-      <path id="ucurve-base"
-        d="M 20 55 C 80 50, 120 53, 160 72 C 200 91, 220 128, 255 140 C 290 152, 308 154, 340 149 C 378 143, 400 131, 432 114 C 480 89, 528 62, 598 40 C 648 25, 700 17, 740 13"
-        fill="none" stroke="#2a2a2a" stroke-width="1.5"/>
-      <!-- Progress drawn so far -->
-      <path id="ucurve-progress"
-        d="M 20 55 C 80 50, 120 53, 160 72 C 200 91, 220 128, 255 140 C 290 152, 308 154, 340 149 C 378 143, 400 131, 432 114 C 480 89, 528 62, 598 40 C 648 25, 700 17, 740 13"
-        fill="none" stroke="#C8873F" stroke-width="2"
-        stroke-dasharray="800" stroke-dashoffset="800" opacity="0.9"/>
-      <!-- User dot -->
+      <path id="ucurve-base" d="M 20 55 C 80 50, 120 53, 160 72 C 200 91, 220 128, 255 140 C 290 152, 308 154, 340 149 C 378 143, 400 131, 432 114 C 480 89, 528 62, 598 40 C 648 25, 700 17, 740 13" fill="none" stroke="#2a2a2a" stroke-width="1.5"/>
+      <path id="ucurve-progress" d="M 20 55 C 80 50, 120 53, 160 72 C 200 91, 220 128, 255 140 C 290 152, 308 154, 340 149 C 378 143, 400 131, 432 114 C 480 89, 528 62, 598 40 C 648 25, 700 17, 740 13" fill="none" stroke="#C8873F" stroke-width="2" stroke-dasharray="800" stroke-dashoffset="800" opacity="0.9"/>
       <circle id="ucurve-dot" cx="20" cy="55" r="6" fill="#C8873F"/>
       <circle id="ucurve-dot-pulse" cx="20" cy="55" r="10" fill="none" stroke="#C8873F" stroke-width="1" opacity="0.4"/>
-      <!-- Phase labels -->
       <text x="20"  y="20" class="user-curve-phase-label" text-anchor="middle">Ignition</text>
       <text x="300" y="170" class="user-curve-phase-label" text-anchor="middle">The Dip</text>
       <text x="432" y="100" class="user-curve-phase-label" text-anchor="middle">Grind</text>
@@ -1669,8 +1096,6 @@
       <text x="740" y="8"  class="user-curve-phase-label" text-anchor="middle">Compounding</text>
     </svg>
   </div>
-
-  <!-- Empty state -->
   <div class="log-empty" id="log-empty">
     <div class="log-empty-line"></div>
     <div class="log-empty-prompt">
@@ -1679,13 +1104,9 @@
       <button class="btn-primary" onclick="openEntryBar()">Log your first entry →</button>
     </div>
   </div>
-
-  <!-- Log actions (start fresh) — shown only when entries exist -->
   <div class="log-actions" id="log-actions" style="display:none">
     <button class="btn-start-fresh" onclick="confirmAction('timeline')">Start Fresh</button>
   </div>
-
-  <!-- Timeline (populated by JS) -->
   <div class="log-timeline" id="log-timeline"></div>
 </section>
 
@@ -1700,28 +1121,17 @@
   </div>
 </div>
 
-
 <button id="entry-trigger" aria-label="Log an entry">+ log entry</button>
 
 <!-- QUICK ENTRY BAR -->
 <div id="entry-bar" role="dialog" aria-label="Quick log entry">
-
-  <!-- Step 1: what did you work on -->
   <div class="entry-step active" id="step-1">
     <div class="entry-input-row">
       <span class="entry-prompt">Today</span>
-      <input
-        type="text"
-        id="entry-text"
-        placeholder="what did you work on or think about?"
-        autocomplete="off"
-        maxlength="120"
-      />
+      <input type="text" id="entry-text" placeholder="what did you work on or think about?" autocomplete="off" maxlength="120"/>
       <button class="entry-next-btn" id="next-btn" aria-label="Next step">Next</button>
     </div>
   </div>
-
-  <!-- Step 2: how did it feel -->
   <div class="entry-step" id="step-2">
     <div class="entry-feeling-row">
       <span class="entry-feeling-label">How Did It Feel?</span>
@@ -1738,51 +1148,39 @@
       <button class="entry-submit" id="submit-btn" disabled>Save Entry</button>
     </div>
   </div>
-
-  <!-- Step 3: logged confirmation -->
   <div class="entry-step" id="step-3">
     <div class="entry-confirm">
       <div class="entry-confirm-dot"></div>
-      <p class="entry-confirm-text">logged — <strong id="confirm-preview"></strong></p>
+      <p class="entry-confirm-text">Logged — <strong id="confirm-preview"></strong></p>
     </div>
   </div>
-
 </div>
 
-<!-- FOOTER placeholder -->
+<!-- FOOTER -->
 <footer>
   <span>© 2025 Execution Curve</span>
   <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>
 </footer>
 
 <script>
-  // Hero entrance
   window.addEventListener('load', () => {
     document.getElementById('hero').classList.add('revealed');
   });
 
-  // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
   reveals.forEach(el => observer.observe(el));
 
-  // Reduced motion
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.querySelectorAll('.reveal, .hero-eyebrow, .hero-heading, .hero-sub, .hero-actions, .hero-stats, .hero-bg-numeral').forEach(el => {
-      el.style.transition = 'none';
-      el.style.opacity = '1';
-      el.style.transform = 'none';
+      el.style.transition = 'none'; el.style.opacity = '1'; el.style.transform = 'none';
     });
   }
 
-  // ---- ENTRY BAR ----
   const bar = document.getElementById('entry-bar');
   const trigger = document.getElementById('entry-trigger');
   const step1 = document.getElementById('step-1');
@@ -1809,15 +1207,12 @@
     setTimeout(() => entryText.focus(), 100);
   }
 
-  trigger.addEventListener('click', openEntryBar);
+  window.openEntryBar = openEntryBar;
 
-  // Also open bar from hero CTA and nav CTA
-  document.querySelectorAll('.btn-primary').forEach(btn => {
-    btn.addEventListener('click', openEntryBar);
-  });
+  trigger.addEventListener('click', openEntryBar);
+  document.querySelectorAll('.btn-primary').forEach(btn => btn.addEventListener('click', openEntryBar));
   document.querySelector('.nav-cta').addEventListener('click', openEntryBar);
 
-  // Step 1 → 2
   nextBtn.addEventListener('click', () => {
     entryValue = entryText.value.trim();
     if (!entryValue) return;
@@ -1825,14 +1220,10 @@
   });
 
   entryText.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      entryValue = entryText.value.trim();
-      if (entryValue) showStep(2);
-    }
+    if (e.key === 'Enter') { entryValue = entryText.value.trim(); if (entryValue) showStep(2); }
     if (e.key === 'Escape') closeBar();
   });
 
-  // Step 2: feeling chips
   feelingChips.forEach(chip => {
     chip.addEventListener('click', () => {
       feelingChips.forEach(c => c.classList.remove('selected'));
@@ -1842,31 +1233,17 @@
     });
   });
 
-  backBtn.addEventListener('click', () => {
-    showStep(1);
-    setTimeout(() => entryText.focus(), 50);
-  });
+  backBtn.addEventListener('click', () => { showStep(1); setTimeout(() => entryText.focus(), 50); });
 
-  // Submit
   submitBtn.addEventListener('click', () => {
     if (!selectedFeeling) return;
-
-    // Save to localStorage
     const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-    entries.push({
-      text: entryValue,
-      feeling: selectedFeeling,
-      date: new Date().toISOString()
-    });
+    entries.push({ text: entryValue, feeling: selectedFeeling, date: new Date().toISOString() });
     localStorage.setItem('ec_entries', JSON.stringify(entries));
-
     renderLog();
     checkMilestone(entries.length);
-
-    // Confirm
     confirmPreview.textContent = `"${entryValue.slice(0, 42)}${entryValue.length > 42 ? '…' : ''}" · ${selectedFeeling}`;
     showStep(3);
-
     setTimeout(() => closeBar(), 2800);
   });
 
@@ -1882,105 +1259,74 @@
     }, 400);
   }
 
-  // ---- LOG TIMELINE ----
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && bar.classList.contains('visible')) closeBar(); });
+
   const INSIGHTS = {
     'making progress': { label: 'Phase Read', text: 'Momentum is building. This is the compound phase — what you do now stacks. Keep the streak alive.' },
-    'Energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
-    'stuck':           { label: 'Phase Read', text: 'Stuck is normal at this stage. It usually means you\'re past the easy part. Shrink the next action to something tiny.' },
-    'uncertain':       { label: 'Phase Read', text: 'Uncertainty isn\'t stalling — it\'s processing. Write down the one thing you\'d need to know to move forward.' },
-    'about to quit':   { label: 'Phase Read', text: 'This feeling peaks right before things start to click. Look back at your earliest entries — you\'ve already come further than it feels.' },
+    'energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
+    'stuck':           { label: 'Phase Read', text: "Stuck is normal at this stage. It usually means you're past the easy part. Shrink the next action to something tiny." },
+    'uncertain':       { label: 'Phase Read', text: "Uncertainty isn't stalling — it's processing. Write down the one thing you'd need to know to move forward." },
+    'about to quit':   { label: 'Phase Read', text: "This feeling peaks right before things start to click. Look back at your earliest entries — you've already come further than it feels." },
   };
 
   function formatDate(iso) {
     const d = new Date(iso);
     const now = new Date();
     const diffDays = Math.floor((now - d) / 86400000);
-    if (diffDays === 0) return 'today';
-    if (diffDays === 1) return 'yesterday';
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
-  // ---- CURVE POSITIONING ----
-  // Maps feelings to a 0-1 progress value along the curve
-  // and the corresponding x,y on the SVG path
-  const CURVE_POINTS = {
-    // [progress 0-1, x, y] — sampled from the path at each phase
-    'Energized':       [0.08,  20,  55],  // Ignition
-    'making progress': [0.35, 255, 140],  // Deep in dip but moving
-    'stuck':           [0.28, 220, 148],  // The Dip
-    'uncertain':       [0.42, 340, 149],  // Grind start
-    'about to quit':   [0.32, 255, 144],  // Deepest dip
-  };
+  const PHASE_CURVE_POS = [
+    { x: 20,  y: 55,  offset: 720 },
+    { x: 300, y: 152, offset: 430 },
+    { x: 432, y: 114, offset: 310 },
+    { x: 598, y: 40,  offset: 160 },
+    { x: 740, y: 13,  offset: 0   },
+  ];
 
-  // Phase thresholds by feeling frequency
   function inferPhase(entries) {
     if (!entries.length) return null;
     const last5 = entries.slice(-5);
     const counts = { positive: 0, struggling: 0, uncertain: 0 };
     last5.forEach(e => {
-      if (['Energized','making progress'].includes(e.feeling)) counts.positive++;
+      if (['energized','making progress'].includes(e.feeling)) counts.positive++;
       else if (['stuck','about to quit'].includes(e.feeling)) counts.struggling++;
       else counts.uncertain++;
     });
     const total = entries.length;
-    // Phase logic: based on total entries + recent feeling trend
-    if (total <= 3) return 0; // Ignition
-    if (counts.struggling > counts.positive && total < 15) return 1; // The Dip
-    if (total >= 5 && total < 12 && counts.uncertain >= 1) return 2; // Grind
-    if (counts.positive > counts.struggling && total >= 8) return 3; // Traction
-    if (total >= 15 && counts.positive >= counts.struggling) return 4; // Compounding
+    if (total <= 3) return 0;
+    if (counts.struggling > counts.positive && total < 15) return 1;
+    if (total >= 5 && total < 12 && counts.uncertain >= 1) return 2;
+    if (counts.positive > counts.struggling && total >= 8) return 3;
+    if (total >= 15 && counts.positive >= counts.struggling) return 4;
     return Math.min(Math.floor(total / 5), 4);
   }
-
-  // Curve dot positions per phase
-  const PHASE_CURVE_POS = [
-    { x: 20,  y: 55,  offset: 720 }, // Ignition
-    { x: 300, y: 152, offset: 430 }, // The Dip
-    { x: 432, y: 114, offset: 310 }, // Grind
-    { x: 598, y: 40,  offset: 160 }, // Traction
-    { x: 740, y: 13,  offset: 0   }, // Compounding
-  ];
 
   function updateUserCurve(entries) {
     const wrap = document.getElementById('user-curve-wrap');
     if (!entries.length) { wrap.classList.remove('show'); return; }
-
     wrap.classList.add('show');
-
     const phase = inferPhase(entries);
     const pos = PHASE_CURVE_POS[phase];
-
     const dot = document.getElementById('ucurve-dot');
     const pulse = document.getElementById('ucurve-dot-pulse');
     const progress = document.getElementById('ucurve-progress');
-
-    dot.setAttribute('cx', pos.x);
-    dot.setAttribute('cy', pos.y);
-    pulse.setAttribute('cx', pos.x);
-    pulse.setAttribute('cy', pos.y);
-
-    // Animate progress path drawing
+    dot.setAttribute('cx', pos.x); dot.setAttribute('cy', pos.y);
+    pulse.setAttribute('cx', pos.x); pulse.setAttribute('cy', pos.y);
     progress.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)';
     progress.style.strokeDashoffset = pos.offset;
-
-    // Pulse animation on dot
-    dot.style.animation = 'none';
-    setTimeout(() => { dot.style.animation = ''; }, 50);
   }
 
-  // Add pulse keyframe dynamically
   const pulseStyle = document.createElement('style');
   pulseStyle.textContent = `
-    @keyframes curvePulse {
-      0%   { r: 6; opacity: 1; }
-      100% { r: 14; opacity: 0; }
-    }
+    @keyframes curvePulse { 0% { r: 6; opacity: 1; } 100% { r: 14; opacity: 0; } }
     #ucurve-dot-pulse { animation: curvePulse 1.8s ease-out infinite; }
   `;
   document.head.appendChild(pulseStyle);
 
-  // ---- CONFIRM POPUP ----
-  let pendingAction = null; // { type: 'entry' | 'timeline', index?: number }
+  let pendingAction = null;
 
   function confirmAction(type, index) {
     pendingAction = { type, index };
@@ -1996,10 +1342,14 @@
     document.getElementById('confirm-overlay').classList.add('show');
   }
 
+  window.confirmAction = confirmAction;
+
   function cancelConfirm() {
     pendingAction = null;
     document.getElementById('confirm-overlay').classList.remove('show');
   }
+
+  window.cancelConfirm = cancelConfirm;
 
   document.getElementById('confirm-proceed').addEventListener('click', () => {
     if (!pendingAction) return;
@@ -2007,8 +1357,7 @@
       localStorage.removeItem('ec_entries');
       localStorage.removeItem('ec_milestones_seen');
       document.getElementById('milestone-banner').classList.remove('show');
-    } else if (pendingAction.type === 'entry') {
-      // Delete by original (unreversed) index
+    } else {
       const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
       entries.splice(pendingAction.index, 1);
       localStorage.setItem('ec_entries', JSON.stringify(entries));
@@ -2017,22 +1366,19 @@
     renderLog();
   });
 
-  // Close overlay on background click
   document.getElementById('confirm-overlay').addEventListener('click', function(e) {
     if (e.target === this) cancelConfirm();
   });
 
-  // ---- LOG TIMELINE ----
   function renderLog() {
     const rawEntries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-    const entries = [...rawEntries].reverse(); // display newest first
+    const entries = [...rawEntries].reverse();
     const empty = document.getElementById('log-empty');
     const timeline = document.getElementById('log-timeline');
     const meta = document.getElementById('log-meta');
     const actions = document.getElementById('log-actions');
 
     meta.textContent = entries.length === 1 ? '1 entry' : `${entries.length} entries`;
-
     updateUserCurve(rawEntries);
 
     if (entries.length === 0) {
@@ -2046,7 +1392,6 @@
     actions.style.display = 'flex';
 
     timeline.innerHTML = entries.map((entry, i) => {
-      // i is display index (newest first); real index in rawEntries is (rawEntries.length - 1 - i)
       const realIndex = rawEntries.length - 1 - i;
       const insight = INSIGHTS[entry.feeling] || null;
       return `
@@ -2078,7 +1423,6 @@
 
   renderLog();
 
-  // ---- MILESTONES ----
   const MILESTONES = {
     5:  "Five entries in. The shape of your timeline is starting to show.",
     10: "Ten entries. This is usually around where people stop comparing day-to-day and start seeing the trend.",
@@ -2088,18 +1432,12 @@
 
   function checkMilestone(entryCount) {
     if (!MILESTONES[entryCount]) return;
-
     const seen = JSON.parse(localStorage.getItem('ec_milestones_seen') || '[]');
     if (seen.includes(entryCount)) return;
-
     const banner = document.getElementById('milestone-banner');
-    const num = document.getElementById('milestone-num');
-    const text = document.getElementById('milestone-text');
-
-    num.textContent = entryCount;
-    text.textContent = MILESTONES[entryCount];
+    document.getElementById('milestone-num').textContent = entryCount;
+    document.getElementById('milestone-text').textContent = MILESTONES[entryCount];
     banner.classList.add('show');
-
     seen.push(entryCount);
     localStorage.setItem('ec_milestones_seen', JSON.stringify(seen));
   }
@@ -2108,48 +1446,22 @@
     document.getElementById('milestone-banner').classList.remove('show');
   });
 
-  // ---- PHASES ----
-  const phaseData = {
-    0: { dotColor: '#C8873F' },
-    1: { dotColor: '#b85c38' },
-    2: { dotColor: '#8a7340' },
-    3: { dotColor: '#4a7c59' },
-    4: { dotColor: '#C8873F' },
-  };
-
   const pills = document.querySelectorAll('.phase-pill');
   const dots = document.querySelectorAll('.phase-dot');
 
   function activatePhase(n) {
-    // Pills
     pills.forEach(p => p.classList.remove('active'));
     document.querySelector(`.phase-pill[data-phase="${n}"]`).classList.add('active');
-
-    // Detail panels
     document.querySelectorAll('.phase-detail').forEach(d => d.classList.remove('active'));
     document.getElementById(`phase-${n}`).classList.add('active');
-
-    // Dots
-    dots.forEach(d => {
-      d.setAttribute('fill', '#333');
-      d.setAttribute('r', '4');
-    });
+    dots.forEach(d => { d.setAttribute('fill', '#333'); d.setAttribute('r', '4'); });
     const activeDot = document.querySelector(`.phase-dot[data-phase="${n}"]`);
-    if (activeDot) {
-      activeDot.setAttribute('fill', '#C8873F');
-      activeDot.setAttribute('r', '5');
-    }
+    if (activeDot) { activeDot.setAttribute('fill', '#C8873F'); activeDot.setAttribute('r', '5'); }
   }
 
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => activatePhase(+pill.dataset.phase));
-  });
+  pills.forEach(pill => pill.addEventListener('click', () => activatePhase(+pill.dataset.phase)));
+  dots.forEach(dot => dot.addEventListener('click', () => activatePhase(+dot.dataset.phase)));
 
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => activatePhase(+dot.dataset.phase));
-  });
-
-  // Animate curve draw on scroll into view
   const curvePath = document.getElementById('curve-draw');
   const curveSectionObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -2164,9 +1476,7 @@
   const curveSvg = document.querySelector('.curve-wrap');
   if (curveSvg) curveSectionObserver.observe(curveSvg);
 
-  // Init first dot active
   activatePhase(0);
-
 </script>
 </body>
 </html>
