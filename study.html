@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Execution Curve — Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0A0A0A;
+    --white: #FAFAFA;
+    --amber: #C8873F;
+    --amber-dim: #8A5C28;
+    --gray-1: #6B6B6B;
+    --gray-2: #D4D4D4;
+    --gray-3: #F0F0F0;
+    --display: 'Syne', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --body: 'IBM Plex Sans', sans-serif;
+  }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 4rem 1.5rem 8rem; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--amber);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  p.lead { color: var(--gray-1); margin-bottom: 2rem; line-height: 1.7; }
+
+  .card {
+    border: 1px solid var(--gray-2);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--gray-1);
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    border: 1px solid var(--gray-2);
+    padding: 0.85rem 1rem;
+    font-family: var(--body);
+    font-size: 0.95rem;
+    color: var(--black);
+    margin-bottom: 1.5rem;
+    outline: none;
+  }
+
+  input[type="text"]:focus, textarea:focus { border-color: var(--amber); }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  .btn-primary {
+    font-family: var(--body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--white);
+    background: var(--black);
+    border: none;
+    padding: 0.85rem 2rem;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    width: 100%;
+  }
+
+  .btn-primary:hover { background: var(--amber); }
+  .btn-primary:disabled { opacity: 0.4; cursor: default; }
+
+  .feeling-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+
+  .feeling-chip {
+    font-family: var(--body);
+    font-size: 0.85rem;
+    color: var(--black);
+    background: transparent;
+    border: 1px solid var(--gray-2);
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+  }
+
+  .feeling-chip.selected { color: var(--white); background: var(--black); border-color: var(--black); }
+
+  .completion-check {
+    background: var(--gray-3);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .completion-check p { font-size: 0.9rem; margin-bottom: 1rem; }
+  .completion-check .yn-row { display: flex; gap: 0.75rem; }
+  .completion-check button {
+    flex: 1;
+    padding: 0.65rem;
+    border: 1px solid var(--gray-2);
+    background: var(--white);
+    cursor: pointer;
+    font-family: var(--body);
+    font-size: 0.9rem;
+  }
+  .completion-check button.selected { background: var(--black); color: var(--white); }
+
+  .nudge-box {
+    background: var(--black);
+    color: var(--white);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    border-left: 3px solid var(--amber);
+  }
+
+  .nudge-label { font-family: var(--mono); font-size: 0.65rem; color: var(--amber); letter-spacing: 0.06em; display: block; margin-bottom: 0.6rem; }
+  .nudge-text { font-size: 0.95rem; line-height: 1.6; }
+
+  .timeline-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--gray-3);
+    font-size: 0.9rem;
+  }
+
+  .timeline-item .meta { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-1); margin-bottom: 0.4rem; }
+
+  .hidden { display: none; }
+
+  .error-text { color: #b85c38; font-size: 0.85rem; margin-bottom: 1rem; }
+  .loading-text { color: var(--gray-1); font-size: 0.85rem; margin-bottom: 1rem; font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <span class="eyebrow">Execution Curve — Research Study</span>
+
+  <!-- ===== ONBOARDING (shown only if no participant record found) ===== -->
+  <div id="onboarding">
+    <h1>Welcome to the study</h1>
+    <p class="lead">Enter the code your researcher gave you, and tell us what you're working toward. This only needs to be done once.</p>
+    <div class="card">
+      <label for="participant-code">Participant Code</label>
+      <input type="text" id="participant-code" placeholder="e.g. EC-014" />
+      <label for="stated-goal">Your Goal</label>
+      <textarea id="stated-goal" placeholder="e.g. Build a working sustainable energy prototype"></textarea>
+      <div id="onboarding-error" class="error-text hidden"></div>
+      <button class="btn-primary" id="onboarding-submit">Begin</button>
+    </div>
+  </div>
+
+  <!-- ===== MAIN LOG VIEW (shown after onboarding is complete) ===== -->
+  <div id="main-view" class="hidden">
+    <h1>Today's entry</h1>
+
+    <!-- Completion check for previous entry's suggested action -->
+    <div id="completion-check" class="completion-check hidden">
+      <p><strong>Last time:</strong> <span id="previous-nudge-text"></span></p>
+      <p>Did you follow through on that?</p>
+      <div class="yn-row">
+        <button id="completed-yes" data-value="true">Yes</button>
+        <button id="completed-no" data-value="false">No</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <label for="entry-text">What did you work on or think about today?</label>
+      <textarea id="entry-text" maxlength="300"></textarea>
+      <label>How did it feel?</label>
+      <div class="feeling-row" id="feeling-row">
+        <button class="feeling-chip" data-feeling="making progress">Making Progress</button>
+        <button class="feeling-chip" data-feeling="stuck">Stuck</button>
+        <button class="feeling-chip" data-feeling="uncertain">Uncertain</button>
+        <button class="feeling-chip" data-feeling="energized">Energized</button>
+        <button class="feeling-chip" data-feeling="about to quit">About To Quit</button>
+      </div>
+      <div id="submit-error" class="error-text hidden"></div>
+      <div id="loading" class="loading-text hidden">Generating your feedback...</div>
+      <button class="btn-primary" id="submit-entry" disabled>Save Entry</button>
+    </div>
+
+    <div id="nudge-result" class="nudge-box hidden">
+      <span class="nudge-label" id="nudge-label">Phase Read</span>
+      <p class="nudge-text" id="nudge-text-content"></p>
+    </div>
+
+    <h1 style="margin-top:3rem; font-size:1.3rem;">Your entries</h1>
+    <div id="timeline"></div>
+  </div>
+</div>
+
+<script>
+  // ===== CONFIG — fill these in with your real Supabase values =====
+  const SUPABASE_URL = "https://exqczahgelcoibcsagsx.supabase.co/rest/v1/
+";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iMqFL-U8BUtkhZB7aySIGQ_gKjc2q3a
+";
+  // ===================================================================
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  // Same static insight text as your live app — used for Group B (control)
+  const INSIGHTS = {
+    'making progress': { label: 'Phase Read', text: 'Momentum is building. This is the compound phase — what you do now stacks. Keep the streak alive.' },
+    'energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
+    'stuck':           { label: 'Phase Read', text: "Stuck is normal at this stage. It usually means you're past the easy part. Shrink the next action to something tiny." },
+    'uncertain':       { label: 'Phase Read', text: "Uncertainty isn't stalling — it's processing. Write down the one thing you'd need to know to move forward." },
+    'about to quit':   { label: 'Phase Read', text: "This feeling peaks right before things start to click. Look back at your earliest entries — you've already come further than it feels." },
+  };
+
+  const PHASE_NAMES = ['Ignition', 'Dip', 'Grind', 'Traction', 'Compounding'];
+
+  // Same phase-inference logic as your live app, ported to work off
+  // a plain array of {feeling} objects fetched from Supabase.
+  function inferPhase(entries) {
+    if (!entries.length) return 0;
+    const last5 = entries.slice(-5);
+    const counts = { positive: 0, struggling: 0, uncertain: 0 };
+    last5.forEach(e => {
+      if (['energized', 'making progress'].includes(e.feeling)) counts.positive++;
+      else if (['stuck', 'about to quit'].includes(e.feeling)) counts.struggling++;
+      else counts.uncertain++;
+    });
+    const total = entries.length;
+    if (total <= 3) return 0;
+    if (counts.struggling > counts.positive && total < 15) return 1;
+    if (total >= 5 && total < 12 && counts.uncertain >= 1) return 2;
+    if (counts.positive > counts.struggling && total >= 8) return 3;
+    if (total >= 15 && counts.positive >= counts.struggling) return 4;
+    return Math.min(Math.floor(total / 5), 4);
+  }
+
+  let participant = JSON.parse(localStorage.getItem('ec_study_participant') || 'null');
+  let selectedFeeling = null;
+  let pendingCompletionValue = null;
+  let mostRecentEntry = null; // used for the completion-check prompt
+
+  const onboarding = document.getElementById('onboarding');
+  const mainView = document.getElementById('main-view');
+
+  async function init() {
+    if (participant) {
+      onboarding.classList.add('hidden');
+      mainView.classList.remove('hidden');
+      await loadEntries();
+    }
+  }
+
+  document.getElementById('onboarding-submit').addEventListener('click', async () => {
+    const code = document.getElementById('participant-code').value.trim();
+    const goal = document.getElementById('stated-goal').value.trim();
+    const errorBox = document.getElementById('onboarding-error');
+    errorBox.classList.add('hidden');
+
+    if (!code || !goal) {
+      errorBox.textContent = 'Please fill in both fields.';
+      errorBox.classList.remove('hidden');
+      return;
+    }
+
+    // Check if this code already exists (returning participant on a new device)
+    const { data: existing, error: fetchErr } = await supabase
+      .from('participants')
+      .select('*')
+      .eq('participant_code', code)
+      .maybeSingle();
+
+    if (fetchErr) {
+      errorBox.textContent = 'Something went wrong. Try again.';
+      errorBox.classList.remove('hidden');
+      return;
+    }
+
+    if (existing) {
+      participant = existing;
+    } else {
+      const condition = Math.random() < 0.5 ? 'A' : 'B';
+      const { data: inserted, error: insertErr } = await supabase
+        .from('participants')
+        .insert({ participant_code: code, condition, stated_goal: goal })
+        .select()
+        .single();
+
+      if (insertErr) {
+        errorBox.textContent = 'Could not create your record. Check the code and try again.';
+        errorBox.classList.remove('hidden');
+        return;
+      }
+      participant = inserted;
+    }
+
+    localStorage.setItem('ec_study_participant', JSON.stringify(participant));
+    onboarding.classList.add('hidden');
+    mainView.classList.remove('hidden');
+    await loadEntries();
+  });
+
+  async function loadEntries() {
+    const { data: entries, error } = await supabase
+      .from('entries')
+      .select('*')
+      .eq('participant_id', participant.id)
+      .order('created_at', { ascending: true });
+
+    if (error || !entries) return;
+
+    renderTimeline(entries);
+
+    // If the most recent entry doesn't have a completion answer yet
+    // AND it has a nudge/insight to ask about, show the completion check.
+    if (entries.length > 0) {
+      const last = entries[entries.length - 1];
+      mostRecentEntry = last;
+      if (last.completed_previous_action === null || last.completed_previous_action === undefined) {
+        const shownText = participant.condition === 'A' ? last.ai_nudge : INSIGHTS[last.feeling]?.text;
+        if (shownText) {
+          document.getElementById('previous-nudge-text').textContent = shownText;
+          document.getElementById('completion-check').classList.remove('hidden');
+        }
+      }
+    }
+  }
+
+  function renderTimeline(entries) {
+    const timeline = document.getElementById('timeline');
+    timeline.innerHTML = [...entries].reverse().map(e => `
+      <div class="timeline-item">
+        <div class="meta">${new Date(e.created_at).toLocaleDateString()} · ${e.feeling} · ${e.phase}</div>
+        <div>${e.entry_text}</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('completed-yes').addEventListener('click', () => selectCompletion(true));
+  document.getElementById('completed-no').addEventListener('click', () => selectCompletion(false));
+
+  async function selectCompletion(value) {
+    pendingCompletionValue = value;
+    document.getElementById('completed-yes').classList.toggle('selected', value === true);
+    document.getElementById('completed-no').classList.toggle('selected', value === false);
+
+    if (mostRecentEntry) {
+      await supabase
+        .from('entries')
+        .update({ completed_previous_action: value })
+        .eq('id', mostRecentEntry.id);
+    }
+    document.getElementById('completion-check').classList.add('hidden');
+  }
+
+  document.querySelectorAll('.feeling-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.feeling-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      selectedFeeling = chip.dataset.feeling;
+      document.getElementById('submit-entry').disabled = false;
+    });
+  });
+
+  document.getElementById('submit-entry').addEventListener('click', async () => {
+    const entryText = document.getElementById('entry-text').value.trim();
+    const errorBox = document.getElementById('submit-error');
+    const loading = document.getElementById('loading');
+    const submitBtn = document.getElementById('submit-entry');
+    errorBox.classList.add('hidden');
+
+    if (!entryText || !selectedFeeling) {
+      errorBox.textContent = 'Please write an entry and select a feeling.';
+      errorBox.classList.remove('hidden');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    loading.classList.remove('hidden');
+
+    // Get current entries to compute phase
+    const { data: existingEntries } = await supabase
+      .from('entries')
+      .select('feeling')
+      .eq('participant_id', participant.id)
+      .order('created_at', { ascending: true });
+
+    const phaseIndex = inferPhase(existingEntries || []);
+    const phaseName = PHASE_NAMES[phaseIndex];
+
+    let shownText = '';
+    let aiNudge = null;
+
+    if (participant.condition === 'A') {
+      try {
+        const res = await fetch('/api/nudge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goal: participant.stated_goal, phase: phaseName, entryText }),
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'AI generation failed');
+        aiNudge = json.nudge;
+        shownText = aiNudge;
+      } catch (err) {
+        errorBox.textContent = 'Could not generate feedback. Try again.';
+        errorBox.classList.remove('hidden');
+        loading.classList.add('hidden');
+        submitBtn.disabled = false;
+        return;
+      }
+    } else {
+      shownText = INSIGHTS[selectedFeeling].text;
+    }
+
+    const { error: insertErr } = await supabase.from('entries').insert({
+      participant_id: participant.id,
+      entry_text: entryText,
+      feeling: selectedFeeling,
+      phase: phaseName,
+      ai_nudge: aiNudge,
+      completed_previous_action: null,
+    });
+
+    loading.classList.add('hidden');
+
+    if (insertErr) {
+      errorBox.textContent = 'Could not save your entry. Try again.';
+      errorBox.classList.remove('hidden');
+      submitBtn.disabled = false;
+      return;
+    }
+
+    document.getElementById('nudge-label').textContent = 'Phase Read';
+    document.getElementById('nudge-text-content').textContent = shownText;
+    document.getElementById('nudge-result').classList.remove('hidden');
+
+    document.getElementById('entry-text').value = '';
+    document.querySelectorAll('.feeling-chip').forEach(c => c.classList.remove('selected'));
+    selectedFeeling = null;
+    submitBtn.disabled = true;
+    document.getElementById('completion-check').classList.add('hidden');
+
+    await loadEntries();
+  });
+
+  init();
+</script>
+</body>
+</html>
