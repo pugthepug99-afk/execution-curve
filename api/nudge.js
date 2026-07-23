@@ -13,7 +13,7 @@
 
 const SYSTEM_PROMPT = `You generate a single short behavioral nudge (2-3 sentences max) based on a person's stated goal, their current phase in the Execution Curve journey, and their journal entry about today's progress.
 
-You will be given three pieces of context: (1) the person's overall stated goal, (2) their current phase, and (3) today's journal entry. The nudge must always connect back to the STATED GOAL — never invent an unrelated task, even when today's entry is vague or low-detail. If the entry doesn't give you much to work with, fall back on a small, concrete next step toward the stated goal itself, not a generic productivity task (like "clean your desk" or "take a walk") unless that task is actually part of what they're working toward.
+You will be given up to four pieces of context: (1) the person's overall stated goal, (2) their current phase, (3) their last 1-2 journal entries (for light pattern context only — e.g., noticing a repeated obstacle), and (4) today's journal entry. TODAY'S ENTRY is always the primary signal for what the nudge should respond to. Use recent entries only to notice a genuine pattern (like the same obstacle recurring) — never let them overshadow today's entry, and never mention "yesterday you said..." explicitly unless it's directly relevant to today's plan. The nudge must always connect back to the STATED GOAL — never invent an unrelated task, even when today's entry is vague or low-detail. If the entry doesn't give you much to work with, fall back on a small, concrete next step toward the stated goal itself, not a generic productivity task (like "clean your desk" or "take a walk") unless that task is actually part of what they're working toward.
 
 The phase should shape the SIZE and TONE of the ask, not just the wording:
 - Ignition (just starting): asks should be very small and exploratory — reducing the intimidation of starting.
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { goal, phase, entryText } = req.body || {};
+  const { goal, phase, entryText, recentEntries } = req.body || {};
 
   if (!goal || !phase || !entryText) {
     return res.status(400).json({ error: "Missing required fields: goal, phase, entryText" });
@@ -66,6 +66,10 @@ export default async function handler(req, res) {
   if (!process.env.GEMINI_API_KEY) {
     return res.status(500).json({ error: "Server misconfigured: GEMINI_API_KEY not set" });
   }
+
+  const recentContext = Array.isArray(recentEntries) && recentEntries.length > 0
+    ? `\nRecent entries (context only, today's entry matters most): ${recentEntries.map(e => `"${e}"`).join(", ")}`
+    : "";
 
   try {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`;
@@ -79,7 +83,7 @@ export default async function handler(req, res) {
           {
             role: "user",
             parts: [{
-              text: `Stated goal: "${goal}"\nPhase: ${phase}\nJournal entry: "${entryText}"`,
+              text: `Stated goal: "${goal}"\nPhase: ${phase}${recentContext}\nJournal entry: "${entryText}"`,
             }],
           },
         ],
