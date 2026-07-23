@@ -224,7 +224,7 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iMqFL-U8BUtkhZB7aySIGQ_gKjc2q3a";
   // ===================================================================
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   // Same static insight text as your live app — used for Group B (control)
   const INSIGHTS = {
@@ -286,7 +286,7 @@
     }
 
     // Check if this code already exists (returning participant on a new device)
-    const { data: existing, error: fetchErr } = await supabase
+    const { data: existing, error: fetchErr } = await supabaseClient
       .from('participants')
       .select('*')
       .eq('participant_code', code)
@@ -302,7 +302,7 @@
       participant = existing;
     } else {
       const condition = Math.random() < 0.5 ? 'A' : 'B';
-      const { data: inserted, error: insertErr } = await supabase
+      const { data: inserted, error: insertErr } = await supabaseClient
         .from('participants')
         .insert({ participant_code: code, condition, stated_goal: goal })
         .select()
@@ -323,7 +323,7 @@
   });
 
   async function loadEntries() {
-    const { data: entries, error } = await supabase
+    const { data: entries, error } = await supabaseClient
       .from('entries')
       .select('*')
       .eq('participant_id', participant.id)
@@ -367,7 +367,7 @@
     document.getElementById('completed-no').classList.toggle('selected', value === false);
 
     if (mostRecentEntry) {
-      await supabase
+      await supabaseClient
         .from('entries')
         .update({ completed_previous_action: value })
         .eq('id', mostRecentEntry.id);
@@ -401,7 +401,7 @@
     loading.classList.remove('hidden');
 
     // Get current entries to compute phase
-    const { data: existingEntries } = await supabase
+    const { data: existingEntries } = await supabaseClient
       .from('entries')
       .select('feeling')
       .eq('participant_id', participant.id)
@@ -435,7 +435,7 @@
       shownText = INSIGHTS[selectedFeeling].text;
     }
 
-    const { error: insertErr } = await supabase.from('entries').insert({
+    const { error: insertErr } = await supabaseClient.from('entries').insert({
       participant_id: participant.id,
       entry_text: entryText,
       feeling: selectedFeeling,
