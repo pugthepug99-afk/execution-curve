@@ -184,8 +184,7 @@
 
     <!-- Completion check for previous entry's suggested action -->
     <div id="completion-check" class="completion-check hidden">
-      <p><strong>Last time:</strong> <span id="previous-nudge-text"></span></p>
-      <p>Did you follow through on that?</p>
+      <p>Did you follow through on what was suggested last time?</p>
       <div class="yn-row">
         <button id="completed-yes" data-value="true">Yes</button>
         <button id="completed-no" data-value="false">No</button>
@@ -228,7 +227,7 @@
 
   // Same static insight text as your live app — used for Group B (control)
   const INSIGHTS = {
-    'making progress': { label: 'Phase Read', text: 'Momentum is building. This is the compound phase — what you do now stacks. Keep the streak alive.' },
+    'making progress': { label: 'Phase Read', text: "Momentum is building. What you do now stacks — keep the streak alive." },
     'energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
     'stuck':           { label: 'Phase Read', text: "Stuck is normal at this stage. It usually means you're past the easy part. Shrink the next action to something tiny." },
     'uncertain':       { label: 'Phase Read', text: "Uncertainty isn't stalling — it's processing. Write down the one thing you'd need to know to move forward." },
@@ -269,7 +268,7 @@
     if (participant) {
       onboarding.classList.add('hidden');
       mainView.classList.remove('hidden');
-      await loadEntries();
+      await loadEntries(true);
     }
   }
 
@@ -319,10 +318,12 @@
     localStorage.setItem('ec_study_participant', JSON.stringify(participant));
     onboarding.classList.add('hidden');
     mainView.classList.remove('hidden');
-    await loadEntries();
+    await loadEntries(true);
   });
 
-  async function loadEntries() {
+  let hasCheckedCompletionThisSession = false;
+
+  async function loadEntries(checkCompletion = false) {
     const { data: entries, error } = await supabaseClient
       .from('entries')
       .select('*')
@@ -333,18 +334,16 @@
 
     renderTimeline(entries);
 
-    // If the most recent entry doesn't have a completion answer yet
-    // AND it has a nudge/insight to ask about, show the completion check.
-    if (entries.length > 0) {
+    // Only ask "did you follow through?" once per session, and only on the
+    // entry that existed BEFORE this session started — never on an entry
+    // that was just created a moment ago in this same session.
+    if (checkCompletion && !hasCheckedCompletionThisSession && entries.length > 0) {
       const last = entries[entries.length - 1];
       mostRecentEntry = last;
       if (last.completed_previous_action === null || last.completed_previous_action === undefined) {
-        const shownText = participant.condition === 'A' ? last.ai_nudge : INSIGHTS[last.feeling]?.text;
-        if (shownText) {
-          document.getElementById('previous-nudge-text').textContent = shownText;
-          document.getElementById('completion-check').classList.remove('hidden');
-        }
+        document.getElementById('completion-check').classList.remove('hidden');
       }
+      hasCheckedCompletionThisSession = true;
     }
   }
 
@@ -400,15 +399,22 @@
     submitBtn.disabled = true;
     loading.classList.remove('hidden');
 
-    // Get current entries to compute phase
+    // Get current entries to compute phase, and recent entry text for context
     const { data: existingEntries } = await supabaseClient
       .from('entries')
-      .select('feeling')
+      .select('feeling, entry_text')
       .eq('participant_id', participant.id)
       .order('created_at', { ascending: true });
 
     const phaseIndex = inferPhase(existingEntries || []);
     const phaseName = PHASE_NAMES[phaseIndex];
+
+    // Last 2 entries (not counting today's, which hasn't been saved yet) —
+    // gives the AI light pattern context without overwhelming today's entry
+    // as the primary signal.
+    const recentEntries = (existingEntries || [])
+      .slice(-2)
+      .map(e => e.entry_text);
 
     let shownText = '';
     let aiNudge = null;
@@ -418,7 +424,7 @@
         const res = await fetch('/api/nudge', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ goal: participant.stated_goal, phase: phaseName, entryText }),
+          body: JSON.stringify({ goal: participant.stated_goal, phase: phaseName, entryText, recentEntries }),
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'AI generation failed');
