@@ -101,6 +101,18 @@
   .btn-primary:hover { background: var(--amber); }
   .btn-primary:disabled { opacity: 0.4; cursor: default; }
 
+  .quick-fill-row { display: flex; gap: 0.5rem; margin: -0.5rem 0 1.5rem; }
+  .quick-fill-btn {
+    font-family: var(--body);
+    font-size: 0.78rem;
+    color: var(--gray-1);
+    background: var(--gray-3);
+    border: 1px solid var(--gray-2);
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+  }
+  .quick-fill-btn:hover { color: var(--black); border-color: var(--gray-1); }
+
   .feeling-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 
   .feeling-chip {
@@ -198,6 +210,10 @@
     <div class="card">
       <label for="entry-text">What did you work on or think about today?</label>
       <textarea id="entry-text" maxlength="300"></textarea>
+      <div class="quick-fill-row">
+        <button type="button" class="quick-fill-btn" data-fill="Took a break today.">Took a break</button>
+        <button type="button" class="quick-fill-btn" data-fill="Didn't do anything on this today.">Didn't do anything today</button>
+      </div>
       <label>How did it feel?</label>
       <div class="feeling-row" id="feeling-row">
         <button class="feeling-chip" data-feeling="making progress">Making Progress</button>
@@ -217,7 +233,7 @@
     </div>
 
     <h1 style="margin-top:3rem; font-size:1.3rem;">Your entries</h1>
-    <p style="color: var(--gray-1); font-size: 0.85rem; margin-bottom: 1rem;">This is your private log — every entry you've written and the feedback you got each time. It's only visible to you and the researcher, and it's here so you can look back and see how far you've come.</p>
+    <p style="color: var(--gray-1); font-size: 0.85rem; margin-bottom: 1rem;">This is your private log — every entry you've written and the feedback you got each time. It's only visible to you and the researcher, and it's here so you can look back and see how far you've come. Every goal goes through five phases: Ignition, the Dip, Grind, Traction, and Compounding. The phase will be down in each entry. </p>
     <div id="timeline"></div>
   </div>
 </div>
@@ -382,6 +398,14 @@
     }
     document.getElementById('completion-check').classList.add('hidden');
   }
+
+  document.querySelectorAll('.quick-fill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const entryTextEl = document.getElementById('entry-text');
+      entryTextEl.value = btn.dataset.fill;
+      entryTextEl.focus();
+    });
+  });
 
   document.querySelectorAll('.feeling-chip').forEach(chip => {
     chip.addEventListener('click', () => {
