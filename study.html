@@ -228,12 +228,12 @@
     </div>
 
     <div id="nudge-result" class="nudge-box hidden">
-      <span class="nudge-label" id="nudge-label">Message</span>
+      <span class="nudge-label" id="nudge-label">Phase Read</span>
       <p class="nudge-text" id="nudge-text-content"></p>
     </div>
 
     <h1 style="margin-top:3rem; font-size:1.3rem;">Your entries</h1>
-    <p style="color: var(--gray-1); font-size: 0.85rem; margin-bottom: 1rem;">This is your private log — every entry you've written and the feedback you got each time. It's only visible to you and the researcher, and it's here so you can look back and see how far you've come. Every goal goes through five phases: Ignition, the Dip, Grind, Traction, and Compounding. The phase you are in will be shown in each entry. </p>
+    <p style="color: var(--gray-1); font-size: 0.85rem; margin-bottom: 1rem;">This is your private log — every entry you've written and the feedback you got each time. It's only visible to you and the researcher, and it's here so you can look back and see how far you've come.</p>
     <div id="timeline"></div>
   </div>
 </div>
@@ -248,11 +248,11 @@
 
   // Same static insight text as your live app — used for Group B (control)
   const INSIGHTS = {
-    'making progress': { label: 'Message', text: "Momentum is building. What you do now stacks — keep the streak alive." },
-    'energized':       { label: 'Message', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
-    'stuck':           { label: 'Message', text: "Stuck is normal at this stage. It usually means you're past the easy part. Shrink the next action to something tiny." },
-    'uncertain':       { label: 'Message', text: "Uncertainty isn't stalling — it's processing. Write down the one thing you'd need to know to move forward." },
-    'about to quit':   { label: 'Message', text: "This feeling peaks right before things start to click. Look back at your earliest entries — you've already come further than it feels." },
+    'making progress': { label: 'Phase Read', text: "Momentum is building. What you do now stacks — keep the streak alive." },
+    'energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
+    'stuck':           { label: 'Phase Read', text: "Stuck is normal at this stage. It usually means you're past the easy part. Shrink the next action to something tiny." },
+    'uncertain':       { label: 'Phase Read', text: "Uncertainty isn't stalling — it's processing. Write down the one thing you'd need to know to move forward." },
+    'about to quit':   { label: 'Phase Read', text: "This feeling peaks right before things start to click. Look back at your earliest entries — you've already come further than it feels." },
   };
 
   const PHASE_NAMES = ['Ignition', 'Dip', 'Grind', 'Traction', 'Compounding'];
@@ -261,20 +261,26 @@
   // a plain array of {feeling} objects fetched from Supabase.
   function inferPhase(entries) {
     if (!entries.length) return 0;
-    const last5 = entries.slice(-5);
-    const counts = { positive: 0, struggling: 0, uncertain: 0 };
-    last5.forEach(e => {
-      if (['energized', 'making progress'].includes(e.feeling)) counts.positive++;
-      else if (['stuck', 'about to quit'].includes(e.feeling)) counts.struggling++;
-      else counts.uncertain++;
-    });
     const total = entries.length;
-    if (total <= 3) return 0;
-    if (counts.struggling > counts.positive && total < 15) return 1;
-    if (total >= 5 && total < 12 && counts.uncertain >= 1) return 2;
-    if (counts.positive > counts.struggling && total >= 8) return 3;
-    if (total >= 15 && counts.positive >= counts.struggling) return 4;
-    return Math.min(Math.floor(total / 5), 4);
+    if (total <= 2) return 0; // Ignition — not enough data yet
+
+    // Weight the most recent entries most heavily, so a current rough
+    // stretch isn't masked by a better distant history.
+    const recent = entries.slice(-3);
+    let posScore = 0, strugScore = 0;
+    recent.forEach((e, i) => {
+      const weight = i + 1; // most recent entry counts most
+      if (['energized', 'making progress'].includes(e.feeling)) posScore += weight;
+      else if (['stuck', 'about to quit'].includes(e.feeling)) strugScore += weight;
+    });
+
+    if (strugScore > posScore) return 1; // Dip — recent struggle dominates, regardless of history
+    if (strugScore === posScore) return 2; // Grind — mixed recent signal
+
+    // Recent trend is positive from here on
+    if (total < 6) return 2;  // Grind — too early to call it Traction even if recent is good
+    if (total < 15) return 3; // Traction
+    return 4;                  // Compounding
   }
 
   let participant = JSON.parse(localStorage.getItem('ec_study_participant') || 'null');
