@@ -395,6 +395,108 @@
 
   .user-curve-phase-label { font-family: 'DM Mono', monospace; font-size: 8px; fill: #555; }
 
+  /* DAILY TASK CHECK */
+  .task-check-wrap {
+    border: 1px solid var(--gray-2);
+    padding: 1.75rem 2rem;
+    margin-bottom: 3rem;
+    display: none;
+  }
+
+  .task-check-wrap.show { display: block; }
+
+  .task-check-goal {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--amber);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .task-check-goal-text {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    line-height: 1.3;
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+
+  .task-check-question {
+    font-family: var(--body);
+    font-size: 0.95rem;
+    color: var(--gray-1);
+    margin-bottom: 1rem;
+  }
+
+  .task-check-btns {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0;
+  }
+
+  .btn-task-yes {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--white);
+    background: var(--black);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.15s;
+  }
+
+  .btn-task-yes:hover { background: #4a7c59; }
+
+  .btn-task-no {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--gray-1);
+    background: none;
+    border: 1px solid var(--gray-2);
+    padding: 0.6rem 1.5rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .btn-task-no:hover { border-color: #b85c38; color: #b85c38; }
+
+  .task-check-response {
+    margin-top: 1rem;
+    font-family: var(--body);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    display: none;
+    padding: 0.85rem 1rem;
+  }
+
+  .task-check-response.yes { background: #f0f7f0; color: #3a6647; display: block; }
+  .task-check-response.no  { background: var(--gray-3); color: var(--black); display: block; }
+  .task-check-response.persistent-no { background: #0A0A0A; color: #ccc; display: block; }
+
+  .task-check-reset {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--gray-1);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    margin-top: 0.75rem;
+    padding: 0;
+    display: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .task-check-reset:hover { color: var(--black); }
+
   .log-actions { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; }
 
   .btn-start-fresh {
@@ -1254,6 +1356,20 @@
       <text x="740" y="8"  class="user-curve-phase-label" text-anchor="middle">Compounding</text>
     </svg>
   </div>
+
+  <!-- DAILY TASK CHECK -->
+  <div class="task-check-wrap" id="task-check-wrap">
+    <span class="task-check-goal">Your Goal</span>
+    <span class="task-check-goal-text" id="task-check-goal-text"></span>
+    <p class="task-check-question">Did you work toward this today?</p>
+    <div class="task-check-btns" id="task-check-btns">
+      <button class="btn-task-yes" onclick="taskCheckAnswer('yes')">Yes</button>
+      <button class="btn-task-no" onclick="taskCheckAnswer('no')">Not Today</button>
+    </div>
+    <div class="task-check-response" id="task-check-response"></div>
+    <button class="task-check-reset" id="task-check-reset" onclick="taskCheckReset()">Answer again</button>
+  </div>
+
   <div class="log-empty" id="log-empty">
     <div class="log-empty-line"></div>
     <div class="log-empty-prompt">
@@ -1323,7 +1439,7 @@
   <div class="entry-step" id="step-3">
     <div class="entry-confirm">
       <div class="entry-confirm-dot"></div>
-      <p class="entry-confirm-text">Logged — <strong id="confirm-preview"></strong></p>
+      <p class="entry-confirm-text">Logged: <strong id="confirm-preview"></strong></p>
     </div>
   </div>
 </div>
@@ -1494,11 +1610,11 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && bar.classList.contains('visible')) closeBar(); });
 
   const INSIGHTS = {
-    'making progress': { label: 'Phase Read', text: 'Momentum is building. This is the compound phase — what you do now stacks. Keep the streak alive.' },
+    'making progress': { label: 'Phase Read', text: 'Momentum is building. This is the compound phase, what you do now stacks. Keep the streak alive.' },
     'energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
     'stuck':           { label: 'Phase Read', text: "Stuck is normal at this stage. It usually means you're past the easy part. Shrink the next action to something tiny." },
-    'uncertain':       { label: 'Phase Read', text: "Uncertainty isn't stalling — it's processing. Write down the one thing you'd need to know to move forward." },
-    'about to quit':   { label: 'Phase Read', text: "This feeling peaks right before things start to click. Look back at your earliest entries — you've already come further than it feels." },
+    'uncertain':       { label: 'Phase Read', text: "Uncertainty isn't stalling, it's processing. Write down the one thing you'd need to know to move forward." },
+    'about to quit':   { label: 'Phase Read', text: "This feeling peaks right before things start to click. Look back at your earliest entries. You've already come further than it feels." },
   };
 
   function formatDate(iso) {
@@ -1714,6 +1830,7 @@
       localStorage.setItem('ec_goal', goalInput.value.trim());
       hideGoalModal();
       updateGoalChip();
+      renderTaskCheck();
     }
     if (e.key === 'Escape') hideGoalModal();
   });
@@ -1724,6 +1841,7 @@
     localStorage.setItem('ec_goal', val);
     hideGoalModal();
     updateGoalChip();
+    renderTaskCheck();
   });
 
   goalSkipBtn.addEventListener('click', () => {
@@ -1742,10 +1860,103 @@
 
   updateGoalChip();
 
+  // ---- DAILY TASK CHECK ----
+  const YES_MESSAGES = [
+    "Good. Keep that going tomorrow.",
+    "That's what matters. Show up again tomorrow.",
+    "One day at a time. Log how it goes.",
+    "That's the whole game. Do it again tomorrow.",
+  ];
+
+  const NO_MESSAGES = [
+    "That's fine. Tomorrow is a clean start. Log what gets in the way next time.",
+    "It happens. What would make it easier to get one small thing done tomorrow?",
+    "Not every day works out. What is one thing you can do tomorrow, even a tiny one?",
+  ];
+
+  const PERSISTENT_NO_MESSAGES = [
+    "You have said not today a few times in a row. That is worth paying attention to. What is actually stopping you? Write it in your next entry.",
+    "A few days without progress is normal. A week starts to become a pattern. What would it take to do just one thing toward this goal tomorrow?",
+    "This goal is still here. You keep coming back to check it. That means something. What is the smallest possible version of progress you could make tomorrow?",
+  ];
+
+  function getDateKey() {
+    return 'ec_task_' + new Date().toISOString().slice(0, 10);
+  }
+
+  function renderTaskCheck() {
+    const goal = localStorage.getItem('ec_goal') || '';
+    const wrap = document.getElementById('task-check-wrap');
+    if (!goal) { wrap.classList.remove('show'); return; }
+
+    wrap.classList.add('show');
+    document.getElementById('task-check-goal-text').textContent = goal;
+
+    const todayKey = getDateKey();
+    const todayAnswer = localStorage.getItem(todayKey);
+    const noStreak = parseInt(localStorage.getItem('ec_task_no_streak') || '0', 10);
+
+    const btns = document.getElementById('task-check-btns');
+    const response = document.getElementById('task-check-response');
+    const reset = document.getElementById('task-check-reset');
+
+    if (todayAnswer) {
+      btns.style.display = 'none';
+      reset.style.display = 'inline';
+
+      if (todayAnswer === 'yes') {
+        const msg = YES_MESSAGES[Math.floor(Math.random() * YES_MESSAGES.length)];
+        response.className = 'task-check-response yes';
+        response.textContent = msg;
+      } else {
+        let msg, cls;
+        if (noStreak >= 3) {
+          cls = 'task-check-response persistent-no';
+          msg = PERSISTENT_NO_MESSAGES[Math.min(noStreak - 3, PERSISTENT_NO_MESSAGES.length - 1)];
+        } else {
+          cls = 'task-check-response no';
+          msg = NO_MESSAGES[Math.min(noStreak - 1, NO_MESSAGES.length - 1)];
+        }
+        response.className = cls;
+        response.textContent = msg;
+      }
+    } else {
+      btns.style.display = 'flex';
+      response.className = 'task-check-response';
+      response.textContent = '';
+      reset.style.display = 'none';
+    }
+  }
+
+  function taskCheckAnswer(answer) {
+    const todayKey = getDateKey();
+    localStorage.setItem(todayKey, answer);
+
+    if (answer === 'no') {
+      const streak = parseInt(localStorage.getItem('ec_task_no_streak') || '0', 10);
+      localStorage.setItem('ec_task_no_streak', streak + 1);
+    } else {
+      localStorage.setItem('ec_task_no_streak', '0');
+    }
+
+    renderTaskCheck();
+  }
+
+  function taskCheckReset() {
+    const todayKey = getDateKey();
+    localStorage.removeItem(todayKey);
+    renderTaskCheck();
+  }
+
+  window.taskCheckAnswer = taskCheckAnswer;
+  window.taskCheckReset = taskCheckReset;
+
+  renderTaskCheck();
+
   const MILESTONES = {
     5:  "Five entries in. The shape of your timeline is starting to show.",
     10: "Ten entries. This is usually around where people stop comparing day-to-day and start seeing the trend.",
-    25: "Twenty-five entries. Scroll back to your first one — that's the distance you've actually covered.",
+    25: "Twenty-five entries. Scroll back to your first one. That's the distance you've actually covered.",
     50: "Fifty entries. Most people never get here. You're building a real record.",
   };
 
