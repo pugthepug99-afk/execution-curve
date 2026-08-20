@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -725,6 +724,162 @@
     .phase-next-step { flex-direction: column; gap: 0.5rem; }
   }
 
+  /* GOAL MODAL */
+  .goal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.75);
+    z-index: 600;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .goal-overlay.show { display: flex; }
+
+  .goal-box {
+    background: var(--white);
+    border: 1px solid var(--gray-2);
+    padding: 2.5rem 2rem 2rem;
+    max-width: 440px;
+    width: calc(100% - 2rem);
+  }
+
+  .goal-box-label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--amber);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .goal-box h3 {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .goal-box p {
+    font-family: var(--body);
+    font-size: 0.88rem;
+    color: var(--gray-1);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .goal-box p em {
+    font-style: normal;
+    color: var(--black);
+  }
+
+  #goal-input {
+    width: 100%;
+    font-family: var(--body);
+    font-size: 0.95rem;
+    color: var(--black);
+    background: var(--gray-3);
+    border: 1px solid var(--gray-2);
+    padding: 0.8rem 1rem;
+    outline: none;
+    margin-bottom: 1rem;
+    transition: border-color 0.15s;
+  }
+
+  #goal-input:focus { border-color: var(--amber); }
+  #goal-input::placeholder { color: var(--gray-1); }
+
+  .goal-box-actions { display: flex; justify-content: flex-end; gap: 0.75rem; }
+
+  .btn-goal-save {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--white);
+    background: var(--black);
+    border: none;
+    padding: 0.6rem 1.25rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.15s;
+  }
+
+  .btn-goal-save:hover { background: var(--amber); }
+  .btn-goal-save:disabled { opacity: 0.35; cursor: default; }
+
+  .btn-goal-skip {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--gray-1);
+    background: none;
+    border: 1px solid var(--gray-2);
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  .btn-goal-skip:hover { border-color: var(--black); color: var(--black); }
+
+  /* AI NUDGE BLOCK in timeline */
+  .timeline-nudge {
+    margin-top: 0.75rem;
+    padding: 0.9rem 1rem;
+    background: var(--black);
+    border-left: 2px solid var(--amber);
+    position: relative;
+  }
+
+  .timeline-nudge-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--amber);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .timeline-nudge p {
+    font-family: var(--body);
+    font-size: 0.85rem;
+    color: #ccc;
+    line-height: 1.65;
+  }
+
+  .timeline-nudge-loading {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: #555;
+    letter-spacing: 0.04em;
+    animation: nudgePulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes nudgePulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Goal chip in log header */
+  .log-goal-chip {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--gray-1);
+    letter-spacing: 0.04em;
+    border: 1px solid var(--gray-2);
+    padding: 0.2rem 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  .log-goal-chip:hover { border-color: var(--amber); color: var(--black); }
+  .log-goal-chip span { color: var(--black); }
+
   /* ENTRY BAR */
   #entry-bar {
     position: fixed;
@@ -1076,6 +1231,9 @@
       <h2 class="section-heading">Every entry.<br/>The whole picture.</h2>
       <div class="log-meta" id="log-meta">0 entries</div>
     </div>
+    <div id="log-goal-chip" class="log-goal-chip" onclick="showGoalModal()" style="display:none">
+      Goal: <span id="log-goal-display"></span> · edit
+    </div>
   </div>
   <div class="milestone-banner" id="milestone-banner">
     <span class="milestone-num" id="milestone-num"></span>
@@ -1121,7 +1279,21 @@
   </div>
 </div>
 
-<button id="entry-trigger" aria-label="Log an entry">+ Log Entry</button>
+<!-- GOAL MODAL -->
+<div class="goal-overlay" id="goal-overlay">
+  <div class="goal-box">
+    <span class="goal-box-label">One Time Setup</span>
+    <h3>What are you working toward?</h3>
+    <p>This helps us give you <em>specific</em> next steps instead of generic advice. You can change it any time.</p>
+    <input type="text" id="goal-input" placeholder="e.g. Launch my first app, grow my YouTube channel..." maxlength="120" autocomplete="off"/>
+    <div class="goal-box-actions">
+      <button class="btn-goal-skip" id="goal-skip-btn">Skip For Now</button>
+      <button class="btn-goal-save" id="goal-save-btn" disabled>Save Goal</button>
+    </div>
+  </div>
+</div>
+
+<button id="entry-trigger" aria-label="Log an entry">+ log entry</button>
 
 <!-- QUICK ENTRY BAR -->
 <div id="entry-bar" role="dialog" aria-label="Quick log entry">
@@ -1235,16 +1407,76 @@
 
   backBtn.addEventListener('click', () => { showStep(1); setTimeout(() => entryText.focus(), 50); });
 
-  submitBtn.addEventListener('click', () => {
+  submitBtn.addEventListener('click', async () => {
     if (!selectedFeeling) return;
-    const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-    entries.push({ text: entryValue, feeling: selectedFeeling, date: new Date().toISOString() });
-    localStorage.setItem('ec_entries', JSON.stringify(entries));
+
+    const rawEntries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+    const newEntry = {
+      text: entryValue,
+      feeling: selectedFeeling,
+      date: new Date().toISOString(),
+      nudge: null,
+      nudgeLoading: true,
+    };
+    rawEntries.push(newEntry);
+    localStorage.setItem('ec_entries', JSON.stringify(rawEntries));
+
     renderLog();
-    checkMilestone(entries.length);
+    checkMilestone(rawEntries.length);
     confirmPreview.textContent = `"${entryValue.slice(0, 42)}${entryValue.length > 42 ? '…' : ''}" · ${selectedFeeling}`;
     showStep(3);
     setTimeout(() => closeBar(), 2800);
+
+    // Fetch AI nudge in background
+    const goal = localStorage.getItem('ec_goal') || '';
+    if (goal) {
+      const phaseNames = ['Ignition', 'The Dip', 'Grind', 'Traction', 'Compounding'];
+      const phaseIndex = inferPhase(rawEntries) ?? 0;
+      const phaseName = phaseNames[phaseIndex];
+      const recentEntries = rawEntries.slice(-3, -1).map(e => e.text);
+
+      try {
+        const res = await fetch('/api/nudge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            goal,
+            phase: phaseName,
+            entryText: entryValue,
+            recentEntries,
+          }),
+        });
+        const data = await res.json();
+        const nudge = data.nudge || null;
+
+        // Save nudge back into the entry
+        const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+        const idx = updated.length - 1;
+        if (updated[idx]) {
+          updated[idx].nudge = nudge;
+          updated[idx].nudgeLoading = false;
+          localStorage.setItem('ec_entries', JSON.stringify(updated));
+          renderLog();
+        }
+      } catch (err) {
+        // Silently fail — just remove the loading state
+        const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+        const idx = updated.length - 1;
+        if (updated[idx]) {
+          updated[idx].nudgeLoading = false;
+          localStorage.setItem('ec_entries', JSON.stringify(updated));
+          renderLog();
+        }
+      }
+    } else {
+      // No goal set — clear loading state
+      const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+      const idx = updated.length - 1;
+      if (updated[idx]) {
+        updated[idx].nudgeLoading = false;
+        localStorage.setItem('ec_entries', JSON.stringify(updated));
+      }
+    }
   });
 
   function closeBar() {
@@ -1380,6 +1612,7 @@
 
     meta.textContent = entries.length === 1 ? '1 entry' : `${entries.length} entries`;
     updateUserCurve(rawEntries);
+    updateGoalChip();
 
     if (entries.length === 0) {
       empty.style.display = 'flex';
@@ -1394,6 +1627,22 @@
     timeline.innerHTML = entries.map((entry, i) => {
       const realIndex = rawEntries.length - 1 - i;
       const insight = INSIGHTS[entry.feeling] || null;
+
+      let nudgeBlock = '';
+      if (entry.nudgeLoading) {
+        nudgeBlock = `
+          <div class="timeline-nudge">
+            <span class="timeline-nudge-label">Your Nudge</span>
+            <p class="timeline-nudge-loading">Generating your personalised next step...</p>
+          </div>`;
+      } else if (entry.nudge) {
+        nudgeBlock = `
+          <div class="timeline-nudge">
+            <span class="timeline-nudge-label">Your Nudge</span>
+            <p>${entry.nudge}</p>
+          </div>`;
+      }
+
       return `
         <div class="timeline-entry" style="transition-delay: ${i * 0.06}s">
           <div class="timeline-date">${formatDate(entry.date)}</div>
@@ -1409,6 +1658,7 @@
               <span class="timeline-insight-label">${insight.label}</span>
               <p>${insight.text}</p>
             </div>` : ''}
+            ${nudgeBlock}
             <button class="btn-delete-entry" onclick="confirmAction('entry', ${realIndex})">Delete Entry</button>
           </div>
         </div>`;
@@ -1422,6 +1672,75 @@
   }
 
   renderLog();
+
+  // ---- GOAL MODAL ----
+  const goalOverlay = document.getElementById('goal-overlay');
+  const goalInput = document.getElementById('goal-input');
+  const goalSaveBtn = document.getElementById('goal-save-btn');
+  const goalSkipBtn = document.getElementById('goal-skip-btn');
+
+  function showGoalModal() {
+    const existing = localStorage.getItem('ec_goal') || '';
+    goalInput.value = existing;
+    goalSaveBtn.disabled = existing.trim().length === 0;
+    goalOverlay.classList.add('show');
+    setTimeout(() => goalInput.focus(), 100);
+  }
+
+  function hideGoalModal() {
+    goalOverlay.classList.remove('show');
+  }
+
+  function updateGoalChip() {
+    const goal = localStorage.getItem('ec_goal') || '';
+    const chip = document.getElementById('log-goal-chip');
+    const display = document.getElementById('log-goal-display');
+    if (goal) {
+      display.textContent = goal.length > 48 ? goal.slice(0, 48) + '…' : goal;
+      chip.style.display = 'inline-flex';
+    } else {
+      chip.style.display = 'none';
+    }
+  }
+
+  window.showGoalModal = showGoalModal;
+
+  goalInput.addEventListener('input', () => {
+    goalSaveBtn.disabled = goalInput.value.trim().length === 0;
+  });
+
+  goalInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && goalInput.value.trim()) {
+      localStorage.setItem('ec_goal', goalInput.value.trim());
+      hideGoalModal();
+      updateGoalChip();
+    }
+    if (e.key === 'Escape') hideGoalModal();
+  });
+
+  goalSaveBtn.addEventListener('click', () => {
+    const val = goalInput.value.trim();
+    if (!val) return;
+    localStorage.setItem('ec_goal', val);
+    hideGoalModal();
+    updateGoalChip();
+  });
+
+  goalSkipBtn.addEventListener('click', () => {
+    localStorage.setItem('ec_goal_skipped', '1');
+    hideGoalModal();
+  });
+
+  goalOverlay.addEventListener('click', function(e) {
+    if (e.target === this) hideGoalModal();
+  });
+
+  // Show goal modal on first ever visit (no goal set, not yet skipped)
+  if (!localStorage.getItem('ec_goal') && !localStorage.getItem('ec_goal_skipped')) {
+    setTimeout(() => showGoalModal(), 1200);
+  }
+
+  updateGoalChip();
 
   const MILESTONES = {
     5:  "Five entries in. The shape of your timeline is starting to show.",
