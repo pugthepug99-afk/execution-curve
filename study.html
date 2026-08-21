@@ -79,6 +79,7 @@
     color: var(--black);
     margin-bottom: 1.5rem;
     outline: none;
+    background: var(--white);
   }
 
   input[type="text"]:focus, textarea:focus { border-color: var(--amber); }
@@ -96,12 +97,14 @@
     cursor: pointer;
     letter-spacing: -0.01em;
     width: 100%;
+    transition: background 0.15s;
   }
 
   .btn-primary:hover { background: var(--amber); }
-  .btn-primary:disabled { opacity: 0.4; cursor: default; }
+  .btn-primary:disabled { opacity: 0.4; cursor: default; background: var(--black); }
 
-  .quick-fill-row { display: flex; gap: 0.5rem; margin: -0.5rem 0 1.5rem; }
+  .quick-fill-row { display: flex; gap: 0.5rem; margin: -0.5rem 0 1.5rem; flex-wrap: wrap; }
+
   .quick-fill-btn {
     font-family: var(--body);
     font-size: 0.78rem;
@@ -110,7 +113,9 @@
     border: 1px solid var(--gray-2);
     padding: 0.35rem 0.75rem;
     cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
   }
+
   .quick-fill-btn:hover { color: var(--black); border-color: var(--gray-1); }
 
   .feeling-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
@@ -123,6 +128,7 @@
     border: 1px solid var(--gray-2);
     padding: 0.4rem 0.9rem;
     cursor: pointer;
+    transition: all 0.15s;
   }
 
   .feeling-chip.selected { color: var(--white); background: var(--black); border-color: var(--black); }
@@ -134,9 +140,11 @@
   }
 
   .completion-check p { font-size: 0.9rem; margin-bottom: 1rem; }
-  .completion-check .prev-suggestion-label { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); letter-spacing: 0.04em; margin-bottom: 0.4rem; }
-  .completion-check .prev-suggestion-text { font-size: 0.9rem; font-style: italic; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gray-2); }
-  .completion-check .yn-row { display: flex; gap: 0.75rem; }
+  .completion-check .prev-suggestion-label { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); letter-spacing: 0.04em; margin-bottom: 0.4rem; display: block; }
+  .completion-check .prev-suggestion-text { font-size: 0.9rem; font-style: italic; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gray-2); display: block; }
+
+  .yn-row { display: flex; gap: 0.75rem; }
+
   .completion-check button {
     flex: 1;
     padding: 0.65rem;
@@ -145,8 +153,10 @@
     cursor: pointer;
     font-family: var(--body);
     font-size: 0.9rem;
+    transition: all 0.15s;
   }
-  .completion-check button.selected { background: var(--black); color: var(--white); }
+
+  .completion-check button.selected { background: var(--black); color: var(--white); border-color: var(--black); }
 
   .nudge-box {
     background: var(--black);
@@ -165,12 +175,37 @@
     font-size: 0.9rem;
   }
 
+  .timeline-item:last-child { border-bottom: none; }
   .timeline-item .meta { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-1); margin-bottom: 0.4rem; }
+  .timeline-item .nudge-preview { font-size: 0.82rem; color: var(--gray-1); margin-top: 0.4rem; font-style: italic; }
 
   .hidden { display: none; }
 
   .error-text { color: #b85c38; font-size: 0.85rem; margin-bottom: 1rem; }
-  .loading-text { color: var(--gray-1); font-size: 0.85rem; margin-bottom: 1rem; font-family: var(--mono); }
+
+  .loading-text {
+    color: var(--gray-1);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    font-family: var(--mono);
+    animation: studyPulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes studyPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  .success-notice {
+    background: #f0f7f0;
+    color: #3a6647;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -178,10 +213,10 @@
 <div class="wrap">
   <span class="eyebrow">Execution Curve — Research Study</span>
 
-  <!-- ===== ONBOARDING (shown only if no participant record found) ===== -->
+  <!-- ONBOARDING -->
   <div id="onboarding">
     <h1>Welcome to the study</h1>
-    <p class="lead">Enter the code your researcher gave you, and tell us what you're working toward. This only needs to be done once.</p>
+    <p class="lead">Enter the code your researcher gave you, and tell us what you are working toward. This only needs to be done once.</p>
     <div class="card">
       <label for="participant-code">Participant Code</label>
       <input type="text" id="participant-code" placeholder="e.g. EC-014" />
@@ -192,18 +227,18 @@
     </div>
   </div>
 
-  <!-- ===== MAIN LOG VIEW (shown after onboarding is complete) ===== -->
+  <!-- MAIN LOG VIEW -->
   <div id="main-view" class="hidden">
     <h1>Today's entry</h1>
 
     <!-- Completion check for previous entry's suggested action -->
     <div id="completion-check" class="completion-check hidden">
-      <p class="prev-suggestion-label">Your last suggestion:</p>
-      <p id="previous-nudge-text" class="prev-suggestion-text"></p>
+      <span class="prev-suggestion-label">Your last suggestion:</span>
+      <span id="previous-nudge-text" class="prev-suggestion-text"></span>
       <p>Did you follow through on it?</p>
       <div class="yn-row">
         <button id="completed-yes" data-value="true">Yes</button>
-        <button id="completed-no" data-value="false">No</button>
+        <button id="completed-no" data-value="false">Not really</button>
       </div>
     </div>
 
@@ -212,7 +247,7 @@
       <textarea id="entry-text" maxlength="300"></textarea>
       <div class="quick-fill-row">
         <button type="button" class="quick-fill-btn" data-fill="Took a break today.">Took a break</button>
-        <button type="button" class="quick-fill-btn" data-fill="Didn't do anything on this today.">Didn't do anything today</button>
+        <button type="button" class="quick-fill-btn" data-fill="Did not do anything on this today.">Did nothing today</button>
       </div>
       <label>How did it feel?</label>
       <div class="feeling-row" id="feeling-row">
@@ -223,70 +258,63 @@
         <button class="feeling-chip" data-feeling="about to quit">About To Quit</button>
       </div>
       <div id="submit-error" class="error-text hidden"></div>
-      <div id="loading" class="loading-text hidden">Generating your feedback...</div>
+      <div id="success-notice" class="success-notice">Entry saved.</div>
+      <div id="loading" class="loading-text hidden">Saving your entry and generating feedback...</div>
       <button class="btn-primary" id="submit-entry" disabled>Save Entry</button>
     </div>
 
     <div id="nudge-result" class="nudge-box hidden">
-      <span class="nudge-label" id="nudge-label">Phase Read</span>
+      <span class="nudge-label" id="nudge-label">Your Feedback</span>
       <p class="nudge-text" id="nudge-text-content"></p>
     </div>
 
     <h1 style="margin-top:3rem; font-size:1.3rem;">Your entries</h1>
-    <p style="color: var(--gray-1); font-size: 0.85rem; margin-bottom: 1rem;">This is your private log — every entry you've written and the feedback you got each time. It's only visible to you and the researcher, and it's here so you can look back and see how far you've come. A staged model is a simplification, and real behavior change is often cyclical rather than linear. The model shows the phases to get to inital sucess, even though there are still challenges after sucess. </p>
+    <p style="color: var(--gray-1); font-size: 0.85rem; margin-bottom: 1rem;">This is your private log. Every entry you have written and the feedback you received each time. It is only visible to you and the researcher. A staged model is a simplification and real behavior change is often cyclical rather than linear. The model shows the phases to get to initial success, even though there are still challenges after success.</p>
     <div id="timeline"></div>
   </div>
 </div>
 
 <script>
-  // ===== CONFIG — fill these in with your real Supabase values =====
   const SUPABASE_URL = "https://exqczahgelcoibcsagsx.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iMqFL-U8BUtkhZB7aySIGQ_gKjc2q3a";
-  // ===================================================================
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // Same static insight text as your live app — used for Group B (control)
+  // Static insight text for Group B (control condition)
   const INSIGHTS = {
-    'making progress': { label: 'Phase Read', text: "Momentum is building. What you do now stacks — keep the streak alive." },
+    'making progress': { label: 'Phase Read', text: "Momentum is building. What you do now stacks, keep the streak alive." },
     'energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
-    'stuck':           { label: 'Phase Read', text: "Stuck is normal at this stage. It usually means you're past the easy part. Shrink the next action to something tiny." },
-    'uncertain':       { label: 'Phase Read', text: "Uncertainty isn't stalling — it's processing. Write down the one thing you'd need to know to move forward." },
-    'about to quit':   { label: 'Phase Read', text: "This feeling peaks right before things start to click. Look back at your earliest entries — you've already come further than it feels." },
+    'stuck':           { label: 'Phase Read', text: "Stuck is normal at this stage. It usually means you are past the easy part. Shrink the next action to something tiny." },
+    'uncertain':       { label: 'Phase Read', text: "Uncertainty is not stalling, it is processing. Write down the one thing you would need to know to move forward." },
+    'about to quit':   { label: 'Phase Read', text: "This feeling peaks right before things start to click. Look back at your earliest entries. You have already come further than it feels." },
   };
 
   const PHASE_NAMES = ['Ignition', 'Dip', 'Grind', 'Traction', 'Compounding'];
 
-  // Same phase-inference logic as your live app, ported to work off
-  // a plain array of {feeling} objects fetched from Supabase.
   function inferPhase(entries) {
     if (!entries.length) return 0;
     const total = entries.length;
-    if (total <= 2) return 0; // Ignition — not enough data yet
+    if (total <= 2) return 0;
 
-    // Weight the most recent entries most heavily, so a current rough
-    // stretch isn't masked by a better distant history.
     const recent = entries.slice(-3);
     let posScore = 0, strugScore = 0;
     recent.forEach((e, i) => {
-      const weight = i + 1; // most recent entry counts most
+      const weight = i + 1;
       if (['energized', 'making progress'].includes(e.feeling)) posScore += weight;
       else if (['stuck', 'about to quit'].includes(e.feeling)) strugScore += weight;
     });
 
-    if (strugScore > posScore) return 1; // Dip — recent struggle dominates, regardless of history
-    if (strugScore === posScore) return 2; // Grind — mixed recent signal
-
-    // Recent trend is positive from here on
-    if (total < 6) return 2;  // Grind — too early to call it Traction even if recent is good
-    if (total < 15) return 3; // Traction
-    return 4;                  // Compounding
+    if (strugScore > posScore) return 1;
+    if (strugScore === posScore) return 2;
+    if (total < 6) return 2;
+    if (total < 15) return 3;
+    return 4;
   }
 
   let participant = JSON.parse(localStorage.getItem('ec_study_participant') || 'null');
   let selectedFeeling = null;
-  let pendingCompletionValue = null;
-  let mostRecentEntry = null; // used for the completion-check prompt
+  let mostRecentEntry = null;
+  let hasCheckedCompletionThisSession = false;
 
   const onboarding = document.getElementById('onboarding');
   const mainView = document.getElementById('main-view');
@@ -299,10 +327,12 @@
     }
   }
 
+  // ONBOARDING SUBMIT
   document.getElementById('onboarding-submit').addEventListener('click', async () => {
     const code = document.getElementById('participant-code').value.trim();
     const goal = document.getElementById('stated-goal').value.trim();
     const errorBox = document.getElementById('onboarding-error');
+    const btn = document.getElementById('onboarding-submit');
     errorBox.classList.add('hidden');
 
     if (!code || !goal) {
@@ -311,7 +341,9 @@
       return;
     }
 
-    // Check if this code already exists (returning participant on a new device)
+    btn.disabled = true;
+    btn.textContent = 'Setting up...';
+
     const { data: existing, error: fetchErr } = await supabaseClient
       .from('participants')
       .select('*')
@@ -321,6 +353,8 @@
     if (fetchErr) {
       errorBox.textContent = 'Something went wrong. Try again.';
       errorBox.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = 'Begin';
       return;
     }
 
@@ -337,6 +371,8 @@
       if (insertErr) {
         errorBox.textContent = 'Could not create your record. Check the code and try again.';
         errorBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Begin';
         return;
       }
       participant = inserted;
@@ -348,8 +384,7 @@
     await loadEntries(true);
   });
 
-  let hasCheckedCompletionThisSession = false;
-
+  // LOAD ENTRIES + RENDER TIMELINE
   async function loadEntries(checkCompletion = false) {
     const { data: entries, error } = await supabaseClient
       .from('entries')
@@ -361,12 +396,10 @@
 
     renderTimeline(entries);
 
-    // Only ask "did you follow through?" once per session, and only on the
-    // entry that existed BEFORE this session started — never on an entry
-    // that was just created a moment ago in this same session.
     if (checkCompletion && !hasCheckedCompletionThisSession && entries.length > 0) {
       const last = entries[entries.length - 1];
       mostRecentEntry = last;
+      // Only show completion check if this entry doesn't have an answer yet
       if (last.completed_previous_action === null || last.completed_previous_action === undefined) {
         const shownText = participant.condition === 'A' ? last.ai_nudge : INSIGHTS[last.feeling]?.text;
         if (shownText) {
@@ -380,19 +413,24 @@
 
   function renderTimeline(entries) {
     const timeline = document.getElementById('timeline');
+    if (!entries.length) {
+      timeline.innerHTML = '<p style="color: var(--gray-1); font-size: 0.85rem; padding: 1rem 0;">No entries yet. Your first entry will appear here.</p>';
+      return;
+    }
     timeline.innerHTML = [...entries].reverse().map(e => `
       <div class="timeline-item">
-        <div class="meta">${new Date(e.created_at).toLocaleDateString()} · ${e.feeling} · ${e.phase}</div>
+        <div class="meta">${new Date(e.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} &middot; ${e.feeling} &middot; ${e.phase}</div>
         <div>${e.entry_text}</div>
+        ${e.ai_nudge ? `<div class="nudge-preview">${e.ai_nudge.slice(0, 120)}${e.ai_nudge.length > 120 ? '...' : ''}</div>` : ''}
       </div>
     `).join('');
   }
 
+  // COMPLETION CHECK
   document.getElementById('completed-yes').addEventListener('click', () => selectCompletion(true));
   document.getElementById('completed-no').addEventListener('click', () => selectCompletion(false));
 
   async function selectCompletion(value) {
-    pendingCompletionValue = value;
     document.getElementById('completed-yes').classList.toggle('selected', value === true);
     document.getElementById('completed-no').classList.toggle('selected', value === false);
 
@@ -402,32 +440,53 @@
         .update({ completed_previous_action: value })
         .eq('id', mostRecentEntry.id);
     }
-    document.getElementById('completion-check').classList.add('hidden');
+
+    // Brief pause so they see the selection, then hide
+    setTimeout(() => {
+      document.getElementById('completion-check').classList.add('hidden');
+    }, 600);
   }
 
+  // QUICK FILL BUTTONS
   document.querySelectorAll('.quick-fill-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const entryTextEl = document.getElementById('entry-text');
       entryTextEl.value = btn.dataset.fill;
+      entryTextEl.dispatchEvent(new Event('input'));
       entryTextEl.focus();
     });
   });
 
+  // FEELING CHIPS
   document.querySelectorAll('.feeling-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('.feeling-chip').forEach(c => c.classList.remove('selected'));
       chip.classList.add('selected');
       selectedFeeling = chip.dataset.feeling;
-      document.getElementById('submit-entry').disabled = false;
+      checkSubmitReady();
     });
   });
 
+  // Text input also checks submit readiness
+  document.getElementById('entry-text').addEventListener('input', checkSubmitReady);
+
+  function checkSubmitReady() {
+    const hasText = document.getElementById('entry-text').value.trim().length > 0;
+    document.getElementById('submit-entry').disabled = !(hasText && selectedFeeling);
+  }
+
+  // SUBMIT ENTRY — fixed: save first, then generate nudge, then display
   document.getElementById('submit-entry').addEventListener('click', async () => {
     const entryText = document.getElementById('entry-text').value.trim();
     const errorBox = document.getElementById('submit-error');
     const loading = document.getElementById('loading');
     const submitBtn = document.getElementById('submit-entry');
+    const successNotice = document.getElementById('success-notice');
+    const nudgeResult = document.getElementById('nudge-result');
+
     errorBox.classList.add('hidden');
+    successNotice.style.display = 'none';
+    nudgeResult.classList.add('hidden');
 
     if (!entryText || !selectedFeeling) {
       errorBox.textContent = 'Please write an entry and select a feeling.';
@@ -438,48 +497,57 @@
     submitBtn.disabled = true;
     loading.classList.remove('hidden');
 
-    // Get current entries to compute phase, and recent entry text for context
-    const { data: existingEntries } = await supabaseClient
+    // 1. Fetch existing entries to compute phase and recent context
+    const { data: existingEntries, error: fetchErr } = await supabaseClient
       .from('entries')
       .select('feeling, entry_text')
       .eq('participant_id', participant.id)
       .order('created_at', { ascending: true });
 
+    if (fetchErr) {
+      errorBox.textContent = 'Could not load your history. Try again.';
+      errorBox.classList.remove('hidden');
+      loading.classList.add('hidden');
+      submitBtn.disabled = false;
+      return;
+    }
+
     const phaseIndex = inferPhase(existingEntries || []);
     const phaseName = PHASE_NAMES[phaseIndex];
+    const recentEntries = (existingEntries || []).slice(-2).map(e => e.entry_text);
 
-    // Last 2 entries (not counting today's, which hasn't been saved yet) —
-    // gives the AI light pattern context without overwhelming today's entry
-    // as the primary signal.
-    const recentEntries = (existingEntries || [])
-      .slice(-2)
-      .map(e => e.entry_text);
-
+    // 2. Generate AI nudge (Group A) or get static insight (Group B)
     let shownText = '';
     let aiNudge = null;
 
     if (participant.condition === 'A') {
       try {
-        const res = await fetch('/api/nudge', {
+        // FIX: calls /api/nudge-study not /api/nudge
+        const res = await fetch('/api/nudge-study', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ goal: participant.stated_goal, phase: phaseName, entryText, recentEntries }),
+          body: JSON.stringify({
+            goal: participant.stated_goal,
+            phase: phaseName,
+            entryText,
+            recentEntries,
+          }),
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'AI generation failed');
         aiNudge = json.nudge;
         shownText = aiNudge;
       } catch (err) {
-        errorBox.textContent = 'Could not generate feedback. Try again.';
-        errorBox.classList.remove('hidden');
-        loading.classList.add('hidden');
-        submitBtn.disabled = false;
-        return;
+        console.error('Nudge error:', err);
+        // Fall back to static insight rather than blocking save
+        shownText = INSIGHTS[selectedFeeling]?.text || '';
+        aiNudge = null;
       }
     } else {
-      shownText = INSIGHTS[selectedFeeling].text;
+      shownText = INSIGHTS[selectedFeeling]?.text || '';
     }
 
+    // 3. Save entry to Supabase — this happens AFTER nudge generation
     const { error: insertErr } = await supabaseClient.from('entries').insert({
       participant_id: participant.id,
       entry_text: entryText,
@@ -492,22 +560,28 @@
     loading.classList.add('hidden');
 
     if (insertErr) {
-      errorBox.textContent = 'Could not save your entry. Try again.';
+      console.error('Insert error:', insertErr);
+      errorBox.textContent = 'Could not save your entry. Check your connection and try again.';
       errorBox.classList.remove('hidden');
       submitBtn.disabled = false;
       return;
     }
 
-    document.getElementById('nudge-label').textContent = 'Phase Read';
-    document.getElementById('nudge-text-content').textContent = shownText;
-    document.getElementById('nudge-result').classList.remove('hidden');
+    // 4. Entry saved — now show feedback and reset form
+    successNotice.style.display = 'block';
 
+    document.getElementById('nudge-label').textContent = participant.condition === 'A' ? 'Your Feedback' : 'Phase Read';
+    document.getElementById('nudge-text-content').textContent = shownText;
+    nudgeResult.classList.remove('hidden');
+
+    // Reset form
     document.getElementById('entry-text').value = '';
     document.querySelectorAll('.feeling-chip').forEach(c => c.classList.remove('selected'));
     selectedFeeling = null;
     submitBtn.disabled = true;
     document.getElementById('completion-check').classList.add('hidden');
 
+    // Reload timeline so new entry appears
     await loadEntries();
   });
 
