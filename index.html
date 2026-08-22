@@ -1265,7 +1265,6 @@
   <div class="phases-header reveal">
     <span class="section-label">the execution curve</span>
     <h2 class="section-heading">Every project follows<br/>the same shape.</h2>
-    <p class="section-body">Note that the Execution Curve is a staged model. A staged model is a simplification and real behavior change is often cyclical rather than linear.<p>
     <p class="section-body">Most people quit in phase 2, not because they failed, but because they don't know they're in it. Knowing the phase changes everything.</p>
   </div>
   <div class="curve-wrap reveal">
@@ -1552,6 +1551,15 @@
       const phaseName = phaseNames[phaseIndex];
       const recentEntries = rawEntries.slice(-3, -1).map(e => e.text);
 
+      // Calculate days since the previous entry (not counting the one just saved)
+      const previousEntries = rawEntries.slice(0, -1);
+      let daysSinceLastEntry = null;
+      if (previousEntries.length > 0) {
+        const lastDate = new Date(previousEntries[previousEntries.length - 1].date);
+        const today = new Date();
+        daysSinceLastEntry = Math.floor((today - lastDate) / 86400000);
+      }
+
       try {
         const res = await fetch('/api/nudge', {
           method: 'POST',
@@ -1561,6 +1569,7 @@
             phase: phaseName,
             entryText: entryValue,
             recentEntries,
+            daysSinceLastEntry,
           }),
         });
         const data = await res.json();
