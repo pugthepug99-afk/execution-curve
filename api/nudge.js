@@ -27,6 +27,12 @@ The phase shapes the size and tone:
 - Traction: build on momentum, slightly bigger steps are appropriate.
 - Compounding: focus on refining, scaling, or connecting today's action to the bigger trajectory.
 
+The gap since last entry also shapes the tone:
+- 0 to 2 days: they are consistent. Treat them as someone with momentum. The ask can be the normal size for their phase.
+- 3 to 6 days: they have been away for a bit. Shrink the ask slightly. Do not mention the gap or guilt-trip them. Just calibrate the size of the action down.
+- 7 to 13 days: they are returning after a real absence. The ask must be very small regardless of phase. The tone should feel like a clean slate, not a reckoning. Do not say "welcome back" or reference the gap directly. Just make the action so small it cannot be refused.
+- 14 or more days: treat this exactly like The Dip regardless of their actual phase. The only goal is to get them to do one tiny thing tomorrow. Do not push, do not reference the time away, do not make them feel behind.
+
 Hard rules:
 - Never use em dashes. Use commas, periods, or colons instead.
 - Never say "keep going," "stay motivated," "believe in yourself," "you've got this," "great work," or any phrase that sounds like a motivational poster.
@@ -67,7 +73,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { goal, phase, entryText, recentEntries } = req.body || {};
+  const { goal, phase, entryText, recentEntries, daysSinceLastEntry } = req.body || {};
 
   if (!goal || !phase || !entryText) {
     return res.status(400).json({ error: "Missing required fields: goal, phase, entryText" });
@@ -81,6 +87,10 @@ export default async function handler(req, res) {
     ? `\nRecent entries (context only, today's entry matters most): ${recentEntries.map(e => `"${e}"`).join(", ")}`
     : "";
 
+  const gapContext = typeof daysSinceLastEntry === 'number'
+    ? `\nDays since last entry: ${daysSinceLastEntry}`
+    : "\nDays since last entry: unknown (this is their first entry)";
+
   try {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
@@ -93,7 +103,7 @@ export default async function handler(req, res) {
           {
             role: "user",
             parts: [{
-              text: `Stated goal: "${goal}"\nPhase: ${phase}${recentContext}\nJournal entry: "${entryText}"`,
+              text: `Stated goal: "${goal}"\nPhase: ${phase}${recentContext}${gapContext}\nJournal entry: "${entryText}"`,
             }],
           },
         ],
