@@ -1100,6 +1100,164 @@
     #entry-bar { bottom: 1rem; }
     #entry-trigger { bottom: 1rem; right: 1rem; }
   }
+  /* AUTH MODAL */
+  .auth-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.75);
+    z-index: 700;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .auth-overlay.show { display: flex; }
+
+  .auth-box {
+    background: var(--white);
+    border: 1px solid var(--gray-2);
+    padding: 2.5rem 2rem 2rem;
+    max-width: 400px;
+    width: calc(100% - 2rem);
+  }
+
+  .auth-box-label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--amber);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .auth-box h3 {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .auth-input {
+    width: 100%;
+    font-family: var(--body);
+    font-size: 0.9rem;
+    color: var(--black);
+    background: var(--gray-3);
+    border: 1px solid var(--gray-2);
+    padding: 0.75rem 1rem;
+    outline: none;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.15s;
+  }
+
+  .auth-input:focus { border-color: var(--amber); }
+  .auth-input::placeholder { color: var(--gray-1); }
+
+  .auth-error {
+    font-family: var(--body);
+    font-size: 0.82rem;
+    color: #b85c38;
+    margin-bottom: 0.75rem;
+    display: none;
+  }
+
+  .auth-error.show { display: block; }
+
+  .btn-auth-submit {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--white);
+    background: var(--black);
+    border: none;
+    padding: 0.75rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+    transition: background 0.15s;
+  }
+
+  .btn-auth-submit:hover { background: var(--amber); }
+  .btn-auth-submit:disabled { opacity: 0.35; cursor: default; background: var(--black); }
+
+  .auth-switch {
+    font-family: var(--body);
+    font-size: 0.82rem;
+    color: var(--gray-1);
+    text-align: center;
+  }
+
+  .auth-switch button {
+    background: none;
+    border: none;
+    font-family: var(--body);
+    font-size: 0.82rem;
+    color: var(--black);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0;
+  }
+
+  .auth-divider {
+    border: none;
+    border-top: 1px solid var(--gray-2);
+    margin: 1.25rem 0;
+  }
+
+  .auth-success {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: #3a6647;
+    background: #f0f7f0;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 0.75rem;
+    display: none;
+    letter-spacing: 0.02em;
+  }
+
+  .auth-success.show { display: block; }
+
+  /* NAV ACCOUNT */
+  .nav-account {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nav-account-email {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--gray-1);
+    letter-spacing: 0.02em;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .btn-nav-signout {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--gray-1);
+    background: none;
+    border: 1px solid var(--gray-2);
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .btn-nav-signout:hover { color: #b85c38; border-color: #b85c38; }
+
+  @media (max-width: 768px) {
+    .nav-account-email { display: none; }
+  }
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </style>
 </head>
 <body>
@@ -1112,7 +1270,15 @@
     <li><a href="#phases">The curve</a></li>
     <li><a href="#log">Your log</a></li>
   </ul>
-  <button class="nav-cta">Start logging</button>
+  <div id="nav-auth">
+    <!-- Shown when logged out -->
+    <button class="nav-cta" id="nav-signin-btn" onclick="showAuthModal('signin')">Sign In</button>
+    <!-- Shown when logged in -->
+    <div class="nav-account" id="nav-account" style="display:none">
+      <span class="nav-account-email" id="nav-account-email"></span>
+      <button class="btn-nav-signout" id="nav-signout-btn">Sign Out</button>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -1395,6 +1561,26 @@
   </div>
 </div>
 
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-box">
+    <span class="auth-box-label" id="auth-label">Sign In</span>
+    <h3 id="auth-title">Welcome back.</h3>
+    <div class="auth-success" id="auth-success"></div>
+    <div class="auth-error" id="auth-error"></div>
+    <input class="auth-input" type="email" id="auth-email" placeholder="Email address" autocomplete="email"/>
+    <input class="auth-input" type="password" id="auth-password" placeholder="Password" autocomplete="current-password"/>
+    <button class="btn-auth-submit" id="auth-submit-btn">Sign In</button>
+    <hr class="auth-divider"/>
+    <p class="auth-switch" id="auth-switch-text">
+      No account yet? <button onclick="switchAuthMode()">Create one</button>
+    </p>
+    <p class="auth-switch" style="margin-top:0.5rem">
+      <button onclick="showForgotPassword()" id="forgot-btn" style="color:var(--gray-1); font-size:0.75rem">Forgot password?</button>
+    </p>
+  </div>
+</div>
+
 <!-- GOAL MODAL -->
 <div class="goal-overlay" id="goal-overlay">
   <div class="goal-box">
@@ -1451,6 +1637,233 @@
 </footer>
 
 <script>
+  // ---- SUPABASE INIT ----
+  const SUPABASE_URL = 'https://exqczahgelcoibcsagsx.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4cWN6YWhnZWxjb2liY3NhZ3N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MzM2MjEsImV4cCI6MjEwMDMwOTYyMX0.G6kN0LtvxSO9j5orEGnYuyq9AOQDfqpJel6KqB7PKqs'; // Replace with your real anon key from Supabase dashboard -> Settings -> API
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let currentUser = null; // null = logged out, object = logged in
+
+  // ---- AUTH STATE ----
+  sb.auth.onAuthStateChange(async (event, session) => {
+    currentUser = session?.user || null;
+    updateNavAuth();
+    if (currentUser) {
+      await syncGoalFromSupabase();
+      await renderLog();
+    } else {
+      renderLog();
+    }
+  });
+
+  function updateNavAuth() {
+    const signinBtn = document.getElementById('nav-signin-btn');
+    const accountEl = document.getElementById('nav-account');
+    const emailEl = document.getElementById('nav-account-email');
+    if (currentUser) {
+      signinBtn.style.display = 'none';
+      accountEl.style.display = 'flex';
+      emailEl.textContent = currentUser.email;
+    } else {
+      signinBtn.style.display = '';
+      accountEl.style.display = 'none';
+    }
+  }
+
+  // ---- AUTH MODAL ----
+  let authMode = 'signin'; // 'signin' | 'signup' | 'forgot'
+
+  function showAuthModal(mode = 'signin') {
+    authMode = mode;
+    updateAuthModal();
+    document.getElementById('auth-overlay').classList.add('show');
+    setTimeout(() => document.getElementById('auth-email').focus(), 100);
+  }
+
+  function hideAuthModal() {
+    document.getElementById('auth-overlay').classList.remove('show');
+    document.getElementById('auth-error').classList.remove('show');
+    document.getElementById('auth-success').classList.remove('show');
+    document.getElementById('auth-email').value = '';
+    document.getElementById('auth-password').value = '';
+  }
+
+  function updateAuthModal() {
+    const label = document.getElementById('auth-label');
+    const title = document.getElementById('auth-title');
+    const submitBtn = document.getElementById('auth-submit-btn');
+    const switchText = document.getElementById('auth-switch-text');
+    const passwordInput = document.getElementById('auth-password');
+    const forgotBtn = document.getElementById('forgot-btn');
+    document.getElementById('auth-error').classList.remove('show');
+    document.getElementById('auth-success').classList.remove('show');
+
+    if (authMode === 'signin') {
+      label.textContent = 'Sign In';
+      title.textContent = 'Welcome back.';
+      submitBtn.textContent = 'Sign In';
+      passwordInput.style.display = '';
+      forgotBtn.style.display = '';
+      switchText.innerHTML = 'No account yet? <button onclick="switchAuthMode()">Create one</button>';
+    } else if (authMode === 'signup') {
+      label.textContent = 'Create Account';
+      title.textContent = 'Start your log.';
+      submitBtn.textContent = 'Create Account';
+      passwordInput.style.display = '';
+      forgotBtn.style.display = 'none';
+      switchText.innerHTML = 'Already have an account? <button onclick="switchAuthMode()">Sign in</button>';
+    } else if (authMode === 'forgot') {
+      label.textContent = 'Reset Password';
+      title.textContent = 'We will send you a link.';
+      submitBtn.textContent = 'Send Reset Link';
+      passwordInput.style.display = 'none';
+      forgotBtn.style.display = 'none';
+      switchText.innerHTML = 'Remembered it? <button onclick="switchAuthMode()">Sign in</button>';
+    }
+  }
+
+  function switchAuthMode() {
+    if (authMode === 'signin') authMode = 'signup';
+    else authMode = 'signin';
+    updateAuthModal();
+  }
+
+  function showForgotPassword() {
+    authMode = 'forgot';
+    updateAuthModal();
+  }
+
+  window.showAuthModal = showAuthModal;
+  window.switchAuthMode = switchAuthMode;
+  window.showForgotPassword = showForgotPassword;
+
+  document.getElementById('auth-overlay').addEventListener('click', function(e) {
+    if (e.target === this) hideAuthModal();
+  });
+
+  document.getElementById('auth-submit-btn').addEventListener('click', async () => {
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    const errorEl = document.getElementById('auth-error');
+    const successEl = document.getElementById('auth-success');
+    const submitBtn = document.getElementById('auth-submit-btn');
+    errorEl.classList.remove('show');
+    successEl.classList.remove('show');
+
+    if (!email) { errorEl.textContent = 'Please enter your email.'; errorEl.classList.add('show'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Working...';
+
+    if (authMode === 'forgot') {
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://execution-curve.vercel.app',
+      });
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Reset Link';
+      if (error) { errorEl.textContent = error.message; errorEl.classList.add('show'); }
+      else { successEl.textContent = 'Check your email for a reset link.'; successEl.classList.add('show'); }
+      return;
+    }
+
+    if (!password) { errorEl.textContent = 'Please enter your password.'; errorEl.classList.add('show'); submitBtn.disabled = false; submitBtn.textContent = authMode === 'signin' ? 'Sign In' : 'Create Account'; return; }
+
+    if (authMode === 'signup') {
+      const { error } = await sb.auth.signUp({ email, password });
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create Account';
+      if (error) { errorEl.textContent = error.message; errorEl.classList.add('show'); }
+      else {
+        successEl.textContent = 'Account created. Check your email to confirm, then sign in.';
+        successEl.classList.add('show');
+      }
+    } else {
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Sign In';
+      if (error) { errorEl.textContent = 'Incorrect email or password.'; errorEl.classList.add('show'); }
+      else { hideAuthModal(); }
+    }
+  });
+
+  // Allow Enter key in auth inputs
+  ['auth-email', 'auth-password'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('auth-submit-btn').click();
+      if (e.key === 'Escape') hideAuthModal();
+    });
+  });
+
+  document.getElementById('nav-signout-btn').addEventListener('click', async () => {
+    await sb.auth.signOut();
+    currentUser = null;
+    updateNavAuth();
+    renderLog();
+  });
+
+  // ---- GOAL SYNC ----
+  async function syncGoalFromSupabase() {
+    if (!currentUser) return;
+    const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).maybeSingle();
+    if (data?.goal) {
+      localStorage.setItem('ec_goal', data.goal);
+      updateGoalChip();
+      renderTaskCheck();
+    }
+  }
+
+  async function saveGoalToSupabase(goal) {
+    if (!currentUser) return;
+    await sb.from('user_goals').upsert({ user_id: currentUser.id, goal, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+  }
+
+  // ---- SUPABASE ENTRY OPS ----
+  async function saveEntryToSupabase(entry) {
+    if (!currentUser) return null;
+    const { data, error } = await sb.from('app_entries').insert({
+      user_id: currentUser.id,
+      text: entry.text,
+      feeling: entry.feeling,
+      date: entry.date,
+      nudge: entry.nudge || null,
+      nudge_loading: entry.nudgeLoading || false,
+    }).select().single();
+    if (error) { console.error('Supabase insert error:', error); return null; }
+    return data;
+  }
+
+  async function updateNudgeInSupabase(supabaseId, nudge) {
+    if (!currentUser || !supabaseId) return;
+    await sb.from('app_entries').update({ nudge, nudge_loading: false }).eq('id', supabaseId);
+  }
+
+  async function deleteEntryFromSupabase(supabaseId) {
+    if (!currentUser || !supabaseId) return;
+    await sb.from('app_entries').delete().eq('id', supabaseId);
+  }
+
+  async function loadEntriesFromSupabase() {
+    if (!currentUser) return null;
+    const { data, error } = await sb.from('app_entries').select('*').eq('user_id', currentUser.id).order('date', { ascending: true });
+    if (error) { console.error('Supabase load error:', error); return null; }
+    return data.map(e => ({
+      id: e.id, // keep supabase id for updates/deletes
+      text: e.text,
+      feeling: e.feeling,
+      date: e.date,
+      nudge: e.nudge,
+      nudgeLoading: e.nudge_loading,
+    }));
+  }
+
+  // ---- HELPER: get entries from right source ----
+  async function getEntries() {
+    if (currentUser) {
+      return await loadEntriesFromSupabase() || [];
+    }
+    return JSON.parse(localStorage.getItem('ec_entries') || '[]');
+  }
+
   window.addEventListener('load', () => {
     document.getElementById('hero').classList.add('revealed');
   });
@@ -1526,7 +1939,10 @@
   submitBtn.addEventListener('click', async () => {
     if (!selectedFeeling) return;
 
-    const rawEntries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+    const rawEntries = currentUser
+      ? (await loadEntriesFromSupabase() || [])
+      : JSON.parse(localStorage.getItem('ec_entries') || '[]');
+
     const newEntry = {
       text: entryValue,
       feeling: selectedFeeling,
@@ -1534,12 +1950,23 @@
       nudge: null,
       nudgeLoading: true,
     };
-    rawEntries.push(newEntry);
-    localStorage.setItem('ec_entries', JSON.stringify(rawEntries));
 
-    renderLog();
-    checkMilestone(rawEntries.length);
-    confirmPreview.textContent = `"${entryValue.slice(0, 42)}${entryValue.length > 42 ? '…' : ''}" · ${selectedFeeling}`;
+    let supabaseId = null;
+
+    if (currentUser) {
+      // Save to Supabase immediately
+      const saved = await saveEntryToSupabase(newEntry);
+      supabaseId = saved?.id || null;
+    } else {
+      // Save to localStorage
+      const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+      entries.push(newEntry);
+      localStorage.setItem('ec_entries', JSON.stringify(entries));
+    }
+
+    await renderLog();
+    checkMilestone(rawEntries.length + 1);
+    confirmPreview.textContent = `"${entryValue.slice(0, 42)}${entryValue.length > 42 ? '...' : ''}" · ${selectedFeeling}`;
     showStep(3);
     setTimeout(() => closeBar(), 2800);
 
@@ -1551,7 +1978,6 @@
       const phaseName = phaseNames[phaseIndex];
       const recentEntries = rawEntries.slice(-3, -1).map(e => e.text);
 
-      // Calculate days since the previous entry (not counting the one just saved)
       const previousEntries = rawEntries.slice(0, -1);
       let daysSinceLastEntry = null;
       if (previousEntries.length > 0) {
@@ -1575,32 +2001,34 @@
         const data = await res.json();
         const nudge = data.nudge || null;
 
-        // Save nudge back into the entry
-        const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-        const idx = updated.length - 1;
-        if (updated[idx]) {
-          updated[idx].nudge = nudge;
-          updated[idx].nudgeLoading = false;
-          localStorage.setItem('ec_entries', JSON.stringify(updated));
-          renderLog();
+        if (currentUser && supabaseId) {
+          await updateNudgeInSupabase(supabaseId, nudge);
+        } else {
+          const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+          const idx = updated.length - 1;
+          if (updated[idx]) {
+            updated[idx].nudge = nudge;
+            updated[idx].nudgeLoading = false;
+            localStorage.setItem('ec_entries', JSON.stringify(updated));
+          }
         }
+        await renderLog();
       } catch (err) {
-        // Silently fail — just remove the loading state
-        const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-        const idx = updated.length - 1;
-        if (updated[idx]) {
-          updated[idx].nudgeLoading = false;
-          localStorage.setItem('ec_entries', JSON.stringify(updated));
-          renderLog();
+        // Silently clear loading state
+        if (currentUser && supabaseId) {
+          await updateNudgeInSupabase(supabaseId, null);
+        } else {
+          const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+          const idx = updated.length - 1;
+          if (updated[idx]) { updated[idx].nudgeLoading = false; localStorage.setItem('ec_entries', JSON.stringify(updated)); }
         }
+        await renderLog();
       }
     } else {
-      // No goal set — clear loading state
-      const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-      const idx = updated.length - 1;
-      if (updated[idx]) {
-        updated[idx].nudgeLoading = false;
-        localStorage.setItem('ec_entries', JSON.stringify(updated));
+      if (!currentUser) {
+        const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+        const idx = updated.length - 1;
+        if (updated[idx]) { updated[idx].nudgeLoading = false; localStorage.setItem('ec_entries', JSON.stringify(updated)); }
       }
     }
   });
@@ -1709,27 +2137,35 @@
 
   window.cancelConfirm = cancelConfirm;
 
-  document.getElementById('confirm-proceed').addEventListener('click', () => {
+  document.getElementById('confirm-proceed').addEventListener('click', async () => {
     if (!pendingAction) return;
     if (pendingAction.type === 'timeline') {
-      localStorage.removeItem('ec_entries');
+      if (currentUser) {
+        await sb.from('app_entries').delete().eq('user_id', currentUser.id);
+      } else {
+        localStorage.removeItem('ec_entries');
+      }
       localStorage.removeItem('ec_milestones_seen');
       document.getElementById('milestone-banner').classList.remove('show');
     } else {
-      const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-      entries.splice(pendingAction.index, 1);
-      localStorage.setItem('ec_entries', JSON.stringify(entries));
+      if (currentUser) {
+        await deleteEntryFromSupabase(pendingAction.index);
+      } else {
+        const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+        entries.splice(pendingAction.index, 1);
+        localStorage.setItem('ec_entries', JSON.stringify(entries));
+      }
     }
     cancelConfirm();
-    renderLog();
+    await renderLog();
   });
 
   document.getElementById('confirm-overlay').addEventListener('click', function(e) {
     if (e.target === this) cancelConfirm();
   });
 
-  function renderLog() {
-    const rawEntries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+  async function renderLog() {
+    const rawEntries = await getEntries();
     const entries = [...rawEntries].reverse();
     const empty = document.getElementById('log-empty');
     const timeline = document.getElementById('log-timeline');
@@ -1751,22 +2187,14 @@
     actions.style.display = 'flex';
 
     timeline.innerHTML = entries.map((entry, i) => {
-      const realIndex = rawEntries.length - 1 - i;
+      const realIndex = currentUser ? entry.id : (rawEntries.length - 1 - i);
       const insight = INSIGHTS[entry.feeling] || null;
 
       let nudgeBlock = '';
       if (entry.nudgeLoading) {
-        nudgeBlock = `
-          <div class="timeline-nudge">
-            <span class="timeline-nudge-label">Your Nudge</span>
-            <p class="timeline-nudge-loading">Generating your personalised next step...</p>
-          </div>`;
+        nudgeBlock = `<div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p class="timeline-nudge-loading">Generating your personalised next step...</p></div>`;
       } else if (entry.nudge) {
-        nudgeBlock = `
-          <div class="timeline-nudge">
-            <span class="timeline-nudge-label">Your Nudge</span>
-            <p>${entry.nudge}</p>
-          </div>`;
+        nudgeBlock = `<div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p>${entry.nudge}</p></div>`;
       }
 
       return `
@@ -1779,13 +2207,9 @@
           <div class="timeline-content">
             <p class="timeline-text">${entry.text}</p>
             <span class="timeline-feeling" data-feeling="${entry.feeling}">${entry.feeling}</span>
-            ${insight ? `
-            <div class="timeline-insight">
-              <span class="timeline-insight-label">${insight.label}</span>
-              <p>${insight.text}</p>
-            </div>` : ''}
+            ${insight ? `<div class="timeline-insight"><span class="timeline-insight-label">${insight.label}</span><p>${insight.text}</p></div>` : ''}
             ${nudgeBlock}
-            <button class="btn-delete-entry" onclick="confirmAction('entry', ${realIndex})">Delete Entry</button>
+            <button class="btn-delete-entry" onclick="confirmAction('entry', ${JSON.stringify(realIndex)})">Delete Entry</button>
           </div>
         </div>`;
     }).join('');
@@ -1797,7 +2221,7 @@
     });
   }
 
-  renderLog();
+  (async () => { await renderLog(); })();
 
   // ---- GOAL MODAL ----
   const goalOverlay = document.getElementById('goal-overlay');
@@ -1835,9 +2259,11 @@
     goalSaveBtn.disabled = goalInput.value.trim().length === 0;
   });
 
-  goalInput.addEventListener('keydown', e => {
+  goalInput.addEventListener('keydown', async e => {
     if (e.key === 'Enter' && goalInput.value.trim()) {
-      localStorage.setItem('ec_goal', goalInput.value.trim());
+      const val = goalInput.value.trim();
+      localStorage.setItem('ec_goal', val);
+      await saveGoalToSupabase(val);
       hideGoalModal();
       updateGoalChip();
       renderTaskCheck();
@@ -1845,10 +2271,11 @@
     if (e.key === 'Escape') hideGoalModal();
   });
 
-  goalSaveBtn.addEventListener('click', () => {
+  goalSaveBtn.addEventListener('click', async () => {
     const val = goalInput.value.trim();
     if (!val) return;
     localStorage.setItem('ec_goal', val);
+    await saveGoalToSupabase(val);
     hideGoalModal();
     updateGoalChip();
     renderTaskCheck();
