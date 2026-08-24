@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<!-- Supabase MUST be outside style tag -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -34,7 +36,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* NAV */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -47,309 +48,82 @@
     border-bottom: 1px solid var(--gray-2);
   }
 
-  .nav-logo {
-    font-family: var(--mono);
-    font-weight: 500;
-    font-size: 0.9rem;
-    letter-spacing: -0.01em;
-    color: var(--black);
-    text-decoration: none;
-  }
-
+  .nav-logo { font-family: var(--mono); font-weight: 500; font-size: 0.9rem; letter-spacing: -0.01em; color: var(--black); text-decoration: none; }
   .nav-logo span { color: var(--amber); }
 
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-family: var(--body);
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--gray-1);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-family: var(--body); font-size: 0.875rem; font-weight: 400; color: var(--gray-1); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover { color: var(--black); }
 
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-  }
+  @media (max-width: 768px) { .nav-links { display: none; } }
 
   .nav-cta {
-    font-family: var(--body);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.5rem 1.25rem;
-    cursor: pointer;
-    letter-spacing: -0.01em;
+    font-family: var(--body); font-size: 0.875rem; font-weight: 500;
+    color: var(--white); background: var(--black); border: none;
+    padding: 0.5rem 1.25rem; cursor: pointer; letter-spacing: -0.01em;
     transition: background 0.2s;
   }
-
   .nav-cta:hover { background: var(--amber); }
 
-  /* HERO */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-end;
-    padding: 0 3rem 5rem;
-    padding-top: 6rem;
-    position: relative;
-    overflow: hidden;
-  }
+  /* NAV ACCOUNT */
+  .nav-account { display: flex; align-items: center; gap: 0.75rem; }
+  .nav-account-email { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); letter-spacing: 0.02em; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .btn-nav-signout { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.3rem 0.7rem; cursor: pointer; letter-spacing: 0.02em; transition: color 0.15s, border-color 0.15s; }
+  .btn-nav-signout:hover { color: #b85c38; border-color: #b85c38; }
+  @media (max-width: 768px) { .nav-account-email { display: none; } }
 
+  /* HERO */
+  #hero { min-height: 100vh; display: flex; align-items: flex-end; padding: 0 3rem 5rem; padding-top: 6rem; position: relative; overflow: hidden; }
   .hero-inner { max-width: 860px; }
 
-  .hero-eyebrow {
-    font-family: var(--mono);
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--amber);
-    margin-bottom: 2rem;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .hero-heading {
-    font-family: var(--display);
-    font-size: clamp(2.8rem, 6vw, 5.5rem);
-    font-weight: 700;
-    line-height: 1.0;
-    letter-spacing: -0.04em;
-    color: var(--black);
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s;
-  }
-
+  .hero-eyebrow { font-family: var(--mono); font-size: 1rem; font-weight: 500; letter-spacing: 0.04em; color: var(--amber); margin-bottom: 2rem; opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .hero-heading { font-family: var(--display); font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 700; line-height: 1.0; letter-spacing: -0.04em; color: var(--black); margin-bottom: 2.5rem; opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s; }
   .hero-heading em { font-style: normal; color: var(--amber); }
+  .hero-sub { font-family: var(--body); font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 400; color: var(--gray-1); line-height: 1.7; max-width: 520px; margin-bottom: 3rem; opacity: 0; transform: translateY(16px); transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s; }
+  .hero-actions { display: flex; align-items: center; gap: 1.5rem; opacity: 0; transform: translateY(16px); transition: opacity 0.8s ease 0.32s, transform 0.8s ease 0.32s; }
 
-  .hero-sub {
-    font-family: var(--body);
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
-    font-weight: 400;
-    color: var(--gray-1);
-    line-height: 1.7;
-    max-width: 520px;
-    margin-bottom: 3rem;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
-  }
-
-  .hero-actions {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.8s ease 0.32s, transform 0.8s ease 0.32s;
-  }
-
-  .btn-primary {
-    font-family: var(--body);
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.85rem 2rem;
-    cursor: pointer;
-    letter-spacing: -0.01em;
-    transition: background 0.2s, transform 0.15s;
-  }
-
+  .btn-primary { font-family: var(--body); font-size: 0.95rem; font-weight: 500; color: var(--white); background: var(--black); border: none; padding: 0.85rem 2rem; cursor: pointer; letter-spacing: -0.01em; transition: background 0.2s, transform 0.15s; }
   .btn-primary:hover { background: var(--amber); transform: translateY(-1px); }
 
-  .btn-ghost {
-    font-family: var(--body);
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--gray-1);
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color 0.2s;
-  }
-
+  .btn-ghost { font-family: var(--body); font-size: 0.875rem; font-weight: 400; color: var(--gray-1); background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
   .btn-ghost:hover { color: var(--black); }
 
-  .hero-bg-numeral {
-    position: absolute;
-    right: -2rem;
-    bottom: -4rem;
-    font-family: var(--display);
-    font-size: clamp(14rem, 22vw, 22rem);
-    font-weight: 700;
-    letter-spacing: -0.06em;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--gray-2);
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 1.2s ease 0.4s;
-  }
+  .hero-bg-numeral { position: absolute; right: -2rem; bottom: -4rem; font-family: var(--display); font-size: clamp(14rem, 22vw, 22rem); font-weight: 700; letter-spacing: -0.06em; color: transparent; -webkit-text-stroke: 1px var(--gray-2); line-height: 1; user-select: none; pointer-events: none; opacity: 0; transition: opacity 1.2s ease 0.4s; }
 
-  .revealed .hero-eyebrow,
-  .revealed .hero-heading,
-  .revealed .hero-sub,
-  .revealed .hero-actions,
-  .revealed .hero-bg-numeral { opacity: 1; transform: translateY(0); }
+  .revealed .hero-eyebrow, .revealed .hero-heading, .revealed .hero-sub, .revealed .hero-actions, .revealed .hero-bg-numeral { opacity: 1; transform: translateY(0); }
 
-  .scroll-hint {
-    position: absolute;
-    bottom: 2rem;
-    left: 3rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    opacity: 0;
-    transition: opacity 0.8s ease 0.8s;
-  }
-
+  .scroll-hint { position: absolute; bottom: 2rem; left: 3rem; display: flex; align-items: center; gap: 0.75rem; opacity: 0; transition: opacity 0.8s ease 0.8s; }
   .revealed .scroll-hint { opacity: 1; }
-
   .scroll-hint-line { width: 32px; height: 1px; background: var(--gray-2); }
+  .scroll-hint span { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-1); font-family: var(--body); }
 
-  .scroll-hint span {
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gray-1);
-    font-family: var(--body);
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 3rem;
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--gray-2);
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s;
-  }
-
+  .hero-stats { display: flex; gap: 3rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--gray-2); opacity: 0; transform: translateY(12px); transition: opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s; }
   .revealed .hero-stats { opacity: 1; transform: translateY(0); }
+  .stat-num { font-family: var(--display); font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em; color: var(--black); display: block; }
+  .stat-label { font-size: 0.78rem; color: var(--gray-1); font-family: var(--body); letter-spacing: 0.01em; }
 
-  .stat-num {
-    font-family: var(--display);
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--black);
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 0.78rem;
-    color: var(--gray-1);
-    font-family: var(--body);
-    letter-spacing: 0.01em;
-  }
-
-  #problem {
-    padding: 8rem 3rem;
-    border-top: 1px solid var(--gray-2);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-  }
-
-  .section-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--amber);
-    font-family: var(--body);
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    display: block;
-  }
-
-  .section-heading {
-    font-family: var(--display);
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    color: var(--black);
-    margin-bottom: 1.5rem;
-  }
-
-  .section-body {
-    font-family: var(--body);
-    font-size: 1rem;
-    color: var(--gray-1);
-    line-height: 1.8;
-  }
-
+  /* PROBLEM */
+  #problem { padding: 8rem 3rem; border-top: 1px solid var(--gray-2); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .section-label { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); font-family: var(--body); font-weight: 500; margin-bottom: 1.5rem; display: block; }
+  .section-heading { font-family: var(--display); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; color: var(--black); margin-bottom: 1.5rem; }
+  .section-body { font-family: var(--body); font-size: 1rem; color: var(--gray-1); line-height: 1.8; }
   .section-body p + p { margin-top: 1rem; }
-
   .problem-blocks { display: flex; flex-direction: column; gap: 0; }
-
-  .problem-block {
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--gray-2);
-    display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    gap: 1rem;
-    align-items: start;
-  }
-
+  .problem-block { padding: 1.75rem 0; border-bottom: 1px solid var(--gray-2); display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; align-items: start; }
   .problem-block:first-child { border-top: 1px solid var(--gray-2); }
-
-  .problem-num {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    color: var(--amber);
-    padding-top: 0.2rem;
-  }
-
+  .problem-num { font-family: var(--mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.04em; color: var(--amber); padding-top: 0.2rem; }
   .problem-text { font-family: var(--body); font-size: 0.95rem; color: var(--black); line-height: 1.6; }
   .problem-text strong { font-weight: 500; display: block; margin-bottom: 0.25rem; }
   .problem-text span { color: var(--gray-1); font-size: 0.875rem; }
 
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.75s ease, transform 0.75s ease;
-  }
-
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.75s ease, transform 0.75s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
-
   .reveal-delay-1 { transition-delay: 0.1s; }
   .reveal-delay-2 { transition-delay: 0.2s; }
   .reveal-delay-3 { transition-delay: 0.3s; }
   .reveal-delay-4 { transition-delay: 0.4s; }
 
-  footer {
-    padding: 3rem;
-    border-top: 1px solid var(--gray-2);
-    font-size: 0.8rem;
-    color: var(--gray-1);
-    font-family: var(--body);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
+  footer { padding: 3rem; border-top: 1px solid var(--gray-2); font-size: 0.8rem; color: var(--gray-1); font-family: var(--body); display: flex; justify-content: space-between; align-items: center; }
   footer a { color: var(--gray-1); text-decoration: none; }
   footer a:hover { color: var(--black); }
 
@@ -364,290 +138,63 @@
   .how-step-visual { width: 100%; aspect-ratio: 120 / 64; background: var(--gray-3); }
   .how-step-title { font-family: var(--display); font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); margin-bottom: 0.75rem; line-height: 1.25; }
   .how-step-body { font-family: var(--body); font-size: 0.9rem; color: var(--gray-1); line-height: 1.65; }
+  @media (max-width: 768px) { #how { padding: 5rem 1.25rem; } .how-steps { grid-template-columns: 1fr; gap: 2.5rem; } }
 
-  @media (max-width: 768px) {
-    #how { padding: 5rem 1.25rem; }
-    .how-steps { grid-template-columns: 1fr; gap: 2.5rem; }
-  }
-
-  /* YOUR LOG SECTION */
+  /* YOUR LOG */
   #log { padding: 8rem 3rem 6rem; border-top: 1px solid var(--gray-2); }
 
-  .user-curve-wrap {
-    margin-bottom: 3.5rem;
-    background: var(--black);
-    padding: 2rem 2rem 1.5rem;
-    display: none;
-  }
-
+  .user-curve-wrap { margin-bottom: 3.5rem; background: var(--black); padding: 2rem 2rem 1.5rem; display: none; }
   .user-curve-wrap.show { display: block; }
-
-  .user-curve-label {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 1.25rem;
-  }
-
+  .user-curve-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 1.25rem; }
   .user-curve-wrap svg { width: 100%; height: auto; overflow: visible; }
-
   .user-curve-phase-label { font-family: 'DM Mono', monospace; font-size: 8px; fill: #555; }
 
-  /* DAILY TASK CHECK */
-  .task-check-wrap {
-    border: 1px solid var(--gray-2);
-    padding: 1.75rem 2rem;
-    margin-bottom: 3rem;
-    display: none;
-  }
-
+  /* TASK CHECK */
+  .task-check-wrap { border: 1px solid var(--gray-2); padding: 1.75rem 2rem; margin-bottom: 3rem; display: none; }
   .task-check-wrap.show { display: block; }
-
-  .task-check-goal {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
-
-  .task-check-goal-text {
-    font-family: var(--display);
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--black);
-    line-height: 1.3;
-    margin-bottom: 1.25rem;
-    display: block;
-  }
-
-  .task-check-question {
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--gray-1);
-    margin-bottom: 1rem;
-  }
-
-  .task-check-btns {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 0;
-  }
-
-  .btn-task-yes {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.6rem 1.5rem;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    transition: background 0.15s;
-  }
-
+  .task-check-goal { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.5rem; text-transform: uppercase; }
+  .task-check-goal-text { font-family: var(--display); font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); line-height: 1.3; margin-bottom: 1.25rem; display: block; }
+  .task-check-question { font-family: var(--body); font-size: 0.95rem; color: var(--gray-1); margin-bottom: 1rem; }
+  .task-check-btns { display: flex; gap: 0.75rem; margin-bottom: 0; }
+  .btn-task-yes { font-family: var(--mono); font-size: 0.75rem; color: var(--white); background: var(--black); border: none; padding: 0.6rem 1.5rem; cursor: pointer; letter-spacing: 0.02em; transition: background 0.15s; }
   .btn-task-yes:hover { background: #4a7c59; }
-
-  .btn-task-no {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--gray-1);
-    background: none;
-    border: 1px solid var(--gray-2);
-    padding: 0.6rem 1.5rem;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    transition: border-color 0.15s, color 0.15s;
-  }
-
+  .btn-task-no { font-family: var(--mono); font-size: 0.75rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.6rem 1.5rem; cursor: pointer; letter-spacing: 0.02em; transition: border-color 0.15s, color 0.15s; }
   .btn-task-no:hover { border-color: #b85c38; color: #b85c38; }
-
-  .task-check-response {
-    margin-top: 1rem;
-    font-family: var(--body);
-    font-size: 0.88rem;
-    line-height: 1.6;
-    display: none;
-    padding: 0.85rem 1rem;
-  }
-
+  .task-check-response { margin-top: 1rem; font-family: var(--body); font-size: 0.88rem; line-height: 1.6; display: none; padding: 0.85rem 1rem; }
   .task-check-response.yes { background: #f0f7f0; color: #3a6647; display: block; }
-  .task-check-response.no  { background: var(--gray-3); color: var(--black); display: block; }
+  .task-check-response.no { background: var(--gray-3); color: var(--black); display: block; }
   .task-check-response.persistent-no { background: #0A0A0A; color: #ccc; display: block; }
-
-  .task-check-reset {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    color: var(--gray-1);
-    background: none;
-    border: none;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    margin-top: 0.75rem;
-    padding: 0;
-    display: none;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
+  .task-check-reset { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-1); background: none; border: none; cursor: pointer; letter-spacing: 0.02em; margin-top: 0.75rem; padding: 0; display: none; text-decoration: underline; text-underline-offset: 3px; }
   .task-check-reset:hover { color: var(--black); }
 
   .log-actions { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; }
-
-  .btn-start-fresh {
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    color: #999;
-    background: none;
-    border: 1px solid var(--gray-2);
-    padding: 0.4rem 0.9rem;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    transition: color 0.15s, border-color 0.15s;
-  }
-
+  .btn-start-fresh { font-family: var(--mono); font-size: 0.68rem; color: #999; background: none; border: 1px solid var(--gray-2); padding: 0.4rem 0.9rem; cursor: pointer; letter-spacing: 0.02em; transition: color 0.15s, border-color 0.15s; }
   .btn-start-fresh:hover { color: #b85c38; border-color: #b85c38; }
 
-  /* FIX 1: delete button moves below the insight card, full left alignment */
-  .btn-delete-entry {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: #aaa;
-    background: none;
-    border: none;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    margin-top: 0.85rem;
-    padding: 0;
-    display: block;
-    transition: color 0.15s;
-  }
-
+  .btn-delete-entry { font-family: var(--mono); font-size: 0.6rem; color: #aaa; background: none; border: none; cursor: pointer; letter-spacing: 0.02em; margin-top: 0.85rem; padding: 0; display: block; transition: color 0.15s; }
   .btn-delete-entry:hover { color: #b85c38; }
 
-  .confirm-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(10,10,10,0.7);
-    z-index: 500;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
+  .confirm-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.7); z-index: 500; display: none; align-items: center; justify-content: center; }
   .confirm-overlay.show { display: flex; }
-
-  .confirm-box {
-    background: var(--white);
-    border: 1px solid var(--gray-2);
-    padding: 2rem 2rem 1.5rem;
-    max-width: 380px;
-    width: calc(100% - 2rem);
-  }
-
-  .confirm-box p {
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--black);
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
+  .confirm-box { background: var(--white); border: 1px solid var(--gray-2); padding: 2rem 2rem 1.5rem; max-width: 380px; width: calc(100% - 2rem); }
+  .confirm-box p { font-family: var(--body); font-size: 0.95rem; color: var(--black); line-height: 1.6; margin-bottom: 1.5rem; }
   .confirm-box-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
-
-  .btn-confirm-cancel {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--gray-1);
-    background: none;
-    border: 1px solid var(--gray-2);
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: border-color 0.15s;
-  }
-
+  .btn-confirm-cancel { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.5rem 1rem; cursor: pointer; transition: border-color 0.15s; }
   .btn-confirm-cancel:hover { border-color: var(--black); color: var(--black); }
-
-  .btn-confirm-delete {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--white);
-    background: #b85c38;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
+  .btn-confirm-delete { font-family: var(--mono); font-size: 0.72rem; color: var(--white); background: #b85c38; border: none; padding: 0.5rem 1rem; cursor: pointer; transition: opacity 0.15s; }
   .btn-confirm-delete:hover { opacity: 0.85; }
 
   .log-header { margin-bottom: 4rem; }
+  .log-header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; }
+  .log-meta { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); letter-spacing: 0.04em; padding-bottom: 0.4rem; }
 
-  .log-header-row {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .log-meta {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--gray-1);
-    letter-spacing: 0.04em;
-    padding-bottom: 0.4rem;
-  }
-
-  .milestone-banner {
-    display: none;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: var(--amber);
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    transform: translateY(-8px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-
+  .milestone-banner { display: none; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--amber); margin-bottom: 2.5rem; opacity: 0; transform: translateY(-8px); transition: opacity 0.5s ease, transform 0.5s ease; }
   .milestone-banner.show { display: flex; opacity: 1; transform: translateY(0); }
-
-  .milestone-num {
-    font-family: var(--display);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--black);
-    letter-spacing: -0.02em;
-    flex-shrink: 0;
-  }
-
+  .milestone-num { font-family: var(--display); font-size: 1.4rem; font-weight: 700; color: var(--black); letter-spacing: -0.02em; flex-shrink: 0; }
   .milestone-text { font-family: var(--body); font-size: 0.88rem; color: var(--black); line-height: 1.5; }
-
-  .milestone-dismiss {
-    margin-left: auto;
-    background: none;
-    border: none;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--black);
-    opacity: 0.55;
-    cursor: pointer;
-    flex-shrink: 0;
-    padding: 0.25rem 0.5rem;
-    transition: opacity 0.15s;
-  }
-
+  .milestone-dismiss { margin-left: auto; background: none; border: none; font-family: var(--mono); font-size: 0.7rem; color: var(--black); opacity: 0.55; cursor: pointer; flex-shrink: 0; padding: 0.25rem 0.5rem; transition: opacity 0.15s; }
   .milestone-dismiss:hover { opacity: 1; }
-
-  @media (max-width: 768px) {
-    .milestone-banner { flex-wrap: wrap; padding: 1rem; }
-    .milestone-dismiss { margin-left: 0; }
-  }
+  @media (max-width: 768px) { .milestone-banner { flex-wrap: wrap; padding: 1rem; } .milestone-dismiss { margin-left: 0; } }
 
   .log-empty { display: flex; gap: 3rem; align-items: flex-start; padding: 3rem 0; }
   .log-empty-line { width: 1px; min-height: 120px; background: var(--gray-2); flex-shrink: 0; margin-top: 0.25rem; }
@@ -656,88 +203,47 @@
   .log-empty-prompt p { font-family: var(--body); font-size: 0.95rem; color: var(--gray-1); line-height: 1.7; max-width: 420px; }
 
   .log-timeline { display: flex; flex-direction: column; gap: 0; padding-left: 0; }
-
-  .timeline-entry {
-    display: grid;
-    grid-template-columns: 3rem 1px 1fr;
-    gap: 0 1.5rem;
-    align-items: start;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-
+  .timeline-entry { display: grid; grid-template-columns: 3rem 1px 1fr; gap: 0 1.5rem; align-items: start; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
   .timeline-entry.visible { opacity: 1; transform: translateY(0); }
-
-  .timeline-date {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--gray-1);
-    letter-spacing: 0.02em;
-    text-align: right;
-    padding-top: 1.6rem;
-    line-height: 1.4;
-  }
-
+  .timeline-date { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); letter-spacing: 0.02em; text-align: right; padding-top: 1.6rem; line-height: 1.4; }
   .timeline-spine { display: flex; flex-direction: column; align-items: center; position: relative; }
-
-  .timeline-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--black);
-    flex-shrink: 0;
-    margin-top: 1.5rem;
-    position: relative;
-    z-index: 1;
-    transition: background 0.2s;
-  }
-
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--black); flex-shrink: 0; margin-top: 1.5rem; position: relative; z-index: 1; transition: background 0.2s; }
   .timeline-entry:hover .timeline-dot { background: var(--amber); }
-
   .timeline-line { width: 1px; flex: 1; min-height: 2rem; background: var(--gray-2); }
   .timeline-entry:last-child .timeline-line { background: linear-gradient(to bottom, var(--gray-2), transparent); }
-
   .timeline-content { padding: 1.25rem 0 2rem; border-bottom: 1px solid var(--gray-3); }
   .timeline-entry:last-child .timeline-content { border-bottom: none; }
-
   .timeline-text { font-family: var(--body); font-size: 1rem; color: var(--black); line-height: 1.6; margin-bottom: 0.6rem; }
 
-  /* FIX 2: uppercase feeling tags */
-  .timeline-feeling {
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.04em;
-    padding: 0.2rem 0.65rem;
-    border: 1px solid var(--gray-2);
-    color: var(--gray-1);
-    display: inline-block;
-    text-transform: uppercase;
-  }
-
+  .timeline-feeling { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; padding: 0.2rem 0.65rem; border: 1px solid var(--gray-2); color: var(--gray-1); display: inline-block; text-transform: uppercase; }
   .timeline-feeling[data-feeling="making progress"] { border-color: #4a7c59; color: #4a7c59; }
-  .timeline-feeling[data-feeling="energized"]        { border-color: #4a7c59; color: #4a7c59; }
-  .timeline-feeling[data-feeling="stuck"]            { border-color: #b85c38; color: #b85c38; }
-  .timeline-feeling[data-feeling="about to quit"]    { border-color: #b85c38; color: #b85c38; }
-  .timeline-feeling[data-feeling="uncertain"]        { border-color: #8a7340; color: #8a7340; }
+  .timeline-feeling[data-feeling="energized"] { border-color: #4a7c59; color: #4a7c59; }
+  .timeline-feeling[data-feeling="stuck"] { border-color: #b85c38; color: #b85c38; }
+  .timeline-feeling[data-feeling="about to quit"] { border-color: #b85c38; color: #b85c38; }
+  .timeline-feeling[data-feeling="uncertain"] { border-color: #8a7340; color: #8a7340; }
 
-  .timeline-insight {
-    margin-top: 0.75rem;
-    padding: 0.85rem 1rem;
-    background: var(--gray-3);
-    border-left: 2px solid var(--amber);
-  }
-
-  .timeline-insight-label {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    color: var(--amber);
-    letter-spacing: 0.06em;
-    display: block;
-    margin-bottom: 0.35rem;
-  }
-
+  .timeline-insight { margin-top: 0.75rem; padding: 0.85rem 1rem; background: var(--gray-3); border-left: 2px solid var(--amber); }
+  .timeline-insight-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.06em; display: block; margin-bottom: 0.35rem; }
   .timeline-insight p { font-family: var(--body); font-size: 0.85rem; color: var(--gray-1); line-height: 1.6; }
+
+  /* AI NUDGE */
+  .timeline-nudge { margin-top: 0.75rem; padding: 0.9rem 1rem; background: var(--black); border-left: 2px solid var(--amber); }
+  .timeline-nudge-label { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.4rem; }
+  .timeline-nudge p { font-family: var(--body); font-size: 0.85rem; color: #ccc; line-height: 1.65; }
+  .timeline-nudge-loading { font-family: var(--mono); font-size: 0.75rem; color: #555; letter-spacing: 0.04em; animation: nudgePulse 1.4s ease-in-out infinite; }
+  @keyframes nudgePulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* NUDGE LOCKED STATE */
+  .timeline-nudge-locked { margin-top: 0.75rem; padding: 0.9rem 1rem; background: var(--gray-3); border-left: 2px solid var(--gray-2); }
+  .timeline-nudge-locked .timeline-nudge-label { color: var(--gray-1); }
+  .timeline-nudge-locked p { font-family: var(--body); font-size: 0.82rem; color: var(--gray-1); line-height: 1.6; margin-bottom: 0.6rem; }
+  .btn-nudge-signin { font-family: var(--mono); font-size: 0.7rem; color: var(--white); background: var(--black); border: none; padding: 0.4rem 0.9rem; cursor: pointer; letter-spacing: 0.02em; transition: background 0.15s; }
+  .btn-nudge-signin:hover { background: var(--amber); }
+
+  /* GOAL CHIP */
+  .log-goal-chip { font-family: var(--mono); font-size: 0.6rem; color: var(--gray-1); letter-spacing: 0.04em; border: 1px solid var(--gray-2); padding: 0.2rem 0.65rem; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; cursor: pointer; transition: border-color 0.15s; }
+  .log-goal-chip:hover { border-color: var(--amber); color: var(--black); }
+  .log-goal-chip span { color: var(--black); }
 
   @media (max-width: 768px) {
     #log { padding: 5rem 1.25rem 4rem; }
@@ -746,348 +252,101 @@
     .timeline-date { font-size: 0.6rem; }
   }
 
-  /* PHASES SECTION */
+  /* PHASES */
   #phases { background: var(--black); padding: 8rem 3rem 6rem; overflow: hidden; }
   .phases-header { margin-bottom: 5rem; }
   .phases-header .section-label { color: var(--amber); opacity: 0.8; }
   .phases-header .section-heading { color: var(--white); max-width: 560px; }
   .phases-header .section-body { color: #999; max-width: 480px; margin-top: 1rem; }
-
   .curve-wrap { width: 100%; margin-bottom: 0; position: relative; }
   .curve-wrap svg { width: 100%; height: auto; overflow: visible; }
-
   .phase-nav { display: flex; gap: 0; border-top: 1px solid #1e1e1e; }
-
-  .phase-pill {
-    flex: 1;
-    padding: 1.1rem 1.25rem;
-    background: none;
-    border: none;
-    border-right: 1px solid #1e1e1e;
-    cursor: pointer;
-    text-align: left;
-    transition: background 0.2s;
-    position: relative;
-  }
-
+  .phase-pill { flex: 1; padding: 1.1rem 1.25rem; background: none; border: none; border-right: 1px solid #1e1e1e; cursor: pointer; text-align: left; transition: background 0.2s; position: relative; }
   .phase-pill:last-child { border-right: none; }
   .phase-pill:hover { background: #111; }
   .phase-pill.active { background: #111; }
-
-  .phase-pill.active::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--amber);
-  }
-
+  .phase-pill.active::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--amber); }
   .phase-pill-num { font-family: var(--mono); font-size: 0.58rem; color: #444; letter-spacing: 0.06em; display: block; margin-bottom: 0.3rem; }
   .phase-pill-name { font-family: var(--display); font-size: 0.82rem; font-weight: 700; color: #555; transition: color 0.2s; letter-spacing: -0.01em; display: block; }
   .phase-pill.active .phase-pill-name { color: var(--white); }
   .phase-pill:hover .phase-pill-name { color: #aaa; }
-
   .phase-detail { border-top: 1px solid #1e1e1e; padding: 2.5rem 0 1rem; display: none; grid-template-columns: 1fr 1fr 1fr; gap: 3rem; }
   .phase-detail.active { display: grid; }
-
   .phase-detail-label { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.85rem; }
-
   .phase-detail-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
-
-  .phase-detail-col ul li {
-    font-family: var(--body);
-    font-size: 0.88rem;
-    color: #777;
-    padding-left: 1.1rem;
-    position: relative;
-    line-height: 1.55;
-  }
-
+  .phase-detail-col ul li { font-family: var(--body); font-size: 0.88rem; color: #777; padding-left: 1.1rem; position: relative; line-height: 1.55; }
   .phase-detail-col ul li::before { content: '—'; position: absolute; left: 0; color: #333; font-family: var(--mono); font-size: 0.65rem; top: 0.1rem; }
-
-  .phase-next-step {
-    grid-column: 1 / -1;
-    padding: 1rem 1.25rem;
-    border: 1px solid #1e1e1e;
-    border-left: 2px solid var(--amber);
-    display: flex;
-    align-items: baseline;
-    gap: 1.5rem;
-  }
-
+  .phase-next-step { grid-column: 1 / -1; padding: 1rem 1.25rem; border: 1px solid #1e1e1e; border-left: 2px solid var(--amber); display: flex; align-items: baseline; gap: 1.5rem; }
   .phase-next-step-label { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); letter-spacing: 0.08em; flex-shrink: 0; }
   .phase-next-step p { font-family: var(--body); font-size: 0.88rem; color: #777; line-height: 1.6; }
+  @media (max-width: 768px) { #phases { padding: 5rem 1.25rem 4rem; } .phase-nav { flex-wrap: wrap; } .phase-pill { flex: none; width: 50%; border-bottom: 1px solid #1e1e1e; } .phase-detail { grid-template-columns: 1fr; gap: 2rem; } .phase-next-step { flex-direction: column; gap: 0.5rem; } }
 
-  @media (max-width: 768px) {
-    #phases { padding: 5rem 1.25rem 4rem; }
-    .phase-nav { flex-wrap: wrap; }
-    .phase-pill { flex: none; width: 50%; border-bottom: 1px solid #1e1e1e; }
-    .phase-detail { grid-template-columns: 1fr; gap: 2rem; }
-    .phase-next-step { flex-direction: column; gap: 0.5rem; }
-  }
+  /* AUTH MODAL */
+  .auth-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.75); z-index: 700; display: none; align-items: center; justify-content: center; }
+  .auth-overlay.show { display: flex; }
+  .auth-box { background: var(--white); border: 1px solid var(--gray-2); padding: 2.5rem 2rem 2rem; max-width: 400px; width: calc(100% - 2rem); }
+  .auth-box-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.75rem; }
+  .auth-box h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); margin-bottom: 1.5rem; line-height: 1.2; }
+  .auth-input { width: 100%; font-family: var(--body); font-size: 0.9rem; color: var(--black); background: var(--gray-3); border: 1px solid var(--gray-2); padding: 0.75rem 1rem; outline: none; margin-bottom: 0.75rem; transition: border-color 0.15s; }
+  .auth-input:focus { border-color: var(--amber); }
+  .auth-input::placeholder { color: var(--gray-1); }
+  .auth-error { font-family: var(--body); font-size: 0.82rem; color: #b85c38; margin-bottom: 0.75rem; display: none; }
+  .auth-error.show { display: block; }
+  .btn-auth-submit { width: 100%; font-family: var(--mono); font-size: 0.78rem; color: var(--white); background: var(--black); border: none; padding: 0.75rem; cursor: pointer; letter-spacing: 0.02em; margin-bottom: 1rem; transition: background 0.15s; }
+  .btn-auth-submit:hover { background: var(--amber); }
+  .btn-auth-submit:disabled { opacity: 0.35; cursor: default; background: var(--black); }
+  .auth-switch { font-family: var(--body); font-size: 0.82rem; color: var(--gray-1); text-align: center; }
+  .auth-switch button { background: none; border: none; font-family: var(--body); font-size: 0.82rem; color: var(--black); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 0; }
+  .auth-divider { border: none; border-top: 1px solid var(--gray-2); margin: 1.25rem 0; }
+  .auth-success { font-family: var(--mono); font-size: 0.75rem; color: #3a6647; background: #f0f7f0; padding: 0.6rem 0.9rem; margin-bottom: 0.75rem; display: none; letter-spacing: 0.02em; }
+  .auth-success.show { display: block; }
 
   /* GOAL MODAL */
-  .goal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(10,10,10,0.75);
-    z-index: 600;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
+  .goal-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.75); z-index: 600; display: none; align-items: center; justify-content: center; }
   .goal-overlay.show { display: flex; }
-
-  .goal-box {
-    background: var(--white);
-    border: 1px solid var(--gray-2);
-    padding: 2.5rem 2rem 2rem;
-    max-width: 440px;
-    width: calc(100% - 2rem);
-  }
-
-  .goal-box-label {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 0.75rem;
-  }
-
-  .goal-box h3 {
-    font-family: var(--display);
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--black);
-    line-height: 1.2;
-    margin-bottom: 0.6rem;
-  }
-
-  .goal-box p {
-    font-family: var(--body);
-    font-size: 0.88rem;
-    color: var(--gray-1);
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  .goal-box p em {
-    font-style: normal;
-    color: var(--black);
-  }
-
-  #goal-input {
-    width: 100%;
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--black);
-    background: var(--gray-3);
-    border: 1px solid var(--gray-2);
-    padding: 0.8rem 1rem;
-    outline: none;
-    margin-bottom: 1rem;
-    transition: border-color 0.15s;
-  }
-
+  .goal-box { background: var(--white); border: 1px solid var(--gray-2); padding: 2.5rem 2rem 2rem; max-width: 440px; width: calc(100% - 2rem); }
+  .goal-box-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.75rem; }
+  .goal-box h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); line-height: 1.2; margin-bottom: 0.6rem; }
+  .goal-box p { font-family: var(--body); font-size: 0.88rem; color: var(--gray-1); line-height: 1.6; margin-bottom: 1.5rem; }
+  .goal-box p em { font-style: normal; color: var(--black); }
+  #goal-input { width: 100%; font-family: var(--body); font-size: 0.95rem; color: var(--black); background: var(--gray-3); border: 1px solid var(--gray-2); padding: 0.8rem 1rem; outline: none; margin-bottom: 1rem; transition: border-color 0.15s; }
   #goal-input:focus { border-color: var(--amber); }
   #goal-input::placeholder { color: var(--gray-1); }
-
   .goal-box-actions { display: flex; justify-content: flex-end; gap: 0.75rem; }
-
-  .btn-goal-save {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.6rem 1.25rem;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    transition: background 0.15s;
-  }
-
+  .btn-goal-save { font-family: var(--mono); font-size: 0.75rem; color: var(--white); background: var(--black); border: none; padding: 0.6rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: background 0.15s; }
   .btn-goal-save:hover { background: var(--amber); }
   .btn-goal-save:disabled { opacity: 0.35; cursor: default; }
-
-  .btn-goal-skip {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--gray-1);
-    background: none;
-    border: 1px solid var(--gray-2);
-    padding: 0.6rem 1rem;
-    cursor: pointer;
-    transition: border-color 0.15s;
-  }
-
+  .btn-goal-skip { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.6rem 1rem; cursor: pointer; transition: border-color 0.15s; }
   .btn-goal-skip:hover { border-color: var(--black); color: var(--black); }
 
-  /* AI NUDGE BLOCK in timeline */
-  .timeline-nudge {
-    margin-top: 0.75rem;
-    padding: 0.9rem 1rem;
-    background: var(--black);
-    border-left: 2px solid var(--amber);
-    position: relative;
-  }
-
-  .timeline-nudge-label {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 0.4rem;
-  }
-
-  .timeline-nudge p {
-    font-family: var(--body);
-    font-size: 0.85rem;
-    color: #ccc;
-    line-height: 1.65;
-  }
-
-  .timeline-nudge-loading {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: #555;
-    letter-spacing: 0.04em;
-    animation: nudgePulse 1.4s ease-in-out infinite;
-  }
-
-  @keyframes nudgePulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
-
-  /* Goal chip in log header */
-  .log-goal-chip {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--gray-1);
-    letter-spacing: 0.04em;
-    border: 1px solid var(--gray-2);
-    padding: 0.2rem 0.65rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    cursor: pointer;
-    transition: border-color 0.15s;
-  }
-
-  .log-goal-chip:hover { border-color: var(--amber); color: var(--black); }
-  .log-goal-chip span { color: var(--black); }
-
   /* ENTRY BAR */
-  #entry-bar {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    z-index: 200;
-    background: var(--amber);
-    border: 1px solid var(--amber-dim);
-    width: min(640px, calc(100vw - 2rem));
-    padding: 0;
-    opacity: 0;
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
-  }
-
+  #entry-bar { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px); z-index: 200; background: var(--amber); border: 1px solid var(--amber-dim); width: min(640px, calc(100vw - 2rem)); padding: 0; opacity: 0; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease; }
   #entry-bar.visible { transform: translateX(-50%) translateY(0); opacity: 1; }
-
   .entry-step { display: none; flex-direction: column; }
   .entry-step.active { display: flex; }
-
   .entry-input-row { display: flex; align-items: center; gap: 0; }
-
   .entry-prompt { font-family: var(--mono); font-size: 0.7rem; color: var(--black); padding: 0 1rem; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em; }
-
-  #entry-text {
-    flex: 1;
-    background: none;
-    border: none;
-    outline: none;
-    font-family: var(--body);
-    font-size: 0.95rem;
-    color: var(--black);
-    padding: 1.1rem 0.5rem 1.1rem 0;
-    caret-color: var(--black);
-    min-width: 0;
-  }
-
+  #entry-text { flex: 1; background: none; border: none; outline: none; font-family: var(--body); font-size: 0.95rem; color: var(--black); padding: 1.1rem 0.5rem 1.1rem 0; caret-color: var(--black); min-width: 0; }
   #entry-text::placeholder { color: var(--amber-dim); }
-
-  .entry-next-btn {
-    background: none;
-    border: none;
-    border-left: 1px solid var(--amber-dim);
-    color: var(--black);
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    padding: 0 1.25rem;
-    height: 100%;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s;
-    align-self: stretch;
-    display: flex;
-    align-items: center;
-  }
-
+  .entry-next-btn { background: none; border: none; border-left: 1px solid var(--amber-dim); color: var(--black); font-family: var(--mono); font-size: 0.75rem; padding: 0 1.25rem; height: 100%; cursor: pointer; white-space: nowrap; transition: background 0.15s; align-self: stretch; display: flex; align-items: center; }
   .entry-next-btn:hover { background: var(--amber-dim); }
-
   .entry-feeling-row { padding: 0.85rem 1rem; border-top: 1px solid var(--amber-dim); display: flex; flex-direction: column; gap: 0.6rem; }
   .entry-feeling-label { font-family: var(--mono); font-size: 0.65rem; color: var(--black); letter-spacing: 0.04em; opacity: 0.6; }
   .entry-feelings { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-
-  .feeling-chip {
-    font-family: var(--body);
-    font-size: 0.8rem;
-    color: var(--black);
-    background: transparent;
-    border: 1px solid var(--amber-dim);
-    padding: 0.35rem 0.85rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-
+  .feeling-chip { font-family: var(--body); font-size: 0.8rem; color: var(--black); background: transparent; border: 1px solid var(--amber-dim); padding: 0.35rem 0.85rem; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .feeling-chip:hover { background: var(--amber-dim); border-color: var(--black); }
   .feeling-chip.selected { color: var(--white); background: var(--black); border-color: var(--black); }
-
   .entry-submit-row { padding: 0.75rem 1rem; border-top: 1px solid var(--amber-dim); display: flex; justify-content: space-between; align-items: center; }
-
   .entry-back { font-family: var(--mono); font-size: 0.7rem; color: var(--black); background: none; border: none; cursor: pointer; transition: opacity 0.15s; letter-spacing: 0.02em; opacity: 0.5; }
   .entry-back:hover { opacity: 1; }
-
   .entry-submit { font-family: var(--mono); font-size: 0.75rem; color: var(--white); background: var(--black); border: none; padding: 0.5rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: opacity 0.15s; }
   .entry-submit:disabled { opacity: 0.3; cursor: default; }
-
   .entry-confirm { padding: 1.25rem 1.25rem; display: flex; align-items: center; gap: 1rem; }
   .entry-confirm-dot { width: 6px; height: 6px; background: var(--black); border-radius: 50%; flex-shrink: 0; }
   .entry-confirm-text { font-family: var(--mono); font-size: 0.78rem; color: var(--black); letter-spacing: 0.02em; opacity: 0.7; }
   .entry-confirm-text strong { color: var(--black); font-weight: 500; opacity: 1; }
 
-  #entry-trigger {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 199;
-    background: var(--black);
-    border: 1px solid #2a2a2a;
-    color: var(--amber);
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    padding: 0.7rem 1.25rem;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    transition: border-color 0.2s, transform 0.15s;
-  }
-
+  #entry-trigger { position: fixed; bottom: 2rem; right: 2rem; z-index: 199; background: var(--black); border: 1px solid #2a2a2a; color: var(--amber); font-family: var(--mono); font-size: 0.75rem; padding: 0.7rem 1.25rem; cursor: pointer; letter-spacing: 0.04em; transition: border-color 0.2s, transform 0.15s; }
   #entry-trigger:hover { border-color: var(--amber); transform: translateY(-1px); }
   #entry-trigger.hidden { display: none; }
 
@@ -1100,164 +359,6 @@
     #entry-bar { bottom: 1rem; }
     #entry-trigger { bottom: 1rem; right: 1rem; }
   }
-  /* AUTH MODAL */
-  .auth-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(10,10,10,0.75);
-    z-index: 700;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .auth-overlay.show { display: flex; }
-
-  .auth-box {
-    background: var(--white);
-    border: 1px solid var(--gray-2);
-    padding: 2.5rem 2rem 2rem;
-    max-width: 400px;
-    width: calc(100% - 2rem);
-  }
-
-  .auth-box-label {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    color: var(--amber);
-    letter-spacing: 0.08em;
-    display: block;
-    margin-bottom: 0.75rem;
-  }
-
-  .auth-box h3 {
-    font-family: var(--display);
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--black);
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-  }
-
-  .auth-input {
-    width: 100%;
-    font-family: var(--body);
-    font-size: 0.9rem;
-    color: var(--black);
-    background: var(--gray-3);
-    border: 1px solid var(--gray-2);
-    padding: 0.75rem 1rem;
-    outline: none;
-    margin-bottom: 0.75rem;
-    transition: border-color 0.15s;
-  }
-
-  .auth-input:focus { border-color: var(--amber); }
-  .auth-input::placeholder { color: var(--gray-1); }
-
-  .auth-error {
-    font-family: var(--body);
-    font-size: 0.82rem;
-    color: #b85c38;
-    margin-bottom: 0.75rem;
-    display: none;
-  }
-
-  .auth-error.show { display: block; }
-
-  .btn-auth-submit {
-    width: 100%;
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    color: var(--white);
-    background: var(--black);
-    border: none;
-    padding: 0.75rem;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    margin-bottom: 1rem;
-    transition: background 0.15s;
-  }
-
-  .btn-auth-submit:hover { background: var(--amber); }
-  .btn-auth-submit:disabled { opacity: 0.35; cursor: default; background: var(--black); }
-
-  .auth-switch {
-    font-family: var(--body);
-    font-size: 0.82rem;
-    color: var(--gray-1);
-    text-align: center;
-  }
-
-  .auth-switch button {
-    background: none;
-    border: none;
-    font-family: var(--body);
-    font-size: 0.82rem;
-    color: var(--black);
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    padding: 0;
-  }
-
-  .auth-divider {
-    border: none;
-    border-top: 1px solid var(--gray-2);
-    margin: 1.25rem 0;
-  }
-
-  .auth-success {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: #3a6647;
-    background: #f0f7f0;
-    padding: 0.6rem 0.9rem;
-    margin-bottom: 0.75rem;
-    display: none;
-    letter-spacing: 0.02em;
-  }
-
-  .auth-success.show { display: block; }
-
-  /* NAV ACCOUNT */
-  .nav-account {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .nav-account-email {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--gray-1);
-    letter-spacing: 0.02em;
-    max-width: 140px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .btn-nav-signout {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--gray-1);
-    background: none;
-    border: 1px solid var(--gray-2);
-    padding: 0.3rem 0.7rem;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    transition: color 0.15s, border-color 0.15s;
-  }
-
-  .btn-nav-signout:hover { color: #b85c38; border-color: #b85c38; }
-
-  @media (max-width: 768px) {
-    .nav-account-email { display: none; }
-  }
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </style>
 </head>
 <body>
@@ -1271,9 +372,7 @@
     <li><a href="#log">Your log</a></li>
   </ul>
   <div id="nav-auth">
-    <!-- Shown when logged out -->
     <button class="nav-cta" id="nav-signin-btn" onclick="showAuthModal('signin')">Sign In</button>
-    <!-- Shown when logged in -->
     <div class="nav-account" id="nav-account" style="display:none">
       <span class="nav-account-email" id="nav-account-email"></span>
       <button class="btn-nav-signout" id="nav-signout-btn">Sign Out</button>
@@ -1285,148 +384,63 @@
 <section id="hero">
   <div class="hero-inner">
     <p class="hero-eyebrow">For builders who don't quit</p>
-    <h1 class="hero-heading">
-      You started.<br/>
-      Now <em>stay in it.</em>
-    </h1>
-    <p class="hero-sub">
-      Anyone can start something now. The hard part is pushing through when progress feels invisible. Execution Curve gives you a log, a timeline, and honest feedback, so you always know where you are and what to do next.
-    </p>
+    <h1 class="hero-heading">You started.<br/>Now <em>stay in it.</em></h1>
+    <p class="hero-sub">Anyone can start something now. The hard part is pushing through when progress feels invisible. Execution Curve gives you a log, a timeline, and honest feedback, so you always know where you are and what to do next.</p>
     <div class="hero-actions">
-      <button class="btn-primary" onclick="openEntryBar()">Log your first entry →</button>
+      <button class="btn-primary" onclick="openEntryBar()">Log your first entry</button>
       <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
     </div>
     <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-num">92%</span>
-        <span class="stat-label">of people quit before the breakthrough</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">30 sec</span>
-        <span class="stat-label">to log an entry and get feedback</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">0</span>
-        <span class="stat-label">generic advice. Everything is based on your input</span>
-      </div>
+      <div class="stat-item"><span class="stat-num">92%</span><span class="stat-label">of people quit before the breakthrough</span></div>
+      <div class="stat-item"><span class="stat-num">30 sec</span><span class="stat-label">to log an entry and get feedback</span></div>
+      <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">generic advice. Everything is based on your input</span></div>
     </div>
   </div>
   <div class="hero-bg-numeral" aria-hidden="true">EC</div>
-  <div class="scroll-hint">
-    <div class="scroll-hint-line"></div>
-    <span>scroll</span>
-  </div>
+  <div class="scroll-hint"><div class="scroll-hint-line"></div><span>scroll</span></div>
 </section>
 
-<!-- PROBLEM SECTION -->
+<!-- PROBLEM -->
 <section id="problem">
   <div>
     <span class="section-label reveal">The real reason people quit</span>
-    <h2 class="section-heading reveal reveal-delay-1">
-      Tools to start are everywhere.<br/>
-      Tools to <em style="font-style:normal; color: var(--amber);">persist</em> aren't.
-    </h2>
+    <h2 class="section-heading reveal reveal-delay-1">Tools to start are everywhere.<br/>Tools to <em style="font-style:normal; color: var(--amber);">persist</em> aren't.</h2>
     <div class="section-body reveal reveal-delay-2">
       <p>Tech has made it easier than ever to build something whether it's an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
       <p>The messy middle is where most people quit. Not because they failed, but because progress felt invisible and they had no way to know if what they were doing was working.</p>
     </div>
   </div>
   <div class="problem-blocks">
-    <div class="problem-block reveal">
-      <span class="problem-num">01</span>
-      <div class="problem-text">
-        <strong>Progress feels invisible</strong>
-        <span>Real progress is slow and uneven. Without a log, you can't see how far you've come, so you assume you haven't moved at all.</span>
-      </div>
-    </div>
-    <div class="problem-block reveal reveal-delay-1">
-      <span class="problem-num">02</span>
-      <div class="problem-text">
-        <strong>Difficulty reads as failure</strong>
-        <span>When things get hard, most people interpret it as a sign they're doing something wrong, not that they're exactly where they should be.</span>
-      </div>
-    </div>
-    <div class="problem-block reveal reveal-delay-2">
-      <span class="problem-num">03</span>
-      <div class="problem-text">
-        <strong>Generic advice doesn't help</strong>
-        <span>"Just keep going" means nothing without context. What you need is feedback based on where you actually are, not a motivational quote.</span>
-      </div>
-    </div>
-    <div class="problem-block reveal reveal-delay-3">
-      <span class="problem-num">04</span>
-      <div class="problem-text">
-        <strong>No record, no proof</strong>
-        <span>Without a log, you have nothing to look back on. A timeline of your work is proof you showed up, even when you didn't feel like it.</span>
-      </div>
-    </div>
+    <div class="problem-block reveal"><span class="problem-num">01</span><div class="problem-text"><strong>Progress feels invisible</strong><span>Real progress is slow and uneven. Without a log, you can't see how far you've come, so you assume you haven't moved at all.</span></div></div>
+    <div class="problem-block reveal reveal-delay-1"><span class="problem-num">02</span><div class="problem-text"><strong>Difficulty reads as failure</strong><span>When things get hard, most people interpret it as a sign they're doing something wrong, not that they're exactly where they should be.</span></div></div>
+    <div class="problem-block reveal reveal-delay-2"><span class="problem-num">03</span><div class="problem-text"><strong>Generic advice doesn't help</strong><span>"Just keep going" means nothing without context. What you need is feedback based on where you actually are, not a motivational quote.</span></div></div>
+    <div class="problem-block reveal reveal-delay-3"><span class="problem-num">04</span><div class="problem-text"><strong>No record, no proof</strong><span>Without a log, you have nothing to look back on. A timeline of your work is proof you showed up, even when you didn't feel like it.</span></div></div>
   </div>
 </section>
 
-<!-- HOW IT WORKS SECTION -->
+<!-- HOW IT WORKS -->
 <section id="how">
-  <div class="how-header reveal">
-    <span class="section-label">how it works</span>
-    <h2 class="section-heading">Three steps.</h2>
-  </div>
+  <div class="how-header reveal"><span class="section-label">how it works</span><h2 class="section-heading">Three steps.</h2></div>
   <div class="how-steps">
     <div class="how-step reveal">
-      <div class="how-step-top">
-        <span class="how-step-num">01</span>
-        <div class="how-step-visual" aria-hidden="true">
-          <svg viewBox="0 0 120 64" width="100%" height="100%">
-            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
-            <text x="10" y="24" font-family="'DM Mono', monospace" font-size="7" fill="var(--amber)">Today</text>
-            <line x1="10" y1="34" x2="80" y2="34" stroke="var(--gray-2)" stroke-width="1"/>
-            <rect x="10" y="44" width="46" height="12" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/>
-            <text x="33" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)" text-anchor="middle">Stuck</text>
-          </svg>
-        </div>
-      </div>
+      <div class="how-step-top"><span class="how-step-num">01</span><div class="how-step-visual"><svg viewBox="0 0 120 64" width="100%" height="100%"><rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/><text x="10" y="24" font-family="'DM Mono', monospace" font-size="7" fill="var(--amber)">Today</text><line x1="10" y1="34" x2="80" y2="34" stroke="var(--gray-2)" stroke-width="1"/><rect x="10" y="44" width="46" height="12" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/><text x="33" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)" text-anchor="middle">Stuck</text></svg></div></div>
       <h3 class="how-step-title">Log a few seconds of honesty</h3>
-      <p class="how-step-body">One line about what you worked on. One tap on how it felt. That's the entire input, no forms, no streak guilt, no pressure to write an essay.</p>
+      <p class="how-step-body">One line about what you worked on. One tap on how it felt. No forms, no streak guilt, no pressure to write an essay.</p>
     </div>
     <div class="how-step reveal reveal-delay-1">
-      <div class="how-step-top">
-        <span class="how-step-num">02</span>
-        <div class="how-step-visual" aria-hidden="true">
-          <svg viewBox="0 0 120 64" width="100%" height="100%">
-            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
-            <line x1="20" y1="12" x2="20" y2="52" stroke="var(--gray-2)" stroke-width="1"/>
-            <circle cx="20" cy="16" r="2.5" fill="var(--black)"/>
-            <circle cx="20" cy="30" r="2.5" fill="var(--amber)"/>
-            <circle cx="20" cy="44" r="2.5" fill="var(--black)"/>
-            <line x1="28" y1="16" x2="95" y2="16" stroke="var(--gray-2)" stroke-width="1"/>
-            <line x1="28" y1="30" x2="100" y2="30" stroke="var(--amber)" stroke-width="1"/>
-            <line x1="28" y1="44" x2="80" y2="44" stroke="var(--gray-2)" stroke-width="1"/>
-          </svg>
-        </div>
-      </div>
+      <div class="how-step-top"><span class="how-step-num">02</span><div class="how-step-visual"><svg viewBox="0 0 120 64" width="100%" height="100%"><rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/><line x1="20" y1="12" x2="20" y2="52" stroke="var(--gray-2)" stroke-width="1"/><circle cx="20" cy="16" r="2.5" fill="var(--black)"/><circle cx="20" cy="30" r="2.5" fill="var(--amber)"/><circle cx="20" cy="44" r="2.5" fill="var(--black)"/><line x1="28" y1="16" x2="95" y2="16" stroke="var(--gray-2)" stroke-width="1"/><line x1="28" y1="30" x2="100" y2="30" stroke="var(--amber)" stroke-width="1"/><line x1="28" y1="44" x2="80" y2="44" stroke="var(--gray-2)" stroke-width="1"/></svg></div></div>
       <h3 class="how-step-title">Watch the timeline build itself</h3>
       <p class="how-step-body">Every entry stacks into a visible record. The line that felt invisible day to day becomes obvious once you can see ten entries at once.</p>
     </div>
     <div class="how-step reveal reveal-delay-2">
-      <div class="how-step-top">
-        <span class="how-step-num">03</span>
-        <div class="how-step-visual" aria-hidden="true">
-          <svg viewBox="0 0 120 64" width="100%" height="100%">
-            <rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/>
-            <rect x="10" y="10" width="100" height="10" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/>
-            <text x="16" y="17.5" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">"about to quit"</text>
-            <line x1="14" y1="28" x2="14" y2="50" stroke="var(--amber)" stroke-width="1.5"/>
-            <text x="22" y="34" font-family="'DM Mono', monospace" font-size="6" fill="var(--amber)">Phase Read</text>
-            <text x="22" y="44" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">this feeling peaks right</text>
-            <text x="22" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">before it clicks.</text>
-          </svg>
-        </div>
-      </div>
+      <div class="how-step-top"><span class="how-step-num">03</span><div class="how-step-visual"><svg viewBox="0 0 120 64" width="100%" height="100%"><rect x="0.5" y="0.5" width="119" height="63" fill="none" stroke="var(--gray-2)" stroke-width="1"/><rect x="10" y="10" width="100" height="10" fill="none" stroke="var(--gray-1)" stroke-width="0.75"/><text x="16" y="17.5" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">"about to quit"</text><line x1="14" y1="28" x2="14" y2="50" stroke="var(--amber)" stroke-width="1.5"/><text x="22" y="34" font-family="'DM Mono', monospace" font-size="6" fill="var(--amber)">Phase Read</text><text x="22" y="44" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">this feeling peaks right</text><text x="22" y="52" font-family="'IBM Plex Sans'" font-size="6" fill="var(--gray-1)">before it clicks.</text></svg></div></div>
       <h3 class="how-step-title">Get a response, not a slogan</h3>
       <p class="how-step-body">Your input maps to a phase on the curve. The feedback changes based on where you actually are, not a generic quote that means the same thing on day one or day ninety.</p>
     </div>
   </div>
 </section>
 
-<!-- PHASES SECTION -->
+<!-- PHASES -->
 <section id="phases">
   <div class="phases-header reveal">
     <span class="section-label">the execution curve</span>
@@ -1434,20 +448,20 @@
     <p class="section-body">Most people quit in phase 2, not because they failed, but because they don't know they're in it. Knowing the phase changes everything.</p>
   </div>
   <div class="curve-wrap reveal">
-    <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" aria-label="The execution curve showing 5 phases of a project">
+    <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg">
       <line x1="0" y1="200" x2="900" y2="200" stroke="#1e1e1e" stroke-width="1"/>
       <path d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15" fill="none" stroke="#2a2a2a" stroke-width="1.5" id="curve-bg"/>
       <path d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15" fill="none" stroke="#C8873F" stroke-width="2" stroke-dasharray="820" stroke-dashoffset="820" id="curve-draw" opacity="0.9"/>
       <circle cx="40" cy="60" r="4" fill="#C8873F" class="phase-dot" data-phase="0" style="cursor:pointer"/>
-      <text x="40" y="50" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">01</text>
+      <text x="40" y="50" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">01</text>
       <circle cx="340" cy="188" r="4" fill="#555" class="phase-dot" data-phase="1" style="cursor:pointer"/>
-      <text x="340" y="205" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">02</text>
+      <text x="340" y="205" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">02</text>
       <circle cx="450" cy="152" r="4" fill="#555" class="phase-dot" data-phase="2" style="cursor:pointer"/>
-      <text x="450" y="143" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">03</text>
+      <text x="450" y="143" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">03</text>
       <circle cx="620" cy="72" r="4" fill="#555" class="phase-dot" data-phase="3" style="cursor:pointer"/>
-      <text x="620" y="62" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">04</text>
+      <text x="620" y="62" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">04</text>
       <circle cx="860" cy="15" r="4" fill="#555" class="phase-dot" data-phase="4" style="cursor:pointer"/>
-      <text x="860" y="8" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444" class="curve-label">05</text>
+      <text x="860" y="8" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">05</text>
       <line x1="240" y1="200" x2="420" y2="200" stroke="#b85c38" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
       <text x="330" y="218" text-anchor="middle" font-family="'DM Mono', monospace" font-size="8" fill="#b85c38" opacity="0.6">most people quit here</text>
     </svg>
@@ -1467,7 +481,7 @@
   </div>
   <div class="phase-detail" id="phase-1">
     <div class="phase-detail-col"><span class="phase-detail-label">What's happening</span><ul><li>Progress is real but invisible</li><li>The gap between your vision and output feels huge</li><li>Novelty has worn off, difficulty has set in</li></ul></div>
-    <div class="phase-detail-col"><span class="phase-detail-label">Common traps</span><ul><li>Restarting from scratch instead continuing</li><li>Interpreting difficulty as a sign you're wrong</li><li>Comparing your early work to others' polished output</li></ul></div>
+    <div class="phase-detail-col"><span class="phase-detail-label">Common traps</span><ul><li>Restarting from scratch instead of continuing</li><li>Interpreting difficulty as a sign you're wrong</li><li>Comparing your early work to others' polished output</li></ul></div>
     <div class="phase-detail-col"><span class="phase-detail-label">What it feels like</span><ul><li>Like you're moving backwards</li><li>Wanting to quit and start something new</li><li>Secretly wondering if you picked the wrong thing</li></ul></div>
     <div class="phase-next-step"><span class="phase-next-step-label">Next Step</span><p>Improve one small thing. Don't restart. 1% better is still better than nothing. Small improvements compound in ways you can't see yet.</p></div>
   </div>
@@ -1491,7 +505,7 @@
   </div>
 </section>
 
-<!-- YOUR LOG SECTION -->
+<!-- YOUR LOG -->
 <section id="log">
   <div class="log-header reveal">
     <span class="section-label">your log</span>
@@ -1499,9 +513,7 @@
       <h2 class="section-heading">Every entry.<br/>The whole picture.</h2>
       <div class="log-meta" id="log-meta">0 entries</div>
     </div>
-    <div id="log-goal-chip" class="log-goal-chip" onclick="showGoalModal()" style="display:none">
-      Goal: <span id="log-goal-display"></span> · edit
-    </div>
+    <div id="log-goal-chip" class="log-goal-chip" onclick="showGoalModal()" style="display:none">Goal: <span id="log-goal-display"></span> · edit</div>
   </div>
   <div class="milestone-banner" id="milestone-banner">
     <span class="milestone-num" id="milestone-num"></span>
@@ -1510,20 +522,18 @@
   </div>
   <div class="user-curve-wrap" id="user-curve-wrap">
     <span class="user-curve-label">Your Position On The Curve</span>
-    <svg id="user-curve-svg" viewBox="0 0 860 130" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 860 130" xmlns="http://www.w3.org/2000/svg">
       <path id="ucurve-base" d="M 20 55 C 80 50, 120 53, 160 72 C 200 91, 220 128, 255 140 C 290 152, 308 154, 340 149 C 378 143, 400 131, 432 114 C 480 89, 528 62, 598 40 C 648 25, 700 17, 740 13" fill="none" stroke="#2a2a2a" stroke-width="1.5"/>
       <path id="ucurve-progress" d="M 20 55 C 80 50, 120 53, 160 72 C 200 91, 220 128, 255 140 C 290 152, 308 154, 340 149 C 378 143, 400 131, 432 114 C 480 89, 528 62, 598 40 C 648 25, 700 17, 740 13" fill="none" stroke="#C8873F" stroke-width="2" stroke-dasharray="800" stroke-dashoffset="800" opacity="0.9"/>
       <circle id="ucurve-dot" cx="20" cy="55" r="6" fill="#C8873F"/>
       <circle id="ucurve-dot-pulse" cx="20" cy="55" r="10" fill="none" stroke="#C8873F" stroke-width="1" opacity="0.4"/>
-      <text x="20"  y="20" class="user-curve-phase-label" text-anchor="middle">Ignition</text>
+      <text x="20" y="20" class="user-curve-phase-label" text-anchor="middle">Ignition</text>
       <text x="300" y="170" class="user-curve-phase-label" text-anchor="middle">The Dip</text>
       <text x="432" y="100" class="user-curve-phase-label" text-anchor="middle">Grind</text>
       <text x="598" y="30" class="user-curve-phase-label" text-anchor="middle">Traction</text>
-      <text x="740" y="8"  class="user-curve-phase-label" text-anchor="middle">Compounding</text>
+      <text x="740" y="8" class="user-curve-phase-label" text-anchor="middle">Compounding</text>
     </svg>
   </div>
-
-  <!-- DAILY TASK CHECK -->
   <div class="task-check-wrap" id="task-check-wrap">
     <span class="task-check-goal">Your Goal</span>
     <span class="task-check-goal-text" id="task-check-goal-text"></span>
@@ -1535,13 +545,12 @@
     <div class="task-check-response" id="task-check-response"></div>
     <button class="task-check-reset" id="task-check-reset" onclick="taskCheckReset()">Answer again</button>
   </div>
-
   <div class="log-empty" id="log-empty">
     <div class="log-empty-line"></div>
     <div class="log-empty-prompt">
       <span class="log-empty-mono">Nothing Here Yet</span>
       <p>Your first entry starts the timeline. Log something, even one sentence, and it appears here.</p>
-      <button class="btn-primary" onclick="openEntryBar()">Log your first entry →</button>
+      <button class="btn-primary" onclick="openEntryBar()">Log your first entry</button>
     </div>
   </div>
   <div class="log-actions" id="log-actions" style="display:none">
@@ -1572,12 +581,8 @@
     <input class="auth-input" type="password" id="auth-password" placeholder="Password" autocomplete="current-password"/>
     <button class="btn-auth-submit" id="auth-submit-btn">Sign In</button>
     <hr class="auth-divider"/>
-    <p class="auth-switch" id="auth-switch-text">
-      No account yet? <button onclick="switchAuthMode()">Create one</button>
-    </p>
-    <p class="auth-switch" style="margin-top:0.5rem">
-      <button onclick="showForgotPassword()" id="forgot-btn" style="color:var(--gray-1); font-size:0.75rem">Forgot password?</button>
-    </p>
+    <p class="auth-switch" id="auth-switch-text">No account yet? <button onclick="switchAuthMode()">Create one</button></p>
+    <p class="auth-switch" style="margin-top:0.5rem"><button onclick="showForgotPassword()" id="forgot-btn" style="color:var(--gray-1); font-size:0.75rem">Forgot password?</button></p>
   </div>
 </div>
 
@@ -1597,13 +602,13 @@
 
 <button id="entry-trigger" aria-label="Log an entry">+ log entry</button>
 
-<!-- QUICK ENTRY BAR -->
+<!-- ENTRY BAR -->
 <div id="entry-bar" role="dialog" aria-label="Quick log entry">
   <div class="entry-step active" id="step-1">
     <div class="entry-input-row">
       <span class="entry-prompt">Today</span>
       <input type="text" id="entry-text" placeholder="what did you work on or think about?" autocomplete="off" maxlength="120"/>
-      <button class="entry-next-btn" id="next-btn" aria-label="Next step">Next</button>
+      <button class="entry-next-btn" id="next-btn">Next</button>
     </div>
   </div>
   <div class="entry-step" id="step-2">
@@ -1630,30 +635,26 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <span>© 2025 Execution Curve</span>
   <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>
 </footer>
 
 <script>
-  // ---- SUPABASE INIT ----
+  // ---- SUPABASE ----
   const SUPABASE_URL = 'https://exqczahgelcoibcsagsx.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4cWN6YWhnZWxjb2liY3NhZ3N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MzM2MjEsImV4cCI6MjEwMDMwOTYyMX0.G6kN0LtvxSO9j5orEGnYuyq9AOQDfqpJel6KqB7PKqs'; // Replace with your real anon key from Supabase dashboard -> Settings -> API
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4cWN6YWhnZWxjb2liY3NhZ3N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MzM2MjEsImV4cCI6MjEwMDMwOTYyMX0.G6kN0LtvxSO9j5orEGnYuyq9AOQDfqpJel6KqB7PKqs';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let currentUser = null; // null = logged out, object = logged in
+  let currentUser = null;
 
-  // ---- AUTH STATE ----
   sb.auth.onAuthStateChange(async (event, session) => {
     currentUser = session?.user || null;
     updateNavAuth();
     if (currentUser) {
       await syncGoalFromSupabase();
-      await renderLog();
-    } else {
-      renderLog();
     }
+    await renderLog();
   });
 
   function updateNavAuth() {
@@ -1671,7 +672,7 @@
   }
 
   // ---- AUTH MODAL ----
-  let authMode = 'signin'; // 'signin' | 'signup' | 'forgot'
+  let authMode = 'signin';
 
   function showAuthModal(mode = 'signin') {
     authMode = mode;
@@ -1697,49 +698,29 @@
     const forgotBtn = document.getElementById('forgot-btn');
     document.getElementById('auth-error').classList.remove('show');
     document.getElementById('auth-success').classList.remove('show');
-
     if (authMode === 'signin') {
-      label.textContent = 'Sign In';
-      title.textContent = 'Welcome back.';
-      submitBtn.textContent = 'Sign In';
-      passwordInput.style.display = '';
-      forgotBtn.style.display = '';
+      label.textContent = 'Sign In'; title.textContent = 'Welcome back.'; submitBtn.textContent = 'Sign In';
+      passwordInput.style.display = ''; forgotBtn.style.display = '';
       switchText.innerHTML = 'No account yet? <button onclick="switchAuthMode()">Create one</button>';
     } else if (authMode === 'signup') {
-      label.textContent = 'Create Account';
-      title.textContent = 'Start your log.';
-      submitBtn.textContent = 'Create Account';
-      passwordInput.style.display = '';
-      forgotBtn.style.display = 'none';
+      label.textContent = 'Create Account'; title.textContent = 'Start your log.'; submitBtn.textContent = 'Create Account';
+      passwordInput.style.display = ''; forgotBtn.style.display = 'none';
       switchText.innerHTML = 'Already have an account? <button onclick="switchAuthMode()">Sign in</button>';
     } else if (authMode === 'forgot') {
-      label.textContent = 'Reset Password';
-      title.textContent = 'We will send you a link.';
-      submitBtn.textContent = 'Send Reset Link';
-      passwordInput.style.display = 'none';
-      forgotBtn.style.display = 'none';
+      label.textContent = 'Reset Password'; title.textContent = 'We will send you a link.'; submitBtn.textContent = 'Send Reset Link';
+      passwordInput.style.display = 'none'; forgotBtn.style.display = 'none';
       switchText.innerHTML = 'Remembered it? <button onclick="switchAuthMode()">Sign in</button>';
     }
   }
 
-  function switchAuthMode() {
-    if (authMode === 'signin') authMode = 'signup';
-    else authMode = 'signin';
-    updateAuthModal();
-  }
-
-  function showForgotPassword() {
-    authMode = 'forgot';
-    updateAuthModal();
-  }
+  function switchAuthMode() { authMode = authMode === 'signin' ? 'signup' : 'signin'; updateAuthModal(); }
+  function showForgotPassword() { authMode = 'forgot'; updateAuthModal(); }
 
   window.showAuthModal = showAuthModal;
   window.switchAuthMode = switchAuthMode;
   window.showForgotPassword = showForgotPassword;
 
-  document.getElementById('auth-overlay').addEventListener('click', function(e) {
-    if (e.target === this) hideAuthModal();
-  });
+  document.getElementById('auth-overlay').addEventListener('click', function(e) { if (e.target === this) hideAuthModal(); });
 
   document.getElementById('auth-submit-btn').addEventListener('click', async () => {
     const email = document.getElementById('auth-email').value.trim();
@@ -1747,46 +728,30 @@
     const errorEl = document.getElementById('auth-error');
     const successEl = document.getElementById('auth-success');
     const submitBtn = document.getElementById('auth-submit-btn');
-    errorEl.classList.remove('show');
-    successEl.classList.remove('show');
-
+    errorEl.classList.remove('show'); successEl.classList.remove('show');
     if (!email) { errorEl.textContent = 'Please enter your email.'; errorEl.classList.add('show'); return; }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Working...';
-
+    submitBtn.disabled = true; submitBtn.textContent = 'Working...';
     if (authMode === 'forgot') {
-      const { error } = await sb.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://execution-curve.vercel.app',
-      });
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Send Reset Link';
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://execution-curve.vercel.app' });
+      submitBtn.disabled = false; submitBtn.textContent = 'Send Reset Link';
       if (error) { errorEl.textContent = error.message; errorEl.classList.add('show'); }
       else { successEl.textContent = 'Check your email for a reset link.'; successEl.classList.add('show'); }
       return;
     }
-
     if (!password) { errorEl.textContent = 'Please enter your password.'; errorEl.classList.add('show'); submitBtn.disabled = false; submitBtn.textContent = authMode === 'signin' ? 'Sign In' : 'Create Account'; return; }
-
     if (authMode === 'signup') {
       const { error } = await sb.auth.signUp({ email, password });
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Create Account';
+      submitBtn.disabled = false; submitBtn.textContent = 'Create Account';
       if (error) { errorEl.textContent = error.message; errorEl.classList.add('show'); }
-      else {
-        successEl.textContent = 'Account created. Check your email to confirm, then sign in.';
-        successEl.classList.add('show');
-      }
+      else { successEl.textContent = 'Account created. Check your email to confirm, then sign in.'; successEl.classList.add('show'); }
     } else {
       const { error } = await sb.auth.signInWithPassword({ email, password });
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Sign In';
+      submitBtn.disabled = false; submitBtn.textContent = 'Sign In';
       if (error) { errorEl.textContent = 'Incorrect email or password.'; errorEl.classList.add('show'); }
       else { hideAuthModal(); }
     }
   });
 
-  // Allow Enter key in auth inputs
   ['auth-email', 'auth-password'].forEach(id => {
     document.getElementById(id).addEventListener('keydown', e => {
       if (e.key === 'Enter') document.getElementById('auth-submit-btn').click();
@@ -1798,18 +763,14 @@
     await sb.auth.signOut();
     currentUser = null;
     updateNavAuth();
-    renderLog();
+    await renderLog();
   });
 
   // ---- GOAL SYNC ----
   async function syncGoalFromSupabase() {
     if (!currentUser) return;
     const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).maybeSingle();
-    if (data?.goal) {
-      localStorage.setItem('ec_goal', data.goal);
-      updateGoalChip();
-      renderTaskCheck();
-    }
+    if (data?.goal) { localStorage.setItem('ec_goal', data.goal); updateGoalChip(); renderTaskCheck(); }
   }
 
   async function saveGoalToSupabase(goal) {
@@ -1820,59 +781,39 @@
   // ---- SUPABASE ENTRY OPS ----
   async function saveEntryToSupabase(entry) {
     if (!currentUser) return null;
-    const { data, error } = await sb.from('app_entries').insert({
-      user_id: currentUser.id,
-      text: entry.text,
-      feeling: entry.feeling,
-      date: entry.date,
-      nudge: entry.nudge || null,
-      nudge_loading: entry.nudgeLoading || false,
-    }).select().single();
-    if (error) { console.error('Supabase insert error:', error); return null; }
+    const { data, error } = await sb.from('app_entries').insert({ user_id: currentUser.id, text: entry.text, feeling: entry.feeling, date: entry.date, nudge: null, nudge_loading: true }).select().single();
+    if (error) { console.error('Insert error:', error); return null; }
     return data;
   }
 
-  async function updateNudgeInSupabase(supabaseId, nudge) {
-    if (!currentUser || !supabaseId) return;
-    await sb.from('app_entries').update({ nudge, nudge_loading: false }).eq('id', supabaseId);
+  async function updateNudgeInSupabase(id, nudge) {
+    if (!currentUser || !id) return;
+    await sb.from('app_entries').update({ nudge, nudge_loading: false }).eq('id', id);
   }
 
-  async function deleteEntryFromSupabase(supabaseId) {
-    if (!currentUser || !supabaseId) return;
-    await sb.from('app_entries').delete().eq('id', supabaseId);
+  async function deleteEntryFromSupabase(id) {
+    if (!currentUser || !id) return;
+    await sb.from('app_entries').delete().eq('id', id);
   }
 
   async function loadEntriesFromSupabase() {
     if (!currentUser) return null;
     const { data, error } = await sb.from('app_entries').select('*').eq('user_id', currentUser.id).order('date', { ascending: true });
-    if (error) { console.error('Supabase load error:', error); return null; }
-    return data.map(e => ({
-      id: e.id, // keep supabase id for updates/deletes
-      text: e.text,
-      feeling: e.feeling,
-      date: e.date,
-      nudge: e.nudge,
-      nudgeLoading: e.nudge_loading,
-    }));
+    if (error) { console.error('Load error:', error); return null; }
+    return data.map(e => ({ id: e.id, text: e.text, feeling: e.feeling, date: e.date, nudge: e.nudge, nudgeLoading: e.nudge_loading }));
   }
 
-  // ---- HELPER: get entries from right source ----
   async function getEntries() {
-    if (currentUser) {
-      return await loadEntriesFromSupabase() || [];
-    }
+    if (currentUser) return await loadEntriesFromSupabase() || [];
     return JSON.parse(localStorage.getItem('ec_entries') || '[]');
   }
 
-  window.addEventListener('load', () => {
-    document.getElementById('hero').classList.add('revealed');
-  });
+  // ---- HERO / SCROLL ----
+  window.addEventListener('load', () => { document.getElementById('hero').classList.add('revealed'); });
 
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
-    });
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
   reveals.forEach(el => observer.observe(el));
 
@@ -1882,6 +823,7 @@
     });
   }
 
+  // ---- ENTRY BAR ----
   const bar = document.getElementById('entry-bar');
   const trigger = document.getElementById('entry-trigger');
   const step1 = document.getElementById('step-1');
@@ -1909,10 +851,7 @@
   }
 
   window.openEntryBar = openEntryBar;
-
   trigger.addEventListener('click', openEntryBar);
-  document.querySelectorAll('.btn-primary').forEach(btn => btn.addEventListener('click', openEntryBar));
-  document.querySelector('.nav-cta').addEventListener('click', openEntryBar);
 
   nextBtn.addEventListener('click', () => {
     entryValue = entryText.value.trim();
@@ -1939,26 +878,14 @@
   submitBtn.addEventListener('click', async () => {
     if (!selectedFeeling) return;
 
-    const rawEntries = currentUser
-      ? (await loadEntriesFromSupabase() || [])
-      : JSON.parse(localStorage.getItem('ec_entries') || '[]');
-
-    const newEntry = {
-      text: entryValue,
-      feeling: selectedFeeling,
-      date: new Date().toISOString(),
-      nudge: null,
-      nudgeLoading: true,
-    };
+    const rawEntries = await getEntries();
+    const newEntry = { text: entryValue, feeling: selectedFeeling, date: new Date().toISOString(), nudge: null, nudgeLoading: true };
 
     let supabaseId = null;
-
     if (currentUser) {
-      // Save to Supabase immediately
       const saved = await saveEntryToSupabase(newEntry);
       supabaseId = saved?.id || null;
     } else {
-      // Save to localStorage
       const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
       entries.push(newEntry);
       localStorage.setItem('ec_entries', JSON.stringify(entries));
@@ -1970,66 +897,59 @@
     showStep(3);
     setTimeout(() => closeBar(), 2800);
 
-    // Fetch AI nudge in background
     const goal = localStorage.getItem('ec_goal') || '';
-    if (goal) {
+    if (goal && currentUser) {
       const phaseNames = ['Ignition', 'The Dip', 'Grind', 'Traction', 'Compounding'];
       const phaseIndex = inferPhase(rawEntries) ?? 0;
-      const phaseName = phaseNames[phaseIndex];
       const recentEntries = rawEntries.slice(-3, -1).map(e => e.text);
-
-      const previousEntries = rawEntries.slice(0, -1);
+      const prev = rawEntries.slice(0, -1);
       let daysSinceLastEntry = null;
-      if (previousEntries.length > 0) {
-        const lastDate = new Date(previousEntries[previousEntries.length - 1].date);
-        const today = new Date();
-        daysSinceLastEntry = Math.floor((today - lastDate) / 86400000);
+      if (prev.length > 0) {
+        daysSinceLastEntry = Math.floor((new Date() - new Date(prev[prev.length - 1].date)) / 86400000);
       }
-
       try {
         const res = await fetch('/api/nudge', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            goal,
-            phase: phaseName,
-            entryText: entryValue,
-            recentEntries,
-            daysSinceLastEntry,
-          }),
+          body: JSON.stringify({ goal, phase: phaseNames[phaseIndex], entryText: entryValue, recentEntries, daysSinceLastEntry }),
         });
         const data = await res.json();
-        const nudge = data.nudge || null;
-
-        if (currentUser && supabaseId) {
-          await updateNudgeInSupabase(supabaseId, nudge);
-        } else {
-          const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-          const idx = updated.length - 1;
-          if (updated[idx]) {
-            updated[idx].nudge = nudge;
-            updated[idx].nudgeLoading = false;
-            localStorage.setItem('ec_entries', JSON.stringify(updated));
-          }
-        }
+        await updateNudgeInSupabase(supabaseId, data.nudge || null);
         await renderLog();
       } catch (err) {
-        // Silently clear loading state
-        if (currentUser && supabaseId) {
-          await updateNudgeInSupabase(supabaseId, null);
-        } else {
-          const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
-          const idx = updated.length - 1;
-          if (updated[idx]) { updated[idx].nudgeLoading = false; localStorage.setItem('ec_entries', JSON.stringify(updated)); }
-        }
+        await updateNudgeInSupabase(supabaseId, null);
         await renderLog();
       }
-    } else {
-      if (!currentUser) {
+    } else if (goal && !currentUser) {
+      const phaseNames = ['Ignition', 'The Dip', 'Grind', 'Traction', 'Compounding'];
+      const phaseIndex = inferPhase(rawEntries) ?? 0;
+      const recentEntries = rawEntries.slice(-3, -1).map(e => e.text);
+      const prev = rawEntries.slice(0, -1);
+      let daysSinceLastEntry = null;
+      if (prev.length > 0) {
+        daysSinceLastEntry = Math.floor((new Date() - new Date(prev[prev.length - 1].date)) / 86400000);
+      }
+      try {
+        const res = await fetch('/api/nudge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goal, phase: phaseNames[phaseIndex], entryText: entryValue, recentEntries, daysSinceLastEntry }),
+        });
+        const data = await res.json();
+        const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+        const idx = updated.length - 1;
+        if (updated[idx]) { updated[idx].nudge = data.nudge || null; updated[idx].nudgeLoading = false; localStorage.setItem('ec_entries', JSON.stringify(updated)); }
+        await renderLog();
+      } catch (err) {
         const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
         const idx = updated.length - 1;
         if (updated[idx]) { updated[idx].nudgeLoading = false; localStorage.setItem('ec_entries', JSON.stringify(updated)); }
+        await renderLog();
       }
+    } else if (!currentUser) {
+      const updated = JSON.parse(localStorage.getItem('ec_entries') || '[]');
+      const idx = updated.length - 1;
+      if (updated[idx]) { updated[idx].nudgeLoading = false; localStorage.setItem('ec_entries', JSON.stringify(updated)); }
     }
   });
 
@@ -2037,16 +957,14 @@
     bar.classList.remove('visible');
     trigger.classList.remove('hidden');
     setTimeout(() => {
-      showStep(1);
-      entryText.value = '';
-      selectedFeeling = null;
-      submitBtn.disabled = true;
+      showStep(1); entryText.value = ''; selectedFeeling = null; submitBtn.disabled = true;
       feelingChips.forEach(c => c.classList.remove('selected'));
     }, 400);
   }
 
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && bar.classList.contains('visible')) closeBar(); });
 
+  // ---- DATA / INSIGHTS ----
   const INSIGHTS = {
     'making progress': { label: 'Phase Read', text: 'Momentum is building. This is the compound phase, what you do now stacks. Keep the streak alive.' },
     'energized':       { label: 'Phase Read', text: 'High energy is a window. Use it to do the hardest thing on your list, not the easiest.' },
@@ -2057,36 +975,31 @@
 
   function formatDate(iso) {
     const d = new Date(iso);
-    const now = new Date();
-    const diffDays = Math.floor((now - d) / 86400000);
+    const diffDays = Math.floor((new Date() - d) / 86400000);
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
   const PHASE_CURVE_POS = [
-    { x: 20,  y: 55,  offset: 720 },
-    { x: 300, y: 152, offset: 430 },
-    { x: 432, y: 114, offset: 310 },
-    { x: 598, y: 40,  offset: 160 },
-    { x: 740, y: 13,  offset: 0   },
+    { x: 20, y: 55, offset: 720 }, { x: 300, y: 152, offset: 430 },
+    { x: 432, y: 114, offset: 310 }, { x: 598, y: 40, offset: 160 }, { x: 740, y: 13, offset: 0 },
   ];
 
   function inferPhase(entries) {
     if (!entries.length) return null;
     const last5 = entries.slice(-5);
-    const counts = { positive: 0, struggling: 0, uncertain: 0 };
+    const counts = { positive: 0, struggling: 0 };
     last5.forEach(e => {
       if (['energized','making progress'].includes(e.feeling)) counts.positive++;
       else if (['stuck','about to quit'].includes(e.feeling)) counts.struggling++;
-      else counts.uncertain++;
     });
     const total = entries.length;
     if (total <= 3) return 0;
     if (counts.struggling > counts.positive && total < 15) return 1;
-    if (total >= 5 && total < 12 && counts.uncertain >= 1) return 2;
+    if (total >= 5 && total < 12) return 2;
     if (counts.positive > counts.struggling && total >= 8) return 3;
-    if (total >= 15 && counts.positive >= counts.struggling) return 4;
+    if (total >= 15) return 4;
     return Math.min(Math.floor(total / 5), 4);
   }
 
@@ -2094,8 +1007,7 @@
     const wrap = document.getElementById('user-curve-wrap');
     if (!entries.length) { wrap.classList.remove('show'); return; }
     wrap.classList.add('show');
-    const phase = inferPhase(entries);
-    const pos = PHASE_CURVE_POS[phase];
+    const pos = PHASE_CURVE_POS[inferPhase(entries) || 0];
     const dot = document.getElementById('ucurve-dot');
     const pulse = document.getElementById('ucurve-dot-pulse');
     const progress = document.getElementById('ucurve-progress');
@@ -2106,12 +1018,10 @@
   }
 
   const pulseStyle = document.createElement('style');
-  pulseStyle.textContent = `
-    @keyframes curvePulse { 0% { r: 6; opacity: 1; } 100% { r: 14; opacity: 0; } }
-    #ucurve-dot-pulse { animation: curvePulse 1.8s ease-out infinite; }
-  `;
+  pulseStyle.textContent = `@keyframes curvePulse { 0% { r: 6; opacity: 1; } 100% { r: 14; opacity: 0; } } #ucurve-dot-pulse { animation: curvePulse 1.8s ease-out infinite; }`;
   document.head.appendChild(pulseStyle);
 
+  // ---- CONFIRM / DELETE ----
   let pendingAction = null;
 
   function confirmAction(type, index) {
@@ -2128,29 +1038,24 @@
     document.getElementById('confirm-overlay').classList.add('show');
   }
 
-  window.confirmAction = confirmAction;
-
   function cancelConfirm() {
     pendingAction = null;
     document.getElementById('confirm-overlay').classList.remove('show');
   }
 
+  window.confirmAction = confirmAction;
   window.cancelConfirm = cancelConfirm;
 
   document.getElementById('confirm-proceed').addEventListener('click', async () => {
     if (!pendingAction) return;
     if (pendingAction.type === 'timeline') {
-      if (currentUser) {
-        await sb.from('app_entries').delete().eq('user_id', currentUser.id);
-      } else {
-        localStorage.removeItem('ec_entries');
-      }
+      if (currentUser) await sb.from('app_entries').delete().eq('user_id', currentUser.id);
+      else localStorage.removeItem('ec_entries');
       localStorage.removeItem('ec_milestones_seen');
       document.getElementById('milestone-banner').classList.remove('show');
     } else {
-      if (currentUser) {
-        await deleteEntryFromSupabase(pendingAction.index);
-      } else {
+      if (currentUser) await deleteEntryFromSupabase(pendingAction.index);
+      else {
         const entries = JSON.parse(localStorage.getItem('ec_entries') || '[]');
         entries.splice(pendingAction.index, 1);
         localStorage.setItem('ec_entries', JSON.stringify(entries));
@@ -2160,10 +1065,9 @@
     await renderLog();
   });
 
-  document.getElementById('confirm-overlay').addEventListener('click', function(e) {
-    if (e.target === this) cancelConfirm();
-  });
+  document.getElementById('confirm-overlay').addEventListener('click', function(e) { if (e.target === this) cancelConfirm(); });
 
+  // ---- RENDER LOG ----
   async function renderLog() {
     const rawEntries = await getEntries();
     const entries = [...rawEntries].reverse();
@@ -2177,10 +1081,7 @@
     updateGoalChip();
 
     if (entries.length === 0) {
-      empty.style.display = 'flex';
-      timeline.innerHTML = '';
-      actions.style.display = 'none';
-      return;
+      empty.style.display = 'flex'; timeline.innerHTML = ''; actions.style.display = 'none'; return;
     }
 
     empty.style.display = 'none';
@@ -2191,7 +1092,10 @@
       const insight = INSIGHTS[entry.feeling] || null;
 
       let nudgeBlock = '';
-      if (entry.nudgeLoading) {
+      if (!currentUser) {
+        // Logged out: show locked state
+        nudgeBlock = `<div class="timeline-nudge-locked"><span class="timeline-nudge-label">Your Nudge</span><p>Sign in to get a personalised next step based on this entry.</p><button class="btn-nudge-signin" onclick="showAuthModal('signin')">Sign In</button></div>`;
+      } else if (entry.nudgeLoading) {
         nudgeBlock = `<div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p class="timeline-nudge-loading">Generating your personalised next step...</p></div>`;
       } else if (entry.nudge) {
         nudgeBlock = `<div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p>${entry.nudge}</p></div>`;
@@ -2200,10 +1104,7 @@
       return `
         <div class="timeline-entry" style="transition-delay: ${i * 0.06}s">
           <div class="timeline-date">${formatDate(entry.date)}</div>
-          <div class="timeline-spine">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
-          </div>
+          <div class="timeline-spine"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
           <div class="timeline-content">
             <p class="timeline-text">${entry.text}</p>
             <span class="timeline-feeling" data-feeling="${entry.feeling}">${entry.feeling}</span>
@@ -2215,9 +1116,7 @@
     }).join('');
 
     requestAnimationFrame(() => {
-      timeline.querySelectorAll('.timeline-entry').forEach(el => {
-        setTimeout(() => el.classList.add('visible'), 50);
-      });
+      timeline.querySelectorAll('.timeline-entry').forEach(el => setTimeout(() => el.classList.add('visible'), 50));
     });
   }
 
@@ -2230,23 +1129,20 @@
   const goalSkipBtn = document.getElementById('goal-skip-btn');
 
   function showGoalModal() {
-    const existing = localStorage.getItem('ec_goal') || '';
-    goalInput.value = existing;
-    goalSaveBtn.disabled = existing.trim().length === 0;
+    goalInput.value = localStorage.getItem('ec_goal') || '';
+    goalSaveBtn.disabled = goalInput.value.trim().length === 0;
     goalOverlay.classList.add('show');
     setTimeout(() => goalInput.focus(), 100);
   }
 
-  function hideGoalModal() {
-    goalOverlay.classList.remove('show');
-  }
+  function hideGoalModal() { goalOverlay.classList.remove('show'); }
 
   function updateGoalChip() {
     const goal = localStorage.getItem('ec_goal') || '';
     const chip = document.getElementById('log-goal-chip');
     const display = document.getElementById('log-goal-display');
     if (goal) {
-      display.textContent = goal.length > 48 ? goal.slice(0, 48) + '…' : goal;
+      display.textContent = goal.length > 48 ? goal.slice(0, 48) + '...' : goal;
       chip.style.display = 'inline-flex';
     } else {
       chip.style.display = 'none';
@@ -2255,18 +1151,14 @@
 
   window.showGoalModal = showGoalModal;
 
-  goalInput.addEventListener('input', () => {
-    goalSaveBtn.disabled = goalInput.value.trim().length === 0;
-  });
+  goalInput.addEventListener('input', () => { goalSaveBtn.disabled = goalInput.value.trim().length === 0; });
 
   goalInput.addEventListener('keydown', async e => {
     if (e.key === 'Enter' && goalInput.value.trim()) {
       const val = goalInput.value.trim();
       localStorage.setItem('ec_goal', val);
       await saveGoalToSupabase(val);
-      hideGoalModal();
-      updateGoalChip();
-      renderTaskCheck();
+      hideGoalModal(); updateGoalChip(); renderTaskCheck();
     }
     if (e.key === 'Escape') hideGoalModal();
   });
@@ -2276,122 +1168,69 @@
     if (!val) return;
     localStorage.setItem('ec_goal', val);
     await saveGoalToSupabase(val);
-    hideGoalModal();
-    updateGoalChip();
-    renderTaskCheck();
+    hideGoalModal(); updateGoalChip(); renderTaskCheck();
   });
 
-  goalSkipBtn.addEventListener('click', () => {
-    localStorage.setItem('ec_goal_skipped', '1');
-    hideGoalModal();
-  });
+  goalSkipBtn.addEventListener('click', () => { localStorage.setItem('ec_goal_skipped', '1'); hideGoalModal(); });
+  goalOverlay.addEventListener('click', function(e) { if (e.target === this) hideGoalModal(); });
 
-  goalOverlay.addEventListener('click', function(e) {
-    if (e.target === this) hideGoalModal();
-  });
-
-  // Show goal modal on first ever visit (no goal set, not yet skipped)
   if (!localStorage.getItem('ec_goal') && !localStorage.getItem('ec_goal_skipped')) {
     setTimeout(() => showGoalModal(), 1200);
   }
 
   updateGoalChip();
 
-  // ---- DAILY TASK CHECK ----
-  const YES_MESSAGES = [
-    "Good. Keep that going tomorrow.",
-    "That's what matters. Show up again tomorrow.",
-    "One day at a time. Log how it goes.",
-    "That's the whole game. Do it again tomorrow.",
-  ];
+  // ---- TASK CHECK ----
+  const YES_MESSAGES = ["Good. Keep that going tomorrow.", "That's what matters. Show up again tomorrow.", "One day at a time. Log how it goes.", "That's the whole game. Do it again tomorrow."];
+  const NO_MESSAGES = ["That's fine. Tomorrow is a clean start. Log what gets in the way next time.", "It happens. What would make it easier to get one small thing done tomorrow?", "Not every day works out. What is one thing you can do tomorrow, even a tiny one?"];
+  const PERSISTENT_NO_MESSAGES = ["You have said not today a few times in a row. That is worth paying attention to. What is actually stopping you? Write it in your next entry.", "A few days without progress is normal. A week starts to become a pattern. What would it take to do just one thing toward this goal tomorrow?", "This goal is still here. You keep coming back to check it. That means something. What is the smallest possible version of progress you could make tomorrow?"];
 
-  const NO_MESSAGES = [
-    "That's fine. Tomorrow is a clean start. Log what gets in the way next time.",
-    "It happens. What would make it easier to get one small thing done tomorrow?",
-    "Not every day works out. What is one thing you can do tomorrow, even a tiny one?",
-  ];
-
-  const PERSISTENT_NO_MESSAGES = [
-    "You have said not today a few times in a row. That is worth paying attention to. What is actually stopping you? Write it in your next entry.",
-    "A few days without progress is normal. A week starts to become a pattern. What would it take to do just one thing toward this goal tomorrow?",
-    "This goal is still here. You keep coming back to check it. That means something. What is the smallest possible version of progress you could make tomorrow?",
-  ];
-
-  function getDateKey() {
-    return 'ec_task_' + new Date().toISOString().slice(0, 10);
-  }
+  function getDateKey() { return 'ec_task_' + new Date().toISOString().slice(0, 10); }
 
   function renderTaskCheck() {
     const goal = localStorage.getItem('ec_goal') || '';
     const wrap = document.getElementById('task-check-wrap');
     if (!goal) { wrap.classList.remove('show'); return; }
-
     wrap.classList.add('show');
     document.getElementById('task-check-goal-text').textContent = goal;
-
-    const todayKey = getDateKey();
-    const todayAnswer = localStorage.getItem(todayKey);
+    const todayAnswer = localStorage.getItem(getDateKey());
     const noStreak = parseInt(localStorage.getItem('ec_task_no_streak') || '0', 10);
-
     const btns = document.getElementById('task-check-btns');
     const response = document.getElementById('task-check-response');
     const reset = document.getElementById('task-check-reset');
-
     if (todayAnswer) {
-      btns.style.display = 'none';
-      reset.style.display = 'inline';
-
+      btns.style.display = 'none'; reset.style.display = 'inline';
       if (todayAnswer === 'yes') {
-        const msg = YES_MESSAGES[Math.floor(Math.random() * YES_MESSAGES.length)];
         response.className = 'task-check-response yes';
-        response.textContent = msg;
+        response.textContent = YES_MESSAGES[Math.floor(Math.random() * YES_MESSAGES.length)];
       } else {
-        let msg, cls;
-        if (noStreak >= 3) {
-          cls = 'task-check-response persistent-no';
-          msg = PERSISTENT_NO_MESSAGES[Math.min(noStreak - 3, PERSISTENT_NO_MESSAGES.length - 1)];
-        } else {
-          cls = 'task-check-response no';
-          msg = NO_MESSAGES[Math.min(noStreak - 1, NO_MESSAGES.length - 1)];
-        }
-        response.className = cls;
-        response.textContent = msg;
+        const isPersistent = noStreak >= 3;
+        response.className = 'task-check-response ' + (isPersistent ? 'persistent-no' : 'no');
+        response.textContent = isPersistent
+          ? PERSISTENT_NO_MESSAGES[Math.min(noStreak - 3, PERSISTENT_NO_MESSAGES.length - 1)]
+          : NO_MESSAGES[Math.min(noStreak - 1, NO_MESSAGES.length - 1)];
       }
     } else {
-      btns.style.display = 'flex';
-      response.className = 'task-check-response';
-      response.textContent = '';
-      reset.style.display = 'none';
+      btns.style.display = 'flex'; response.className = 'task-check-response'; response.textContent = ''; reset.style.display = 'none';
     }
   }
 
   function taskCheckAnswer(answer) {
-    const todayKey = getDateKey();
-    localStorage.setItem(todayKey, answer);
-
-    if (answer === 'no') {
-      const streak = parseInt(localStorage.getItem('ec_task_no_streak') || '0', 10);
-      localStorage.setItem('ec_task_no_streak', streak + 1);
-    } else {
-      localStorage.setItem('ec_task_no_streak', '0');
-    }
-
+    localStorage.setItem(getDateKey(), answer);
+    if (answer === 'no') localStorage.setItem('ec_task_no_streak', parseInt(localStorage.getItem('ec_task_no_streak') || '0', 10) + 1);
+    else localStorage.setItem('ec_task_no_streak', '0');
     renderTaskCheck();
   }
 
-  function taskCheckReset() {
-    const todayKey = getDateKey();
-    localStorage.removeItem(todayKey);
-    renderTaskCheck();
-  }
+  function taskCheckReset() { localStorage.removeItem(getDateKey()); renderTaskCheck(); }
 
   window.taskCheckAnswer = taskCheckAnswer;
   window.taskCheckReset = taskCheckReset;
-
   renderTaskCheck();
 
+  // ---- MILESTONES ----
   const MILESTONES = {
-    5:  "Five entries in. The shape of your timeline is starting to show.",
+    5: "Five entries in. The shape of your timeline is starting to show.",
     10: "Ten entries. This is usually around where people stop comparing day-to-day and start seeing the trend.",
     25: "Twenty-five entries. Scroll back to your first one. That's the distance you've actually covered.",
     50: "Fifty entries. Most people never get here. You're building a real record.",
@@ -2401,18 +1240,16 @@
     if (!MILESTONES[entryCount]) return;
     const seen = JSON.parse(localStorage.getItem('ec_milestones_seen') || '[]');
     if (seen.includes(entryCount)) return;
-    const banner = document.getElementById('milestone-banner');
     document.getElementById('milestone-num').textContent = entryCount;
     document.getElementById('milestone-text').textContent = MILESTONES[entryCount];
-    banner.classList.add('show');
+    document.getElementById('milestone-banner').classList.add('show');
     seen.push(entryCount);
     localStorage.setItem('ec_milestones_seen', JSON.stringify(seen));
   }
 
-  document.getElementById('milestone-dismiss').addEventListener('click', () => {
-    document.getElementById('milestone-banner').classList.remove('show');
-  });
+  document.getElementById('milestone-dismiss').addEventListener('click', () => { document.getElementById('milestone-banner').classList.remove('show'); });
 
+  // ---- PHASES ----
   const pills = document.querySelectorAll('.phase-pill');
   const dots = document.querySelectorAll('.phase-dot');
 
