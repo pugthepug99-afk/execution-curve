@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy Policy — Execution Curve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black: #0A0A0A; --white: #FAFAFA; --amber: #C8873F;
+    --gray-1: #6B6B6B; --gray-2: #D4D4D4; --gray-3: #F0F0F0;
+    --mono: 'DM Mono', monospace; --body: 'IBM Plex Sans', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+  body { background: var(--white); color: var(--black); font-family: var(--body); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; border-bottom: 1px solid var(--gray-2); }
+  .nav-logo { font-family: var(--mono); font-weight: 500; font-size: 0.9rem; color: var(--black); text-decoration: none; }
+  .nav-logo span { color: var(--amber); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 5rem 1.5rem 8rem; }
+  .eyebrow { font-family: var(--mono); font-size: 0.7rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 1rem; text-transform: uppercase; }
+  h1 { font-family: var(--display); font-size: 2.4rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.5rem; line-height: 1.1; }
+  .updated { font-family: var(--mono); font-size: 0.68rem; color: var(--gray-1); letter-spacing: 0.02em; margin-bottom: 3rem; display: block; }
+  h2 { font-family: var(--display); font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); margin: 2.5rem 0 0.75rem; }
+  p { color: var(--gray-1); margin-bottom: 1rem; font-size: 0.95rem; }
+  ul { color: var(--gray-1); font-size: 0.95rem; padding-left: 1.25rem; margin-bottom: 1rem; }
+  ul li { margin-bottom: 0.4rem; }
+  a { color: var(--black); }
+  .divider { border: none; border-top: 1px solid var(--gray-2); margin: 2rem 0; }
+  footer { padding: 2rem 3rem; border-top: 1px solid var(--gray-2); font-size: 0.8rem; color: var(--gray-1); font-family: var(--body); display: flex; justify-content: space-between; }
+  footer a { color: var(--gray-1); text-decoration: none; }
+  footer a:hover { color: var(--black); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Execution<span>Curve</span></a>
+</nav>
+
+<div class="wrap">
+  <span class="eyebrow">Legal</span>
+  <h1>Privacy Policy</h1>
+  <span class="updated">Last updated: August 2026</span>
+
+  <p>Execution Curve is a personal project log and AI coaching tool built to help people persist through long-term goals. This policy explains what data we collect, why we collect it, how it is stored, and your rights over it.</p>
+  <p>By using Execution Curve, you agree to the practices described here. If you do not agree, please do not use the app.</p>
+
+  <hr class="divider"/>
+
+  <h2>1. Who we are</h2>
+  <p>Execution Curve is operated as an independent project. You can contact us at <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a> with any questions about your data.</p>
+
+  <h2>2. What data we collect</h2>
+  <p>We collect only what is needed to make the app work:</p>
+  <ul>
+    <li><strong>Account data:</strong> your email address and encrypted password, collected when you create an account.</li>
+    <li><strong>Journal entries:</strong> the text you write in each log entry and the feeling you select (Making Progress, Stuck, Uncertain, Energized, About To Quit).</li>
+    <li><strong>Your stated goal:</strong> the goal you enter during setup, used to personalise your AI feedback.</li>
+    <li><strong>Entry dates and timestamps:</strong> when each entry was created, used to track progress over time.</li>
+    <li><strong>AI-generated nudges:</strong> the personalised next-step feedback generated for each entry, stored alongside the entry it belongs to.</li>
+  </ul>
+  <p>We do not collect your name, phone number, location, or any payment information. We do not run advertising and we do not sell your data.</p>
+
+  <h2>3. How we use your data</h2>
+  <p>Your data is used for one purpose: to make Execution Curve work for you.</p>
+  <ul>
+    <li>Your email is used to create and secure your account and to send password reset emails.</li>
+    <li>Your journal entries, goal, and recent entry history are sent to Google's Gemini API to generate personalised feedback. This data is sent securely over HTTPS and is not stored by us beyond what appears in your log.</li>
+    <li>Your entries are stored so you can see your timeline across sessions and devices.</li>
+  </ul>
+  <p>We do not use your data to train AI models. We do not share your journal entries or goal with any third party other than the AI processing described above.</p>
+
+  <h2>4. Third-party services</h2>
+  <p>Execution Curve uses two third-party services to operate:</p>
+  <ul>
+    <li><strong>Supabase</strong> — stores your account, journal entries, and goal in a secure database. Supabase is hosted in the United States. Their privacy policy is available at <a href="https://supabase.com/privacy" target="_blank">supabase.com/privacy</a>.</li>
+    <li><strong>Google Gemini API</strong> — generates personalised AI feedback based on your entry and goal. Your entry text and goal are sent to Google's servers to produce this feedback. Google's privacy policy is available at <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a>.</li>
+  </ul>
+  <p>We do not use any advertising networks, analytics trackers, or social media pixels.</p>
+
+  <h2>5. Data storage and security</h2>
+  <p>Your data is stored in Supabase with row-level security enabled, meaning only you can read or write your own entries. Passwords are never stored in plain text. All data is transmitted over encrypted HTTPS connections.</p>
+  <p>We take reasonable steps to protect your data but cannot guarantee absolute security. If you believe your account has been compromised, contact us immediately at <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>.</p>
+
+  <h2>6. How long we keep your data</h2>
+  <p>Your data is kept for as long as your account is active. If you delete your account, all associated entries, goals, and account information are permanently deleted from our database. We do not retain backups of deleted user data beyond 30 days.</p>
+
+  <h2>7. Your rights</h2>
+  <p>You have the right to:</p>
+  <ul>
+    <li>Access all data we hold about you by contacting us at <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>.</li>
+    <li>Delete individual entries at any time using the Delete Entry button in the app.</li>
+    <li>Delete your entire log using the Start Fresh button in the app.</li>
+    <li>Request full account deletion by emailing us. We will delete your account and all associated data within 7 days.</li>
+    <li>Correct inaccurate account information by contacting us.</li>
+  </ul>
+
+  <h2>8. Age requirements</h2>
+  <p>Execution Curve is intended for users aged 13 and older. If you are under 13, please do not create an account. If we become aware that a user under 13 has created an account, we will delete it promptly. If you are between 13 and 18, we recommend reviewing this policy with a parent or guardian.</p>
+
+  <h2>9. Changes to this policy</h2>
+  <p>We may update this policy as the app changes. When we do, we will update the date at the top of this page. Continued use of the app after changes are posted means you accept the updated policy.</p>
+
+  <h2>10. Contact</h2>
+  <p>Questions about this policy or your data: <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a></p>
+</div>
+
+<footer>
+  <span>© 2025 Execution Curve</span>
+  <div style="display:flex; gap:1.5rem">
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms of Service</a>
+    <a href="/">Back to app</a>
+  </div>
+</footer>
+
+</body>
+</html>
