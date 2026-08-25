@@ -409,7 +409,7 @@
     <span class="section-label reveal">The real reason people quit</span>
     <h2 class="section-heading reveal reveal-delay-1">Tools to start are everywhere.<br/>Tools to <em style="font-style:normal; color: var(--amber);">persist</em> aren't.</h2>
     <div class="section-body reveal reveal-delay-2">
-      <p>Tech has made it easier than ever to build something whether it's an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
+      <p>Tech has made it easier than ever to build something whether it's a new skill, an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
       <p>The messy middle is where most people quit. Not because they failed, but because progress felt invisible and they had no way to know if what they were doing was working.</p>
     </div>
   </div>
@@ -752,10 +752,19 @@
     }
     if (!password) { errorEl.textContent = 'Please enter your password.'; errorEl.classList.add('show'); submitBtn.disabled = false; submitBtn.textContent = authMode === 'signin' ? 'Sign In' : 'Create Account'; return; }
     if (authMode === 'signup') {
-      const { error } = await sb.auth.signUp({ email, password });
+      const { data, error } = await sb.auth.signUp({ email, password });
       submitBtn.disabled = false; submitBtn.textContent = 'Create Account';
-      if (error) { errorEl.textContent = error.message; errorEl.classList.add('show'); }
-      else { successEl.textContent = 'Account created. Check your email to confirm, then sign in.'; successEl.classList.add('show'); }
+      if (error) {
+        errorEl.textContent = error.message;
+        errorEl.classList.add('show');
+      } else if (data?.user && data.user.identities && data.user.identities.length === 0) {
+        // Supabase returns empty identities array for already-registered emails
+        errorEl.textContent = 'An account with this email already exists. Sign in instead.';
+        errorEl.classList.add('show');
+      } else {
+        successEl.textContent = 'Check your email for a confirmation link, then sign in.';
+        successEl.classList.add('show');
+      }
     } else {
       const { error } = await sb.auth.signInWithPassword({ email, password });
       submitBtn.disabled = false; submitBtn.textContent = 'Sign In';
