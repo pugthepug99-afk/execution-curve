@@ -297,6 +297,9 @@
   .btn-auth-submit:disabled { opacity: 0.35; cursor: default; background: var(--black); }
   .auth-switch { font-family: var(--body); font-size: 0.82rem; color: var(--gray-1); text-align: center; }
   .auth-switch button { background: none; border: none; font-family: var(--body); font-size: 0.82rem; color: var(--black); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 0; }
+  .auth-terms { font-family: var(--body); font-size: 0.75rem; color: var(--gray-1); text-align: center; margin-bottom: 0.75rem; line-height: 1.5; }
+  .auth-terms a { color: var(--black); font-size: 0.75rem; }
+  .auth-switch button { background: none; border: none; font-family: var(--body); font-size: 0.82rem; color: var(--black); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 0; }
   .auth-divider { border: none; border-top: 1px solid var(--gray-2); margin: 1.25rem 0; }
   .auth-success { font-family: var(--mono); font-size: 0.75rem; color: #3a6647; background: #f0f7f0; padding: 0.6rem 0.9rem; margin-bottom: 0.75rem; display: none; letter-spacing: 0.02em; }
   .auth-success.show { display: block; }
@@ -406,7 +409,7 @@
     <span class="section-label reveal">The real reason people quit</span>
     <h2 class="section-heading reveal reveal-delay-1">Tools to start are everywhere.<br/>Tools to <em style="font-style:normal; color: var(--amber);">persist</em> aren't.</h2>
     <div class="section-body reveal reveal-delay-2">
-      <p>Tech has made it easier than ever to build something whether it's a learning a new skill, creating an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
+      <p>Tech has made it easier than ever to build something whether it's an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
       <p>The messy middle is where most people quit. Not because they failed, but because progress felt invisible and they had no way to know if what they were doing was working.</p>
     </div>
   </div>
@@ -580,6 +583,7 @@
     <input class="auth-input" type="email" id="auth-email" placeholder="Email address" autocomplete="email"/>
     <input class="auth-input" type="password" id="auth-password" placeholder="Password" autocomplete="current-password"/>
     <button class="btn-auth-submit" id="auth-submit-btn">Sign In</button>
+    <p class="auth-terms" id="auth-terms-note" style="display:none">By creating an account you agree to our <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>.</p>
     <hr class="auth-divider"/>
     <p class="auth-switch" id="auth-switch-text">No account yet? <button onclick="switchAuthMode()">Create one</button></p>
     <p class="auth-switch" style="margin-top:0.5rem"><button onclick="showForgotPassword()" id="forgot-btn" style="color:var(--gray-1); font-size:0.75rem">Forgot password?</button></p>
@@ -637,7 +641,11 @@
 
 <footer>
   <span>© 2025 Execution Curve</span>
-  <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>
+  <div style="display:flex; gap:1.5rem">
+    <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>
+    <a href="/privacy" style="color:var(--gray-1); text-decoration:none; font-size:0.8rem">Privacy Policy</a>
+    <a href="/terms" style="color:var(--gray-1); text-decoration:none; font-size:0.8rem">Terms of Service</a>
+  </div>
 </footer>
 
 <script>
@@ -696,20 +704,24 @@
     const switchText = document.getElementById('auth-switch-text');
     const passwordInput = document.getElementById('auth-password');
     const forgotBtn = document.getElementById('forgot-btn');
+    const termsNote = document.getElementById('auth-terms-note');
     document.getElementById('auth-error').classList.remove('show');
     document.getElementById('auth-success').classList.remove('show');
     if (authMode === 'signin') {
       label.textContent = 'Sign In'; title.textContent = 'Welcome back.'; submitBtn.textContent = 'Sign In';
       passwordInput.style.display = ''; forgotBtn.style.display = '';
       switchText.innerHTML = 'No account yet? <button onclick="switchAuthMode()">Create one</button>';
+      termsNote.style.display = 'none';
     } else if (authMode === 'signup') {
       label.textContent = 'Create Account'; title.textContent = 'Start your log.'; submitBtn.textContent = 'Create Account';
       passwordInput.style.display = ''; forgotBtn.style.display = 'none';
       switchText.innerHTML = 'Already have an account? <button onclick="switchAuthMode()">Sign in</button>';
+      termsNote.style.display = 'block';
     } else if (authMode === 'forgot') {
       label.textContent = 'Reset Password'; title.textContent = 'We will send you a link.'; submitBtn.textContent = 'Send Reset Link';
       passwordInput.style.display = 'none'; forgotBtn.style.display = 'none';
       switchText.innerHTML = 'Remembered it? <button onclick="switchAuthMode()">Sign in</button>';
+      termsNote.style.display = 'none';
     }
   }
 
@@ -770,7 +782,14 @@
   async function syncGoalFromSupabase() {
     if (!currentUser) return;
     const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).maybeSingle();
-    if (data?.goal) { localStorage.setItem('ec_goal', data.goal); updateGoalChip(); renderTaskCheck(); }
+    if (data?.goal) {
+      localStorage.setItem('ec_goal', data.goal);
+      updateGoalChip();
+      renderTaskCheck();
+    } else if (!localStorage.getItem('ec_goal')) {
+      // Logged in but no goal anywhere — prompt them so AI works
+      setTimeout(() => showGoalModal(), 800);
+    }
   }
 
   async function saveGoalToSupabase(goal) {
@@ -1174,7 +1193,7 @@
   goalSkipBtn.addEventListener('click', () => { localStorage.setItem('ec_goal_skipped', '1'); hideGoalModal(); });
   goalOverlay.addEventListener('click', function(e) { if (e.target === this) hideGoalModal(); });
 
-  if (!localStorage.getItem('ec_goal') && !localStorage.getItem('ec_goal_skipped')) {
+  if (!currentUser && !localStorage.getItem('ec_goal') && !localStorage.getItem('ec_goal_skipped')) {
     setTimeout(() => showGoalModal(), 1200);
   }
 
