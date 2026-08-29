@@ -838,7 +838,7 @@
     <span class="section-label reveal">The real reason people quit</span>
     <h2 class="section-heading reveal reveal-delay-1">Tools to start are everywhere.<br/>Tools to <em style="font-style:normal; color: var(--amber);">persist</em> aren't.</h2>
     <div class="section-body reveal reveal-delay-2">
-      <p>Tech has made it easier than ever to build something whether it's a new skill, an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
+      <p>Tech has made it easier than ever to build something whether it's an app, a business, a YouTube channel, or a brand. But making it easy to start just means more people are reaching the hard middle.</p>
       <p>The messy middle is where most people quit. Not because they failed, but because progress felt invisible and they had no way to know if what they were doing was working.</p>
     </div>
   </div>
@@ -2040,7 +2040,7 @@
         }),
       });
       const data = await res.json();
-      const reply = data.reply || 'Something went wrong. Try again.';
+      const reply = data.reply || data.error || 'Navi is having trouble connecting. Your conversation is saved — try again.';
       removeTypingIndicator();
       currentChatMessages.push({ role: 'assistant', content: reply });
       renderChatMessages();
@@ -2056,8 +2056,15 @@
 
     } catch (err) {
       removeTypingIndicator();
-      currentChatMessages.push({ role: 'assistant', content: 'Could not connect. Check your connection and try again.' });
+      // Remove the user message we added optimistically so they can retry
+      currentChatMessages.pop();
       renderChatMessages();
+      const errDiv = document.createElement('div');
+      errDiv.className = 'chat-msg assistant';
+      errDiv.style.borderLeftColor = '#b85c38';
+      errDiv.textContent = 'Navi lost connection. Your message was not lost — type it again or check your internet.';
+      document.getElementById('chat-messages').appendChild(errDiv);
+      scrollChatToBottom();
     }
 
     sendBtn.disabled = false;
@@ -2225,14 +2232,14 @@
         }),
       });
       const data = await res.json();
-      const reply = data.reply || 'Something went wrong. Try again.';
+      const reply = data.reply || data.error || 'Navi is having trouble connecting. Your conversation is saved — try again.';
       document.getElementById('ntyping-' + entryId)?.remove();
       existingMessages.push({ role: 'assistant', content: reply });
       await saveNudgeThread(entryId, existingMessages);
       renderNudgeThread(entryId, existingMessages, decodeURIComponent(entryText), decodeURIComponent(nudgeText));
     } catch (err) {
       document.getElementById('ntyping-' + entryId)?.remove();
-      existingMessages.push({ role: 'assistant', content: 'Could not connect. Try again.' });
+      existingMessages.push({ role: 'assistant', content: 'Navi lost connection. Your message was not lost — try sending again.' });
       renderNudgeThread(entryId, existingMessages, decodeURIComponent(entryText), decodeURIComponent(nudgeText));
     }
 
