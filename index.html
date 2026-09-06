@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Execution Curve</title>
+<link rel="icon" type="image/png" href="/logo.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -56,6 +57,146 @@
   .nav-links a:hover { color: var(--black); }
 
   @media (max-width: 768px) { .nav-links { display: none; } }
+
+  /* PROJECT SWITCHER */
+  .project-switcher {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .btn-project-switch {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--black);
+    background: var(--gray-3);
+    border: 1px solid var(--gray-2);
+    padding: 0.3rem 0.75rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: border-color 0.15s;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btn-project-switch:hover { border-color: var(--amber); }
+  .btn-project-switch .project-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  .project-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    background: var(--white);
+    border: 1px solid var(--gray-2);
+    min-width: 220px;
+    z-index: 400;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  .project-dropdown.show { display: flex; }
+
+  .project-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    font-family: var(--body);
+    font-size: 0.85rem;
+    color: var(--black);
+    cursor: pointer;
+    border: none;
+    background: none;
+    text-align: left;
+    transition: background 0.15s;
+    width: 100%;
+  }
+
+  .project-dropdown-item:hover { background: var(--gray-3); }
+  .project-dropdown-item.active { background: var(--gray-3); font-weight: 500; }
+  .project-dropdown-item .item-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  .project-dropdown-divider { border: none; border-top: 1px solid var(--gray-2); margin: 0; }
+
+  .btn-new-project {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--amber);
+    cursor: pointer;
+    border: none;
+    background: none;
+    text-align: left;
+    letter-spacing: 0.02em;
+    transition: background 0.15s;
+    width: 100%;
+  }
+
+  .btn-new-project:hover { background: var(--gray-3); }
+
+  /* NEW PROJECT MODAL */
+  .new-project-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.75); z-index: 700; display: none; align-items: center; justify-content: center; }
+  .new-project-overlay.show { display: flex; }
+  .new-project-box { background: var(--white); border: 1px solid var(--gray-2); padding: 2rem; max-width: 400px; width: calc(100% - 2rem); }
+  .new-project-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.75rem; }
+  .new-project-box h3 { font-family: var(--display); font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+  .new-project-input { width: 100%; font-family: var(--body); font-size: 0.9rem; color: var(--black); background: var(--gray-3); border: 1px solid var(--gray-2); padding: 0.75rem 1rem; outline: none; margin-bottom: 0.75rem; transition: border-color 0.15s; }
+  .new-project-input:focus { border-color: var(--amber); }
+  .new-project-input::placeholder { color: var(--gray-1); }
+  .color-picker-row { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .color-swatch { width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s; }
+  .color-swatch.selected { border-color: var(--black); }
+  .new-project-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+  .btn-project-cancel { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.5rem 1rem; cursor: pointer; }
+  .btn-project-create { font-family: var(--mono); font-size: 0.72rem; color: var(--white); background: var(--black); border: none; padding: 0.5rem 1.25rem; cursor: pointer; transition: background 0.15s; }
+  .btn-project-create:hover { background: var(--amber); }
+  .btn-project-create:disabled { opacity: 0.35; cursor: default; background: var(--black); }
+
+  /* CONSISTENCY INDICATOR */
+  .consistency-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--gray-1);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .consistency-rate {
+    color: var(--black);
+    font-weight: 500;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ALMOST QUIT MARKER */
+  .almost-quit-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: #b85c38;
+    letter-spacing: 0.04em;
+    margin-top: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid rgba(184,92,56,0.3);
+    background: rgba(184,92,56,0.05);
+  }
+
+  .almost-quit-flag::before { content: '⚑'; font-size: 0.7rem; }
 
   .nav-cta {
     font-family: var(--body); font-size: 0.875rem; font-weight: 500;
@@ -797,13 +938,32 @@
 
 <!-- NAV -->
 <nav>
-  <a href="/" class="nav-logo">Execution<span>Curve</span></a>
+  <a href="/" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 100 100" style="display:inline-block;vertical-align:middle;margin-right:7px;flex-shrink:0">
+      <circle cx="50" cy="50" r="28" fill="#C8873F"/>
+      <path d="M 50 8 A 42 42 0 1 1 88 68" fill="none" stroke="#0A0A0A" stroke-width="9" stroke-linecap="round"/>
+      <polygon points="88,68 76,58 98,58" fill="#0A0A0A" transform="rotate(30,88,68)"/>
+    </svg>Execution<span>Curve</span>
+  </a>
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
     <li><a href="#phases">The curve</a></li>
     <li><a href="#log">Your log</a></li>
     <li><a href="/roadmap.html">Roadmap</a></li>
   </ul>
+  <!-- Project switcher (only shown when logged in) -->
+  <div class="project-switcher" id="project-switcher" style="display:none">
+    <button class="btn-project-switch" id="btn-project-switch" onclick="toggleProjectDropdown()">
+      <span class="project-dot" id="nav-project-dot" style="background:#C8873F"></span>
+      <span id="nav-project-name">My Project</span>
+      <span>▾</span>
+    </button>
+    <div class="project-dropdown" id="project-dropdown">
+      <div id="project-dropdown-items"></div>
+      <hr class="project-dropdown-divider"/>
+      <button class="btn-new-project" onclick="openNewProjectModal()">+ New Project</button>
+    </div>
+  </div>
   <div id="nav-auth">
     <button class="nav-cta" id="nav-signin-btn" onclick="showAuthModal('signin')">Sign In</button>
     <div class="nav-account" id="nav-account" style="display:none">
@@ -812,6 +972,20 @@
     </div>
   </div>
 </nav>
+
+<!-- NEW PROJECT MODAL -->
+<div class="new-project-overlay" id="new-project-overlay">
+  <div class="new-project-box">
+    <span class="new-project-label">New Project</span>
+    <h3>What are you working on?</h3>
+    <input class="new-project-input" id="new-project-name" type="text" placeholder="e.g. My Music EP, Fitness Journey, App Launch..." maxlength="60" autocomplete="off"/>
+    <div class="color-picker-row" id="color-picker-row"></div>
+    <div class="new-project-actions">
+      <button class="btn-project-cancel" onclick="closeNewProjectModal()">Cancel</button>
+      <button class="btn-project-create" id="btn-project-create" disabled onclick="createProject()">Create Project</button>
+    </div>
+  </div>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -947,6 +1121,19 @@
       <div class="log-meta" id="log-meta">0 entries</div>
     </div>
     <div id="log-goal-chip" class="log-goal-chip" onclick="showGoalModal()" style="display:none">Goal: <span id="log-goal-display"></span> · edit</div>
+    <div class="consistency-wrap" id="consistency-wrap" style="display:none">
+      <svg width="36" height="36" viewBox="0 0 100 100" id="consistency-arc-svg" title="Consistency">
+        <circle cx="50" cy="50" r="28" fill="#C8873F" opacity="0.15" id="consistency-circle-bg"/>
+        <circle cx="50" cy="50" r="28" fill="#C8873F" id="consistency-circle-fill"/>
+        <path d="M 50 8 A 42 42 0 1 1 88 68" fill="none" stroke="#D4D4D4" stroke-width="9" stroke-linecap="round" id="consistency-arc-bg"/>
+        <path d="M 50 8 A 42 42 0 1 1 88 68" fill="none" stroke="#0A0A0A" stroke-width="9" stroke-linecap="round"
+          stroke-dasharray="220" stroke-dashoffset="220" id="consistency-arc-fill"
+          style="transition: stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)"/>
+        <polygon points="88,68 76,58 98,58" fill="#D4D4D4" transform="rotate(30,88,68)" id="consistency-arrow-bg"/>
+        <polygon points="88,68 76,58 98,58" fill="#0A0A0A" transform="rotate(30,88,68)" id="consistency-arrow"/>
+      </svg>
+      <span class="consistency-rate" id="consistency-rate"></span>
+    </div>
   </div>
   <div class="milestone-banner" id="milestone-banner">
     <span class="milestone-num" id="milestone-num"></span>
@@ -960,6 +1147,9 @@
       <path id="ucurve-progress" d="M 20 55 C 80 50, 120 53, 160 72 C 200 91, 220 128, 255 140 C 290 152, 308 154, 340 149 C 378 143, 400 131, 432 114 C 480 89, 528 62, 598 40 C 648 25, 700 17, 740 13" fill="none" stroke="#C8873F" stroke-width="2" stroke-dasharray="800" stroke-dashoffset="800" opacity="0.9"/>
       <circle id="ucurve-dot" cx="20" cy="55" r="6" fill="#C8873F"/>
       <circle id="ucurve-dot-pulse" cx="20" cy="55" r="10" fill="none" stroke="#C8873F" stroke-width="1" opacity="0.4"/>
+      <!-- Almost quit zone marker (shown when user has Dip/Grind entries) -->
+      <line x1="200" y1="90" x2="420" y2="150" stroke="#b85c38" stroke-width="1" stroke-dasharray="3 3" opacity="0" id="ucurve-quit-line"/>
+      <text x="310" y="175" font-family="'DM Mono', monospace" font-size="7" fill="#b85c38" text-anchor="middle" opacity="0" id="ucurve-quit-label">you pushed through here</text>
       <text x="20" y="20" class="user-curve-phase-label" text-anchor="middle">Ignition</text>
       <text x="300" y="170" class="user-curve-phase-label" text-anchor="middle">The Dip</text>
       <text x="432" y="100" class="user-curve-phase-label" text-anchor="middle">Grind</text>
@@ -1102,6 +1292,7 @@
       <textarea class="chat-input" id="chat-input" placeholder="Ask anything..." rows="1"></textarea>
       <button class="btn-chat-send" id="btn-chat-send">Send</button>
     </div>
+    <p style="font-family:var(--mono);font-size:0.55rem;color:var(--gray-1);letter-spacing:0.03em;padding:0.4rem 1rem;border-top:1px solid var(--gray-2);text-align:center;">Navi is AI and can make mistakes.</p>
   </div>
 
   <!-- Locked state -->
@@ -1133,11 +1324,153 @@
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let currentUser = null;
+  let currentProjectId = null;
+  let allProjects = [];
+
+  const PROJECT_COLORS = ['#C8873F','#4a7c59','#3b6fa0','#8b5cf6','#b85c38','#2d6a6a','#c2185b'];
+
+  // ---- PROJECT SYSTEM ----
+  async function loadProjects() {
+    if (!currentUser) return;
+    const { data } = await sb.from('projects').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: true });
+    allProjects = data || [];
+
+    // If no projects exist, create a default one and migrate existing entries
+    if (allProjects.length === 0) {
+      const { data: newProject } = await sb.from('projects').insert({
+        user_id: currentUser.id,
+        name: 'My Project',
+        color: '#C8873F',
+      }).select().single();
+      if (newProject) {
+        allProjects = [newProject];
+        // Migrate existing entries that have no project_id
+        await sb.from('app_entries').update({ project_id: newProject.id }).eq('user_id', currentUser.id).is('project_id', null);
+        await sb.from('user_goals').update({ project_id: newProject.id }).eq('user_id', currentUser.id).is('project_id', null);
+      }
+    }
+
+    // Restore last used project — prefer Supabase (cross-device), fall back to localStorage
+    let savedId = null;
+    const { data: prefs } = await sb.from('user_preferences').select('last_active_project_id').eq('user_id', currentUser.id).maybeSingle();
+    if (prefs?.last_active_project_id) {
+      savedId = prefs.last_active_project_id;
+    } else {
+      savedId = localStorage.getItem('ec_current_project_' + currentUser.id);
+    }
+    const savedProject = allProjects.find(p => p.id === savedId);
+    currentProjectId = savedProject ? savedProject.id : allProjects[0]?.id;
+    // Sync to localStorage for quick access
+    if (currentProjectId) localStorage.setItem('ec_current_project_' + currentUser.id, currentProjectId);
+
+    renderProjectSwitcher();
+    document.getElementById('project-switcher').style.display = 'inline-flex';
+  }
+
+  function renderProjectSwitcher() {
+    const project = allProjects.find(p => p.id === currentProjectId);
+    if (!project) return;
+    document.getElementById('nav-project-name').textContent = project.name;
+    document.getElementById('nav-project-dot').style.background = project.color;
+
+    const container = document.getElementById('project-dropdown-items');
+    container.innerHTML = allProjects.map(p => `
+      <button class="project-dropdown-item ${p.id === currentProjectId ? 'active' : ''}" onclick="switchProject('${p.id}')">
+        <span class="item-dot" style="background:${p.color}"></span>
+        ${p.name}
+      </button>`).join('');
+  }
+
+  function toggleProjectDropdown() {
+    document.getElementById('project-dropdown').classList.toggle('show');
+  }
+
+  document.addEventListener('click', e => {
+    const switcher = document.getElementById('project-switcher');
+    if (switcher && !switcher.contains(e.target)) {
+      document.getElementById('project-dropdown').classList.remove('show');
+    }
+  });
+
+  async function switchProject(projectId) {
+    currentProjectId = projectId;
+    localStorage.setItem('ec_current_project_' + currentUser.id, projectId);
+    // Save to Supabase so it persists across devices
+    await sb.from('user_preferences').upsert({
+      user_id: currentUser.id,
+      last_active_project_id: projectId,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id' });
+    document.getElementById('project-dropdown').classList.remove('show');
+    renderProjectSwitcher();
+    await syncGoalFromSupabase();
+    await renderLog();
+    renderTaskCheck();
+  }
+
+  window.toggleProjectDropdown = toggleProjectDropdown;
+  window.switchProject = switchProject;
+
+  // New project modal
+  let selectedColor = '#C8873F';
+
+  function openNewProjectModal() {
+    document.getElementById('project-dropdown').classList.remove('show');
+    selectedColor = '#C8873F';
+    document.getElementById('new-project-name').value = '';
+    document.getElementById('btn-project-create').disabled = true;
+
+    const row = document.getElementById('color-picker-row');
+    row.innerHTML = PROJECT_COLORS.map(c => `
+      <div class="color-swatch ${c === selectedColor ? 'selected' : ''}" style="background:${c}" onclick="selectProjectColor('${c}')"></div>`).join('');
+
+    document.getElementById('new-project-overlay').classList.add('show');
+    setTimeout(() => document.getElementById('new-project-name').focus(), 100);
+  }
+
+  function closeNewProjectModal() {
+    document.getElementById('new-project-overlay').classList.remove('show');
+  }
+
+  function selectProjectColor(color) {
+    selectedColor = color;
+    document.querySelectorAll('.color-swatch').forEach(s => {
+      s.classList.toggle('selected', s.style.background === color || s.style.backgroundColor === color);
+    });
+  }
+
+  document.getElementById('new-project-name').addEventListener('input', function() {
+    document.getElementById('btn-project-create').disabled = this.value.trim().length === 0;
+  });
+
+  document.getElementById('new-project-name').addEventListener('keydown', e => {
+    if (e.key === 'Enter') createProject();
+    if (e.key === 'Escape') closeNewProjectModal();
+  });
+
+  async function createProject() {
+    const name = document.getElementById('new-project-name').value.trim();
+    if (!name || !currentUser) return;
+    document.getElementById('btn-project-create').disabled = true;
+    const { data } = await sb.from('projects').insert({ user_id: currentUser.id, name, color: selectedColor }).select().single();
+    if (data) {
+      allProjects.push(data);
+      await switchProject(data.id);
+      closeNewProjectModal();
+    }
+    document.getElementById('btn-project-create').disabled = false;
+  }
+
+  window.openNewProjectModal = openNewProjectModal;
+  window.closeNewProjectModal = closeNewProjectModal;
+  window.selectProjectColor = selectProjectColor;
+  window.createProject = createProject;
 
   sb.auth.onAuthStateChange(async (event, session) => {
     currentUser = session?.user || null;
     updateNavAuth();
     if (currentUser) {
+      await loadProjects();
       await syncGoalFromSupabase();
     }
     await renderLog();
@@ -1267,27 +1600,43 @@
 
   // ---- GOAL SYNC ----
   async function syncGoalFromSupabase() {
-    if (!currentUser) return;
-    const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).maybeSingle();
+    if (!currentUser || !currentProjectId) return;
+    const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).eq('project_id', currentProjectId).maybeSingle();
     if (data?.goal) {
       localStorage.setItem('ec_goal', data.goal);
       updateGoalChip();
       renderTaskCheck();
-    } else if (!localStorage.getItem('ec_goal')) {
-      // Logged in but no goal anywhere — prompt them so AI works
+    } else {
+      // New project has no goal yet — clear local goal and prompt
+      localStorage.removeItem('ec_goal');
+      updateGoalChip();
+      renderTaskCheck();
       setTimeout(() => showGoalModal(), 800);
     }
   }
 
   async function saveGoalToSupabase(goal) {
-    if (!currentUser) return;
-    await sb.from('user_goals').upsert({ user_id: currentUser.id, goal, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+    if (!currentUser || !currentProjectId) return;
+    await sb.from('user_goals').upsert({
+      user_id: currentUser.id,
+      project_id: currentProjectId,
+      goal,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id,project_id' });
   }
 
   // ---- SUPABASE ENTRY OPS ----
   async function saveEntryToSupabase(entry) {
     if (!currentUser) return null;
-    const { data, error } = await sb.from('app_entries').insert({ user_id: currentUser.id, text: entry.text, feeling: entry.feeling, date: entry.date, nudge: null, nudge_loading: true }).select().single();
+    const { data, error } = await sb.from('app_entries').insert({
+      user_id: currentUser.id,
+      project_id: currentProjectId,
+      text: entry.text,
+      feeling: entry.feeling,
+      date: entry.date,
+      nudge: null,
+      nudge_loading: true,
+    }).select().single();
     if (error) { console.error('Insert error:', error); return null; }
     return data;
   }
@@ -1303,8 +1652,8 @@
   }
 
   async function loadEntriesFromSupabase() {
-    if (!currentUser) return null;
-    const { data, error } = await sb.from('app_entries').select('*').eq('user_id', currentUser.id).order('date', { ascending: true });
+    if (!currentUser || !currentProjectId) return null;
+    const { data, error } = await sb.from('app_entries').select('*').eq('user_id', currentUser.id).eq('project_id', currentProjectId).order('date', { ascending: true });
     if (error) { console.error('Load error:', error); return null; }
     return data.map(e => ({ id: e.id, text: e.text, feeling: e.feeling, date: e.date, nudge: e.nudge, nudgeLoading: e.nudge_loading }));
   }
@@ -1555,8 +1904,11 @@
   document.getElementById('confirm-proceed').addEventListener('click', async () => {
     if (!pendingAction) return;
     if (pendingAction.type === 'timeline') {
-      if (currentUser) await sb.from('app_entries').delete().eq('user_id', currentUser.id);
-      else localStorage.removeItem('ec_entries');
+      if (currentUser && currentProjectId) {
+        await sb.from('app_entries').delete().eq('user_id', currentUser.id).eq('project_id', currentProjectId);
+      } else {
+        localStorage.removeItem('ec_entries');
+      }
       localStorage.removeItem('ec_milestones_seen');
       document.getElementById('milestone-banner').classList.remove('show');
     } else {
@@ -1585,6 +1937,8 @@
     meta.textContent = entries.length === 1 ? '1 entry' : `${entries.length} entries`;
     updateUserCurve(rawEntries);
     updateGoalChip();
+    updateConsistency(rawEntries);
+    updateAlmostQuitCurve(rawEntries);
 
     if (entries.length === 0) {
       empty.style.display = 'flex'; timeline.innerHTML = ''; actions.style.display = 'none'; return;
@@ -1597,6 +1951,13 @@
       const realIndex = currentUser ? entry.id : (rawEntries.length - 1 - i);
       const insight = INSIGHTS[entry.feeling] || null;
 
+      // Almost quit flag — show on stuck/about to quit entries during Dip or Grind phase
+      const entryPhase = inferPhase(rawEntries.slice(0, rawEntries.length - i));
+      const isAlmostQuit = ['stuck', 'about to quit'].includes(entry.feeling) && [1, 2].includes(entryPhase);
+      const almostQuitFlag = isAlmostQuit
+        ? `<div class="almost-quit-flag">You pushed through here</div>`
+        : '';
+
       let nudgeBlock = '';
       if (!currentUser) {
         nudgeBlock = `<div class="timeline-nudge-locked"><span class="timeline-nudge-label">Your Nudge</span><p>Sign in to get a personalised next step based on this entry.</p><button class="btn-nudge-signin" onclick="showAuthModal('signin')">Sign In</button></div>`;
@@ -1607,7 +1968,7 @@
         const safeNudge = encodeURIComponent(entry.nudge);
         const tid = entry.id || ('local-' + i);
         nudgeBlock = `
-          <div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p>${entry.nudge}</p></div>
+          <div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p>${entry.nudge}</p><p style="font-family:var(--mono);font-size:0.55rem;color:#666;letter-spacing:0.03em;margin-top:0.6rem;opacity:0.8;">Navi is AI and can make mistakes.</p></div>
           <div class="nudge-reply-section">
             <button class="btn-nudge-reply" id="btn-thread-${tid}" onclick="openNudgeThread('${tid}','${safeEntry}','${safeNudge}')">Reply to Navi</button>
             <div class="nudge-thread" id="thread-${tid}"></div>
@@ -1621,6 +1982,7 @@
           <div class="timeline-content">
             <p class="timeline-text">${entry.text}</p>
             <span class="timeline-feeling" data-feeling="${entry.feeling}">${entry.feeling}</span>
+            ${almostQuitFlag}
             ${insight ? `<div class="timeline-insight"><span class="timeline-insight-label">${insight.label}</span><p>${insight.text}</p></div>` : ''}
             ${nudgeBlock}
             <button class="btn-delete-entry" onclick="confirmAction('entry', ${JSON.stringify(realIndex)})">Delete Entry</button>
@@ -1631,6 +1993,58 @@
     requestAnimationFrame(() => {
       timeline.querySelectorAll('.timeline-entry').forEach(el => setTimeout(() => el.classList.add('visible'), 50));
     });
+  }
+
+  // ---- CONSISTENCY INDICATOR ----
+  function updateConsistency(entries) {
+    const wrap = document.getElementById('consistency-wrap');
+    const rateEl = document.getElementById('consistency-rate');
+    const arcFill = document.getElementById('consistency-arc-fill');
+    const arrowEl = document.getElementById('consistency-arrow');
+    const circleFill = document.getElementById('consistency-circle-fill');
+
+    if (!entries.length) { wrap.style.display = 'none'; return; }
+
+    const today = new Date();
+    const days = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      days.push(d.toISOString().slice(0, 10));
+    }
+
+    const loggedDays = new Set(entries.map(e => new Date(e.date).toISOString().slice(0, 10)));
+    const loggedCount = days.filter(d => loggedDays.has(d)).length;
+    const pct = loggedCount / 14;
+
+    // Arc total length is ~220. Drive dashoffset from 220 (empty) to 0 (full)
+    const arcLength = 220;
+    const offset = Math.round(arcLength - (arcLength * pct));
+    if (arcFill) arcFill.style.strokeDashoffset = offset;
+
+    // Arrow opacity based on consistency
+    if (arrowEl) arrowEl.setAttribute('opacity', pct > 0.5 ? '1' : '0.3');
+
+    // Circle fill opacity
+    if (circleFill) circleFill.setAttribute('opacity', 0.15 + (pct * 0.7));
+
+    rateEl.textContent = loggedCount + ' of 14 days';
+    wrap.style.display = 'inline-flex';
+  }
+
+  // ---- ALMOST QUIT CURVE MARKER ----
+  function updateAlmostQuitCurve(entries) {
+    const quitLine = document.getElementById('ucurve-quit-line');
+    const quitLabel = document.getElementById('ucurve-quit-label');
+    if (!quitLine || !quitLabel) return;
+
+    // Show the marker if user has at least 2 stuck/about-to-quit entries and has since improved
+    const hardEntries = entries.filter(e => ['stuck', 'about to quit'].includes(e.feeling));
+    const recentPositive = entries.slice(-3).some(e => ['making progress', 'energized'].includes(e.feeling));
+    const show = hardEntries.length >= 2 && recentPositive && entries.length >= 5;
+
+    quitLine.setAttribute('opacity', show ? '0.5' : '0');
+    quitLabel.setAttribute('opacity', show ? '0.8' : '0');
   }
 
   (async () => { await renderLog(); })();
@@ -1851,11 +2265,9 @@
   // ---- CHAT LIST ----
   async function loadChatList() {
     if (!currentUser) return;
-    const { data, error } = await sb.from('chat_sessions')
-      .select('*')
-      .eq('user_id', currentUser.id)
-      .order('pinned', { ascending: false })
-      .order('updated_at', { ascending: false });
+    let query = sb.from('chat_sessions').select('*').eq('user_id', currentUser.id);
+    if (currentProjectId) query = query.eq('project_id', currentProjectId);
+    const { data, error } = await query.order('pinned', { ascending: false }).order('updated_at', { ascending: false });
     if (error) { console.error('Load chats error:', error); return; }
     allChats = data || [];
     renderChatList();
@@ -1925,6 +2337,7 @@
     const initialMessages = [{ role: 'assistant', content: starter }];
     const { data, error } = await sb.from('chat_sessions').insert({
       user_id: currentUser.id,
+      project_id: currentProjectId || null,
       title: 'New Chat',
       messages: initialMessages,
       pinned: false,
