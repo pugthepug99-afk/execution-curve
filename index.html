@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="/logo.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
 <!-- Supabase MUST be outside style tag -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
@@ -21,9 +21,9 @@
     --gray-1: #6B6B6B;
     --gray-2: #D4D4D4;
     --gray-3: #F0F0F0;
-    --display: 'Syne', sans-serif;
-    --mono: 'DM Mono', monospace;
-    --body: 'IBM Plex Sans', sans-serif;
+    --display: 'Plus Jakarta Sans', sans-serif;
+    --mono: 'Fira Code', monospace;
+    --body: 'Inter', sans-serif;
   }
 
   html { scroll-behavior: smooth; }
@@ -48,25 +48,8 @@
     background: var(--white);
     border-bottom: 1px solid var(--gray-2);
   }
-.nav-logo { 
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: var(--mono); 
-  font-weight: 500; 
-  font-size: 0.9rem; 
-  letter-spacing: -0.01em; 
-  color: var(--black); 
-  text-decoration: none; 
-}
-.nav-logo span { color: var(--amber); }
 
-.logo-img {
-  height: 24px;
-  width: auto;
-  display: block;
-}
-  .nav-logo { font-family: var(--mono); font-weight: 500; font-size: 0.9rem; letter-spacing: -0.01em; color: var(--black); text-decoration: none; }
+  .nav-logo { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); text-decoration: none; }
   .nav-logo span { color: var(--amber); }
 
   .nav-links { display: flex; gap: 2rem; list-style: none; }
@@ -235,7 +218,7 @@
   .hero-inner { max-width: 860px; }
 
   .hero-eyebrow { font-family: var(--mono); font-size: 1rem; font-weight: 500; letter-spacing: 0.04em; color: var(--amber); margin-bottom: 2rem; opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
-  .hero-heading { font-family: var(--display); font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 700; line-height: 1.0; letter-spacing: -0.04em; color: var(--black); margin-bottom: 2.5rem; opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s; }
+  .hero-heading { font-family: var(--display); font-size: clamp(2.4rem, 5.5vw, 4.8rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; color: #1a1a1a; margin-bottom: 2.5rem; opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s; }
   .hero-heading em { font-style: normal; color: var(--amber); }
   .hero-sub { font-family: var(--body); font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 400; color: var(--gray-1); line-height: 1.7; max-width: 520px; margin-bottom: 3rem; opacity: 0; transform: translateY(16px); transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s; }
   .hero-actions { display: flex; align-items: center; gap: 1.5rem; opacity: 0; transform: translateY(16px); transition: opacity 0.8s ease 0.32s, transform 0.8s ease 0.32s; }
@@ -489,13 +472,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 1.25rem;
+    padding: 1.1rem 1.5rem;
     border-bottom: 1px solid var(--gray-2);
     flex-shrink: 0;
   }
 
   .chat-sidebar-title {
-    font-family: var(--mono);
+    font-family: var(--display);
     font-size: 0.72rem;
     color: var(--black);
     letter-spacing: 0.04em;
@@ -523,14 +506,20 @@
   .btn-chat-new:hover { background: var(--amber); color: var(--white); }
 
   .btn-chat-close {
-    font-family: var(--mono);
-    font-size: 0.75rem;
+    font-family: var(--body);
+    font-size: 1rem;
     color: var(--gray-1);
     background: none;
     border: none;
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     transition: color 0.15s;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   .btn-chat-close:hover { color: var(--black); }
@@ -799,7 +788,7 @@
     background: var(--black);
     border: 1px solid #2a2a2a;
     color: var(--white);
-    font-family: var(--mono);
+    font-family: var(--display);
     font-size: 0.72rem;
     padding: 0.7rem 1.1rem;
     cursor: pointer;
@@ -895,7 +884,7 @@
   .goal-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.75); z-index: 600; display: none; align-items: center; justify-content: center; }
   .goal-overlay.show { display: flex; }
   .goal-box { background: var(--white); border: 1px solid var(--gray-2); padding: 2.5rem 2rem 2rem; max-width: 440px; width: calc(100% - 2rem); }
-  .goal-box-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.75rem; }
+  .goal-box-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.75rem; text-transform: uppercase; }
   .goal-box h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); line-height: 1.2; margin-bottom: 0.6rem; }
   .goal-box p { font-family: var(--body); font-size: 0.88rem; color: var(--gray-1); line-height: 1.6; margin-bottom: 1.5rem; }
   .goal-box p em { font-style: normal; color: var(--black); }
@@ -903,11 +892,11 @@
   #goal-input:focus { border-color: var(--amber); }
   #goal-input::placeholder { color: var(--gray-1); }
   .goal-box-actions { display: flex; justify-content: flex-end; gap: 0.75rem; }
-  .btn-goal-save { font-family: var(--mono); font-size: 0.75rem; color: var(--white); background: var(--black); border: none; padding: 0.6rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: background 0.15s; }
-  .btn-goal-save:hover { background: var(--amber); }
-  .btn-goal-save:disabled { opacity: 0.35; cursor: default; }
-  .btn-goal-skip { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.6rem 1rem; cursor: pointer; transition: border-color 0.15s; }
-  .btn-goal-skip:hover { border-color: var(--black); color: var(--black); }
+  .btn-goal-save { font-family: var(--body); font-size: 0.875rem; font-weight: 600; color: var(--white); background: var(--amber); border: none; padding: 0.7rem 1.5rem; cursor: pointer; letter-spacing: 0; transition: background 0.15s, transform 0.1s; }
+  .btn-goal-save:hover { background: #b8762e; transform: translateY(-1px); }
+  .btn-goal-save:disabled { opacity: 0.35; cursor: default; transform: none; }
+  .btn-goal-skip { font-family: var(--body); font-size: 0.82rem; color: var(--gray-1); background: none; border: none; padding: 0.6rem 0.5rem; cursor: pointer; transition: color 0.15s; text-decoration: underline; text-underline-offset: 3px; }
+  .btn-goal-skip:hover { color: var(--black); }
 
   /* ENTRY BAR */
   #entry-bar { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px); z-index: 200; background: var(--amber); border: 1px solid var(--amber-dim); width: min(640px, calc(100vw - 2rem)); padding: 0; opacity: 0; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease; }
@@ -915,28 +904,28 @@
   .entry-step { display: none; flex-direction: column; }
   .entry-step.active { display: flex; }
   .entry-input-row { display: flex; align-items: center; gap: 0; }
-  .entry-prompt { font-family: var(--mono); font-size: 0.7rem; color: var(--black); padding: 0 1rem; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.02em; }
-  #entry-text { flex: 1; background: none; border: none; outline: none; font-family: var(--body); font-size: 0.95rem; color: var(--black); padding: 1.1rem 0.5rem 1.1rem 0; caret-color: var(--black); min-width: 0; }
-  #entry-text::placeholder { color: var(--amber-dim); }
-  .entry-next-btn { background: none; border: none; border-left: 1px solid var(--amber-dim); color: var(--black); font-family: var(--mono); font-size: 0.75rem; padding: 0 1.25rem; height: 100%; cursor: pointer; white-space: nowrap; transition: background 0.15s; align-self: stretch; display: flex; align-items: center; }
+  .entry-prompt { font-family: var(--display); font-size: 0.78rem; font-weight: 600; color: var(--black); padding: 0 1rem; white-space: nowrap; flex-shrink: 0; letter-spacing: 0; }
+  #entry-text { flex: 1; background: none; border: none; outline: none; font-family: var(--body); font-size: 0.85rem; color: var(--black); padding: 1.1rem 0.75rem 1.1rem 0; caret-color: var(--black); min-width: 0; text-overflow: ellipsis; overflow: hidden; }
+  #entry-text::placeholder { color: var(--amber-dim); font-size: 0.8rem; }
+  .entry-next-btn { background: none; border: none; border-left: 1px solid var(--amber-dim); color: var(--black); font-family: var(--display); font-size: 0.8rem; font-weight: 600; padding: 0 1.25rem; height: 100%; cursor: pointer; white-space: nowrap; transition: background 0.15s; align-self: stretch; display: flex; align-items: center; }
   .entry-next-btn:hover { background: var(--amber-dim); }
   .entry-feeling-row { padding: 0.85rem 1rem; border-top: 1px solid var(--amber-dim); display: flex; flex-direction: column; gap: 0.6rem; }
-  .entry-feeling-label { font-family: var(--mono); font-size: 0.65rem; color: var(--black); letter-spacing: 0.04em; opacity: 0.6; }
+  .entry-feeling-label { font-family: var(--display); font-size: 0.72rem; font-weight: 600; color: var(--black); letter-spacing: 0; opacity: 0.7; }
   .entry-feelings { display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .feeling-chip { font-family: var(--body); font-size: 0.8rem; color: var(--black); background: transparent; border: 1px solid var(--amber-dim); padding: 0.35rem 0.85rem; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .feeling-chip:hover { background: var(--amber-dim); border-color: var(--black); }
   .feeling-chip.selected { color: var(--white); background: var(--black); border-color: var(--black); }
   .entry-submit-row { padding: 0.75rem 1rem; border-top: 1px solid var(--amber-dim); display: flex; justify-content: space-between; align-items: center; }
-  .entry-back { font-family: var(--mono); font-size: 0.7rem; color: var(--black); background: none; border: none; cursor: pointer; transition: opacity 0.15s; letter-spacing: 0.02em; opacity: 0.5; }
+  .entry-back { font-family: var(--display); font-size: 0.7rem; color: var(--black); background: none; border: none; cursor: pointer; transition: opacity 0.15s; letter-spacing: 0.02em; opacity: 0.5; }
   .entry-back:hover { opacity: 1; }
-  .entry-submit { font-family: var(--mono); font-size: 0.75rem; color: var(--white); background: var(--black); border: none; padding: 0.5rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: opacity 0.15s; }
+  .entry-submit { font-family: var(--display); font-size: 0.75rem; color: var(--white); background: var(--black); border: none; padding: 0.5rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: opacity 0.15s; }
   .entry-submit:disabled { opacity: 0.3; cursor: default; }
   .entry-confirm { padding: 1.25rem 1.25rem; display: flex; align-items: center; gap: 1rem; }
   .entry-confirm-dot { width: 6px; height: 6px; background: var(--black); border-radius: 50%; flex-shrink: 0; }
   .entry-confirm-text { font-family: var(--mono); font-size: 0.78rem; color: var(--black); letter-spacing: 0.02em; opacity: 0.7; }
   .entry-confirm-text strong { color: var(--black); font-weight: 500; opacity: 1; }
 
-  #entry-trigger { position: fixed; bottom: 2rem; right: 2rem; z-index: 199; background: var(--black); border: 1px solid #2a2a2a; color: var(--amber); font-family: var(--mono); font-size: 0.75rem; padding: 0.7rem 1.25rem; cursor: pointer; letter-spacing: 0.04em; transition: border-color 0.2s, transform 0.15s; }
+  #entry-trigger { position: fixed; bottom: 2rem; right: 2rem; z-index: 199; background: var(--black); border: 1px solid #2a2a2a; color: var(--amber); font-family: var(--display); font-size: 0.75rem; padding: 0.7rem 1.25rem; cursor: pointer; letter-spacing: 0.04em; transition: border-color 0.2s, transform 0.15s; }
   #entry-trigger:hover { border-color: var(--amber); transform: translateY(-1px); }
   #entry-trigger.hidden { display: none; }
 
@@ -954,14 +943,12 @@
 <body>
 
 <!-- NAV -->
-<a href="#" class="nav-logo">
-  <img src="logo.png" alt="Logo" class="logo-img" />
-  <span>Execution</span> Curve
-</a>
-    <svg width="22" height="22" viewBox="0 0 100 100" style="display:inline-block;vertical-align:middle;margin-right:7px;flex-shrink:0">
-      <circle cx="50" cy="50" r="28" fill="#C8873F"/>
-      <path d="M 50 8 A 42 42 0 1 1 88 68" fill="none" stroke="#0A0A0A" stroke-width="9" stroke-linecap="round"/>
-      <polygon points="88,68 76,58 98,58" fill="#0A0A0A" transform="rotate(30,88,68)"/>
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="28" height="28" viewBox="-20 -20 340 340" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0">
+      <circle cx="150" cy="150" r="55" fill="#C8873F"/>
+      <path d="M 150 65 A 85 85 0 1 1 235 150" fill="none" stroke="#0A0A0A" stroke-width="16" stroke-linecap="round"/>
+      <path d="M 235 150 L 215 136 L 232 172 Z" fill="#0A0A0A"/>
     </svg>Execution<span>Curve</span>
   </a>
   <ul class="nav-links">
@@ -974,7 +961,7 @@
   <div class="project-switcher" id="project-switcher" style="display:none">
     <button class="btn-project-switch" id="btn-project-switch" onclick="toggleProjectDropdown()">
       <span class="project-dot" id="nav-project-dot" style="background:#C8873F"></span>
-      <span id="nav-project-name">My Project</span>
+      <span id="nav-project-name">Loading...</span>
       <span>▾</span>
     </button>
     <div class="project-dropdown" id="project-dropdown">
@@ -1141,15 +1128,15 @@
     </div>
     <div id="log-goal-chip" class="log-goal-chip" onclick="showGoalModal()" style="display:none">Goal: <span id="log-goal-display"></span> · edit</div>
     <div class="consistency-wrap" id="consistency-wrap" style="display:none">
-      <svg width="36" height="36" viewBox="0 0 100 100" id="consistency-arc-svg" title="Consistency">
-        <circle cx="50" cy="50" r="28" fill="#C8873F" opacity="0.15" id="consistency-circle-bg"/>
-        <circle cx="50" cy="50" r="28" fill="#C8873F" id="consistency-circle-fill"/>
-        <path d="M 50 8 A 42 42 0 1 1 88 68" fill="none" stroke="#D4D4D4" stroke-width="9" stroke-linecap="round" id="consistency-arc-bg"/>
-        <path d="M 50 8 A 42 42 0 1 1 88 68" fill="none" stroke="#0A0A0A" stroke-width="9" stroke-linecap="round"
-          stroke-dasharray="220" stroke-dashoffset="220" id="consistency-arc-fill"
+      <svg width="36" height="36" viewBox="-20 -20 340 340" id="consistency-arc-svg" title="Consistency">
+        <circle cx="150" cy="150" r="55" fill="#C8873F" opacity="0.15" id="consistency-circle-bg"/>
+        <circle cx="150" cy="150" r="55" fill="#C8873F" id="consistency-circle-fill"/>
+        <path d="M 150 65 A 85 85 0 1 1 235 150" fill="none" stroke="#D4D4D4" stroke-width="16" stroke-linecap="round" id="consistency-arc-bg"/>
+        <path d="M 150 65 A 85 85 0 1 1 235 150" fill="none" stroke="#0A0A0A" stroke-width="16" stroke-linecap="round"
+          stroke-dasharray="534" stroke-dashoffset="534" id="consistency-arc-fill"
           style="transition: stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)"/>
-        <polygon points="88,68 76,58 98,58" fill="#D4D4D4" transform="rotate(30,88,68)" id="consistency-arrow-bg"/>
-        <polygon points="88,68 76,58 98,58" fill="#0A0A0A" transform="rotate(30,88,68)" id="consistency-arrow"/>
+        <polygon points="235,150 215,136 232,172" fill="#D4D4D4" id="consistency-arrow-bg"/>
+        <polygon points="235,150 215,136 232,172" fill="#0A0A0A" id="consistency-arrow"/>
       </svg>
       <span class="consistency-rate" id="consistency-rate"></span>
     </div>
@@ -1243,10 +1230,10 @@
   </div>
 </div>
 
-<button id="entry-trigger" aria-label="Log an entry">+ log entry</button>
+<button id="entry-trigger" aria-label="Log an entry">+ Log Entry</button>
 
 <!-- ENTRY BAR -->
-<div id="entry-bar" role="dialog" aria-label="Quick log entry">
+<div id="entry-bar" role="dialog" aria-label="Quick Log Entry">
   <div class="entry-step active" id="step-1">
     <div class="entry-input-row">
       <span class="entry-prompt">Today</span>
@@ -1311,7 +1298,7 @@
       <textarea class="chat-input" id="chat-input" placeholder="Ask anything..." rows="1"></textarea>
       <button class="btn-chat-send" id="btn-chat-send">Send</button>
     </div>
-    <p style="font-family:var(--mono);font-size:0.55rem;color:var(--gray-1);letter-spacing:0.03em;padding:0.4rem 1rem;border-top:1px solid var(--gray-2);text-align:center;">Navi is AI and can make mistakes.</p>
+    <p style="font-family:var(--display);font-size:0.72rem;color:var(--gray-1);padding:0.5rem 1rem;border-top:1px solid var(--gray-2);text-align:center;">Navi is AI and can make mistakes.</p>
   </div>
 
   <!-- Locked state -->
@@ -1358,7 +1345,7 @@
     if (allProjects.length === 0) {
       const { data: newProject } = await sb.from('projects').insert({
         user_id: currentUser.id,
-        name: 'My Project',
+        name: 'My Project',  // fallback
         color: '#C8873F',
       }).select().single();
       if (newProject) {
@@ -1516,6 +1503,7 @@
     authMode = mode;
     updateAuthModal();
     document.getElementById('auth-overlay').classList.add('show');
+    if (sidebarOpen) closeSidebar();
     setTimeout(() => document.getElementById('auth-email').focus(), 100);
   }
 
@@ -1626,11 +1614,15 @@
       updateGoalChip();
       renderTaskCheck();
     } else {
-      // New project has no goal yet — clear local goal and prompt
+      // No goal in Supabase for this project yet
       localStorage.removeItem('ec_goal');
       updateGoalChip();
       renderTaskCheck();
-      setTimeout(() => showGoalModal(), 800);
+      // Only prompt if this is genuinely a new project with no entries
+      const { count } = await sb.from('app_entries').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('project_id', currentProjectId);
+      if (!count || count === 0) {
+        setTimeout(() => showGoalModal(), 800);
+      }
     }
   }
 
@@ -1987,7 +1979,7 @@
         const safeNudge = encodeURIComponent(entry.nudge);
         const tid = entry.id || ('local-' + i);
         nudgeBlock = `
-          <div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p>${entry.nudge}</p><p style="font-family:var(--mono);font-size:0.55rem;color:#666;letter-spacing:0.03em;margin-top:0.6rem;opacity:0.8;">Navi is AI and can make mistakes.</p></div>
+          <div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p>${entry.nudge}</p><p style="font-family:var(--mono);font-size:0.65rem;color:var(--gray-1);letter-spacing:0.02em;margin-top:0.65rem;">Navi is AI and can make mistakes.</p></div>
           <div class="nudge-reply-section">
             <button class="btn-nudge-reply" id="btn-thread-${tid}" onclick="openNudgeThread('${tid}','${safeEntry}','${safeNudge}')">Reply to Navi</button>
             <div class="nudge-thread" id="thread-${tid}"></div>
@@ -2037,7 +2029,7 @@
     const pct = loggedCount / 14;
 
     // Arc total length is ~220. Drive dashoffset from 220 (empty) to 0 (full)
-    const arcLength = 220;
+    const arcLength = 534;
     const offset = Math.round(arcLength - (arcLength * pct));
     if (arcFill) arcFill.style.strokeDashoffset = offset;
 
@@ -2078,6 +2070,8 @@
     goalInput.value = localStorage.getItem('ec_goal') || '';
     goalSaveBtn.disabled = goalInput.value.trim().length === 0;
     goalOverlay.classList.add('show');
+    // Close sidebar while modal is open to avoid z-index conflict
+    if (sidebarOpen) closeSidebar();
     setTimeout(() => goalInput.focus(), 100);
   }
 
@@ -2120,9 +2114,13 @@
   goalSkipBtn.addEventListener('click', () => { localStorage.setItem('ec_goal_skipped', '1'); hideGoalModal(); });
   goalOverlay.addEventListener('click', function(e) { if (e.target === this) hideGoalModal(); });
 
-  if (!currentUser && !localStorage.getItem('ec_goal') && !localStorage.getItem('ec_goal_skipped')) {
-    setTimeout(() => showGoalModal(), 1200);
-  }
+  // Goal modal for logged-out users only — logged-in handled by syncGoalFromSupabase
+  // Delay to allow auth to resolve first
+  setTimeout(() => {
+    if (!currentUser && !localStorage.getItem('ec_goal') && !localStorage.getItem('ec_goal_skipped')) {
+      showGoalModal();
+    }
+  }, 2000);
 
   updateGoalChip();
 
@@ -2284,8 +2282,11 @@
   // ---- CHAT LIST ----
   async function loadChatList() {
     if (!currentUser) return;
+    // Include both project-specific chats AND legacy chats with null project_id
     let query = sb.from('chat_sessions').select('*').eq('user_id', currentUser.id);
-    if (currentProjectId) query = query.eq('project_id', currentProjectId);
+    if (currentProjectId) {
+      query = query.or(`project_id.eq.${currentProjectId},project_id.is.null`);
+    }
     const { data, error } = await query.order('pinned', { ascending: false }).order('updated_at', { ascending: false });
     if (error) { console.error('Load chats error:', error); return; }
     allChats = data || [];
@@ -2686,4 +2687,3 @@
 </script>
 </body>
 </html>
-
