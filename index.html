@@ -51,28 +51,6 @@
 
   .nav-logo { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); text-decoration: none; }
   .nav-logo span { color: var(--amber); }
-  .nav-logo { display:inline-flex; align-items:center; gap:0.45rem; }
-  .nav-logo .brand-logo { width:28px; height:28px; object-fit:contain; flex-shrink:0; }
-  .hero-bg-logo {
-    position:absolute;
-    right:-3rem;
-    bottom:-5rem;
-    width:clamp(16rem, 24vw, 24rem);
-    height:auto;
-    opacity:0;
-    pointer-events:none;
-    user-select:none;
-    transform:translateY(0);
-    transition:opacity 1.2s ease 0.4s, transform 1.2s ease 0.4s;
-  }
-  .consistency-logo-tracker { position:relative; width:36px; height:36px; flex:0 0 36px; }
-  .consistency-logo-tracker > .consistency-brand-logo {
-    position:absolute; inset:3px; width:30px; height:30px; object-fit:contain; z-index:2;
-  }
-  .consistency-logo-tracker > svg { position:absolute; inset:0; width:36px; height:36px; z-index:1; overflow:visible; }
-  .ucurve-logo { overflow:visible; }
-  .footer-brand { display:inline-flex; align-items:center; gap:0.5rem; font-family:var(--display); font-weight:700; color:var(--black); }
-  .footer-brand img { width:22px; height:22px; object-fit:contain; }
 
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a { font-family: var(--body); font-size: 0.875rem; font-weight: 400; color: var(--gray-1); text-decoration: none; transition: color 0.2s; }
@@ -239,7 +217,7 @@
   #hero { min-height: 100vh; display: flex; align-items: flex-end; padding: 0 3rem 5rem; padding-top: 6rem; position: relative; overflow: hidden; }
   .hero-inner { max-width: 860px; }
 
-  .hero-eyebrow { font-family: var(--mono); font-size: 1rem; font-weight: 500; letter-spacing: 0.04em; color: var(--amber); margin-bottom: 2rem; opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .hero-eyebrow { font-family: var(--body); font-size: 1rem; font-weight: 500; letter-spacing: 0.02em; color: var(--amber); margin-bottom: 2rem; opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .hero-heading { font-family: var(--display); font-size: clamp(2.4rem, 5.5vw, 4.8rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; color: #1a1a1a; margin-bottom: 2.5rem; opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s; }
   .hero-heading em { font-style: normal; color: var(--amber); }
   .hero-sub { font-family: var(--body); font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 400; color: var(--gray-1); line-height: 1.7; max-width: 520px; margin-bottom: 3rem; opacity: 0; transform: translateY(16px); transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s; }
@@ -251,10 +229,9 @@
   .btn-ghost { font-family: var(--body); font-size: 0.875rem; font-weight: 400; color: var(--gray-1); background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
   .btn-ghost:hover { color: var(--black); }
 
-  .hero-bg-numeral { display:none; }
+  .hero-bg-numeral { position: absolute; right: -2rem; bottom: -4rem; font-family: var(--display); font-size: clamp(14rem, 22vw, 22rem); font-weight: 700; letter-spacing: -0.06em; color: transparent; -webkit-text-stroke: 1px var(--gray-2); line-height: 1; user-select: none; pointer-events: none; opacity: 0; transition: opacity 1.2s ease 0.4s; }
 
-  .revealed .hero-eyebrow, .revealed .hero-heading, .revealed .hero-sub, .revealed .hero-actions { opacity: 1; transform: translateY(0); }
-  .revealed .hero-bg-logo { opacity:0.14; transform:translateY(0); }
+  .revealed .hero-eyebrow, .revealed .hero-heading, .revealed .hero-sub, .revealed .hero-actions, .revealed .hero-bg-numeral { opacity: 1; transform: translateY(0); }
 
   .scroll-hint { position: absolute; bottom: 2rem; left: 3rem; display: flex; align-items: center; gap: 0.75rem; opacity: 0; transition: opacity 0.8s ease 0.8s; }
   .revealed .scroll-hint { opacity: 1; }
@@ -948,9 +925,20 @@
   .entry-confirm-text { font-family: var(--mono); font-size: 0.78rem; color: var(--black); letter-spacing: 0.02em; opacity: 0.7; }
   .entry-confirm-text strong { color: var(--black); font-weight: 500; opacity: 1; }
 
-  #entry-trigger { position: fixed; bottom: 2rem; right: 2rem; z-index: 199; background: var(--black); border: 1px solid #2a2a2a; color: var(--amber); font-family: var(--display); font-size: 0.75rem; padding: 0.7rem 1.25rem; cursor: pointer; letter-spacing: 0.04em; transition: border-color 0.2s, transform 0.15s; }
+  #entry-trigger { position: fixed; bottom: 2rem; right: 2rem; z-index: 199; background: var(--black); border: 1px solid #2a2a2a; color: var(--amber); font-family: var(--display); font-weight: 600; font-size: 0.75rem; padding: 0.7rem 1.25rem; cursor: pointer; letter-spacing: 0.04em; transition: border-color 0.2s, transform 0.15s; }
   #entry-trigger:hover { border-color: var(--amber); transform: translateY(-1px); }
   #entry-trigger.hidden { display: none; }
+  #entry-trigger, #chat-trigger {
+    font-size: 0.78rem;
+    padding: 0.75rem 1.25rem;
+    letter-spacing: 0;
+    line-height: 1;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    bottom: 1.25rem;
+  }
 
   @media (max-width: 768px) {
     nav { padding: 1rem 1.25rem; }
@@ -958,8 +946,9 @@
     #problem { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.25rem; }
     .scroll-hint { left: 1.25rem; }
     .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
-    #entry-bar { bottom: 1rem; }
-    #entry-trigger { bottom: 1rem; right: 1rem; }
+    #entry-bar { bottom: 5rem; }
+    #entry-trigger { bottom: 1.25rem; right: 1rem; }
+    #chat-trigger { bottom: 1.25rem; left: 1rem; }
   }
 </style>
 </head>
@@ -968,8 +957,7 @@
 <!-- NAV -->
 <nav>
   <a href="/" class="nav-logo">
-    <img class="brand-logo" src="logo.png" alt="" aria-hidden="true"/>
-    <span style="color:var(--black)">Execution</span><span>Curve</span>
+    <img src="/logo.png" width="26" height="26" alt="Execution Curve logo" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0;object-fit:contain;">Execution<span>Curve</span>
   </a>
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
@@ -1029,7 +1017,7 @@
       <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">generic advice. Everything is based on your input</span></div>
     </div>
   </div>
-  <img class="hero-bg-logo" src="logo.png" alt="" aria-hidden="true"/>
+  <div class="hero-bg-numeral" aria-hidden="true">EC</div>
   <div class="scroll-hint"><div class="scroll-hint-line"></div><span>scroll</span></div>
 </section>
 
@@ -1148,17 +1136,16 @@
     </div>
     <div id="log-goal-chip" class="log-goal-chip" onclick="showGoalModal()" style="display:none">Goal: <span id="log-goal-display"></span> · edit</div>
     <div class="consistency-wrap" id="consistency-wrap" style="display:none">
-      <div class="consistency-logo-tracker" title="Consistency">
-        <img class="consistency-brand-logo" src="logo.png" alt=""/>
-        <svg viewBox="-20 -20 340 340" id="consistency-arc-svg" aria-hidden="true">
-          <path d="M 150 65 A 85 85 0 1 1 235 150" fill="none" stroke="#D4D4D4" stroke-width="16" stroke-linecap="round" id="consistency-arc-bg"/>
-          <path d="M 150 65 A 85 85 0 1 1 235 150" fill="none" stroke="#0A0A0A" stroke-width="16" stroke-linecap="round"
-            stroke-dasharray="534" stroke-dashoffset="534" id="consistency-arc-fill"
-            style="transition: stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)"/>
-          <polygon points="235,150 215,136 232,172" fill="#D4D4D4" id="consistency-arrow-bg"/>
-          <polygon points="235,150 215,136 232,172" fill="#0A0A0A" id="consistency-arrow"/>
-        </svg>
-      </div>
+      <svg width="36" height="36" viewBox="-20 -20 340 340" id="consistency-arc-svg" title="Consistency">
+        <circle cx="150" cy="150" r="55" fill="#C8873F" opacity="0.15" id="consistency-circle-bg"/>
+        <circle cx="150" cy="150" r="55" fill="#C8873F" id="consistency-circle-fill"/>
+        <path d="M 150 65 A 85 85 0 1 1 235 150" fill="none" stroke="#D4D4D4" stroke-width="16" stroke-linecap="round" id="consistency-arc-bg"/>
+        <path d="M 150 65 A 85 85 0 1 1 235 150" fill="none" stroke="#0A0A0A" stroke-width="16" stroke-linecap="round"
+          stroke-dasharray="534" stroke-dashoffset="534" id="consistency-arc-fill"
+          style="transition: stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)"/>
+        <polygon points="235,150 215,136 232,172" fill="#D4D4D4" id="consistency-arrow-bg"/>
+        <polygon points="235,150 215,136 232,172" fill="#0A0A0A" id="consistency-arrow"/>
+      </svg>
       <span class="consistency-rate" id="consistency-rate"></span>
     </div>
   </div>
@@ -1336,7 +1323,7 @@
 </button>
 
 <footer>
-  <span class="footer-brand"><img src="logo.png" alt="" aria-hidden="true"/>© 2025 Execution Curve</span>
+  <span>© 2025 Execution Curve</span>
   <div style="display:flex; gap:1.5rem">
     <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>
     <a href="/privacy.html" style="color:var(--gray-1); text-decoration:none; font-size:0.8rem">Privacy Policy</a>
