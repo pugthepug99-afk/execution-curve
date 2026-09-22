@@ -1303,6 +1303,7 @@
   let currentUser = null;
   let currentProjectId = null;
   let allProjects = [];
+  let sidebarOpen = false; // declared early — used by showAuthModal and showGoalModal
 
   const PROJECT_COLORS = ['#C8873F','#4a7c59','#3b6fa0','#8b5cf6','#b85c38','#2d6a6a','#c2185b'];
 
@@ -2170,7 +2171,6 @@
     "What's been on your mind about your project that you haven't written in your log yet?",
   ];
 
-  let sidebarOpen = false;
   let currentChatId = null;
   let currentChatMessages = [];
   let allChats = [];
