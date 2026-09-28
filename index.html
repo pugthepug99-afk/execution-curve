@@ -1555,12 +1555,25 @@
         successEl.textContent = 'Check your email for a confirmation link, then sign in.';
         successEl.classList.add('show');
       }
+   } else {
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Sign In';
+  if (error) {
+    console.error('LOGIN ERROR:', error);
+    const msg = (error.message || '').toLowerCase();
+    if (msg.includes('email not confirmed')) {
+      errorEl.textContent = 'Please confirm your email first. Check your inbox for the link.';
+    } else if (msg.includes('invalid login')) {
+      errorEl.textContent = 'Incorrect email or password.';
     } else {
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-      submitBtn.disabled = false; submitBtn.textContent = 'Sign In';
-      if (error) { errorEl.textContent = 'Incorrect email or password.'; errorEl.classList.add('show'); }
-      else { hideAuthModal(); }
+      errorEl.textContent = error.message;
     }
+    errorEl.classList.add('show');
+  } else {
+    hideAuthModal();
+  }
+}
   });
 
   ['auth-email', 'auth-password'].forEach(id => {
