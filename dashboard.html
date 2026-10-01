@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Dashboard — ExecutionCurve</title>
+<title>Dashboard — Execution Curve</title>
 <link rel="icon" type="image/png" href="/logo.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -218,7 +218,7 @@
   <div id="state-locked" class="state-card" style="display:none">
     <h3>Sign in to access the dashboard</h3>
     <p>You need an account to earn and spend points.</p>
-    <a href="/" style="font-family:var(--display);font-size:0.9rem;font-weight:600;color:var(--white);background:var(--amber);padding:0.75rem 1.75rem;text-decoration:none;display:inline-block;">Go to ExecutionCurve</a>
+    <a href="/" style="font-family:var(--display);font-size:0.9rem;font-weight:600;color:var(--white);background:var(--amber);padding:0.75rem 1.75rem;text-decoration:none;display:inline-block;">Go to Execution Curve</a>
   </div>
 
   <div id="main-dashboard" style="display:none">
@@ -298,12 +298,12 @@
       <div class="dash-section-sub">Fill in your project details. Points will be deducted when you submit.</div>
       <div class="request-form show" id="request-form">
         <div>
-          <label class="form-label">Project</label>
-          <select class="form-select" id="request-project-select"></select>
+          <label class="form-label">Project Title</label>
+          <input class="form-input" id="request-title" type="text" placeholder="e.g. My fitness app, Execution Curve, SoundDrops..." maxlength="80"/>
         </div>
         <div>
           <label class="form-label">What should reviewers focus on?</label>
-          <input class="form-input" id="request-title" type="text" placeholder="e.g. Is the onboarding clear? Does the value prop land?" maxlength="120"/>
+          <input class="form-input" id="request-focus" type="text" placeholder="e.g. Is the onboarding clear? Does the value prop land?" maxlength="120"/>
         </div>
         <div>
           <label class="form-label">Description (optional)</label>
@@ -386,7 +386,7 @@
     document.getElementById('dash-username').textContent = profile.display_name || profile.username;
     document.getElementById('dash-points').textContent = profile.points;
     updateTierButtons(profile.points);
-    await loadProjects();
+    // loadProjects removed — no longer needed for free-text requests
     await loadOpenRequests();
     await loadMyRequests();
     await loadTransactions();
@@ -489,8 +489,8 @@
   window.closeRequestForm = closeRequestForm;
 
   async function submitFeedbackRequest() {
-    const projectId = document.getElementById('request-project-select').value;
     const title = document.getElementById('request-title').value.trim();
+    const focus = document.getElementById('request-focus').value.trim();
     const desc = document.getElementById('request-desc').value.trim();
     const url = document.getElementById('request-url').value.trim();
     const errorEl = document.getElementById('request-form-error');
@@ -500,8 +500,8 @@
     errorEl.classList.remove('show');
     successEl.classList.remove('show');
 
-    if (!projectId) { errorEl.textContent = 'Please select a project.'; errorEl.classList.add('show'); return; }
-    if (!title) { errorEl.textContent = 'Please describe what reviewers should focus on.'; errorEl.classList.add('show'); return; }
+    if (!title) { errorEl.textContent = 'Please enter your project title.'; errorEl.classList.add('show'); return; }
+    if (!focus) { errorEl.textContent = 'Please describe what reviewers should focus on.'; errorEl.classList.add('show'); return; }
     if (currentProfile.points < pendingRequestCost) { errorEl.textContent = `You need ${pendingRequestCost} points. You have ${currentProfile.points}.`; errorEl.classList.add('show'); return; }
 
     btn.disabled = true;
@@ -512,15 +512,13 @@
     await sb.from('profiles').update({ points: newPoints }).eq('id', currentUser.id);
     await sb.from('point_transactions').insert({ user_id: currentUser.id, amount: -pendingRequestCost, reason: `Feedback request: ${title.slice(0, 40)}` });
 
-    // Make project public automatically
-    await sb.from('projects').update({ is_public: true }).eq('id', projectId);
-
-    // Create request
+    // Create request — no project_id required, title is free text
+    const fullDesc = focus + (desc ? '\n\n' + desc : '');
     const { error } = await sb.from('feedback_requests').insert({
       user_id: currentUser.id,
-      project_id: projectId,
+      project_id: null,
       title,
-      description: desc || null,
+      description: fullDesc || null,
       url: url || null,
       points_spent: pendingRequestCost,
       guaranteed_reviewers: pendingRequestReviewers,
@@ -552,7 +550,7 @@
   async function loadOpenRequests() {
     const container = document.getElementById('requests-list');
     const { data, error } = await sb.from('feedback_requests')
-      .select('*, profiles(username, display_name), projects(name)')
+      .select('*, profiles(username, display_name)')
       .eq('status', 'open')
       .neq('user_id', currentUser.id)
       .order('created_at', { ascending: false })
@@ -568,7 +566,7 @@
         <div class="request-card-header">
           <div>
             <div class="request-card-title">${r.title}</div>
-            <div class="request-card-user">@${r.profiles?.username || 'anonymous'} · ${r.projects?.name || 'Project'}</div>
+            <div class="request-card-user">@${r.profiles?.username || 'anonymous'}</div>
           </div>
         </div>
         ${r.description ? `<div class="request-card-desc">${r.description}</div>` : ''}
@@ -586,7 +584,7 @@
   async function loadMyRequests() {
     const container = document.getElementById('my-requests-list');
     const { data } = await sb.from('feedback_requests')
-      .select('*, projects(name), feedback_submissions(id)')
+      .select('*, feedback_submissions(id)')
       .eq('user_id', currentUser.id)
       .order('created_at', { ascending: false });
 
@@ -597,7 +595,7 @@
         <div class="request-card-header">
           <div>
             <div class="request-card-title">${r.title}</div>
-            <div class="request-card-user">${r.projects?.name || 'Project'} · ${r.points_spent} pts spent</div>
+            <div class="request-card-user">${r.points_spent} pts spent · ${r.guaranteed_reviewers} reviewers guaranteed</div>
           </div>
           <span class="meta-chip">${r.feedback_submissions?.length || 0} / ${r.guaranteed_reviewers} reviews</span>
         </div>
