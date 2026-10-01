@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard — Execution Curve</title>
+<link rel="icon" type="image/png" href="/logo.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black: #0A0A0A; --white: #FAFAFA; --amber: #C8873F; --amber-dim: #8A5C28;
+    --gray-1: #6B6B6B; --gray-2: #D4D4D4; --gray-3: #F0F0F0;
+    --green: #4a7c59; --red: #b85c38;
+    --display: 'Plus Jakarta Sans', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'Fira Code', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--white); color: var(--black); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 3rem; background: var(--white); border-bottom: 1px solid var(--gray-2); }
+  .nav-logo { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .nav-logo span { color: var(--amber); }
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+  .nav-link { font-family: var(--body); font-size: 0.875rem; color: var(--gray-1); text-decoration: none; transition: color 0.2s; }
+  .nav-link:hover { color: var(--black); }
+  .nav-username { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-1); letter-spacing: 0.02em; }
+  .btn-signout { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.3rem 0.7rem; cursor: pointer; transition: all 0.15s; }
+  .btn-signout:hover { color: var(--red); border-color: var(--red); }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem 6rem; }
+
+  /* STATES */
+  .state-card { border: 1px solid var(--gray-2); padding: 3rem 2rem; text-align: center; margin-top: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .state-card h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+  .state-card p { font-family: var(--body); font-size: 0.9rem; color: var(--gray-1); line-height: 1.6; margin-bottom: 1.25rem; }
+
+  /* SETUP USERNAME MODAL */
+  .setup-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.8); z-index: 800; display: none; align-items: center; justify-content: center; }
+  .setup-overlay.show { display: flex; }
+  .setup-box { background: var(--white); border: 1px solid var(--gray-2); padding: 2.5rem 2rem 2rem; max-width: 420px; width: calc(100% - 2rem); }
+  .setup-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 0.75rem; text-transform: uppercase; }
+  .setup-box h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+  .setup-box p { font-family: var(--body); font-size: 0.85rem; color: var(--gray-1); margin-bottom: 1.5rem; line-height: 1.6; }
+  .setup-input { width: 100%; font-family: var(--body); font-size: 0.95rem; color: var(--black); background: var(--gray-3); border: 1px solid var(--gray-2); padding: 0.75rem 1rem; outline: none; margin-bottom: 0.75rem; transition: border-color 0.15s; }
+  .setup-input:focus { border-color: var(--amber); }
+  .setup-input::placeholder { color: var(--gray-1); }
+  .setup-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-1); margin-bottom: 1rem; letter-spacing: 0.02em; }
+  .setup-error { font-family: var(--body); font-size: 0.82rem; color: var(--red); margin-bottom: 0.75rem; display: none; }
+  .setup-error.show { display: block; }
+  .btn-setup-save { width: 100%; font-family: var(--display); font-size: 0.9rem; font-weight: 600; color: var(--white); background: var(--amber); border: none; padding: 0.75rem; cursor: pointer; transition: background 0.15s; }
+  .btn-setup-save:hover { background: var(--amber-dim); }
+  .btn-setup-save:disabled { opacity: 0.35; cursor: default; }
+
+  /* DASHBOARD HEADER */
+  .dash-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+  .dash-greeting { font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; }
+  .dash-greeting span { color: var(--amber); }
+
+  /* POINTS CARD */
+  .points-card { border: 1px solid var(--gray-2); padding: 1.5rem 2rem; min-width: 200px; text-align: center; }
+  .points-num { font-family: var(--display); font-size: 2.8rem; font-weight: 800; letter-spacing: -0.04em; color: var(--black); display: block; }
+  .points-label { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* GRID */
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+  @media (max-width: 768px) { .dash-grid { grid-template-columns: 1fr; } nav { padding: 1rem 1.25rem; } .page { padding: 5rem 1.25rem 4rem; } }
+
+  /* SECTION */
+  .dash-section { border: 1px solid var(--gray-2); padding: 1.75rem; }
+  .dash-section-title { font-family: var(--display); font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.25rem; }
+  .dash-section-sub { font-family: var(--body); font-size: 0.82rem; color: var(--gray-1); margin-bottom: 1.25rem; }
+
+  /* EARN POINTS */
+  .earn-item { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(--gray-3); gap: 1rem; }
+  .earn-item:last-child { border-bottom: none; }
+  .earn-item-left { display: flex; flex-direction: column; gap: 0.2rem; }
+  .earn-item-name { font-family: var(--body); font-size: 0.88rem; font-weight: 500; color: var(--black); }
+  .earn-item-desc { font-family: var(--body); font-size: 0.75rem; color: var(--gray-1); }
+  .earn-badge { font-family: var(--mono); font-size: 0.7rem; color: var(--green); border: 1px solid var(--green); padding: 0.2rem 0.6rem; white-space: nowrap; }
+
+  /* REQUEST TIERS */
+  .tier-item { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(--gray-3); gap: 1rem; }
+  .tier-item:last-child { border-bottom: none; }
+  .tier-cost { font-family: var(--display); font-size: 1.2rem; font-weight: 700; color: var(--amber); flex-shrink: 0; }
+  .tier-info { flex: 1; }
+  .tier-name { font-family: var(--body); font-size: 0.88rem; font-weight: 500; }
+  .tier-desc { font-family: var(--body); font-size: 0.75rem; color: var(--gray-1); }
+  .btn-tier { font-family: var(--mono); font-size: 0.7rem; color: var(--white); background: var(--black); border: none; padding: 0.4rem 0.85rem; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+  .btn-tier:hover { background: var(--amber); }
+  .btn-tier:disabled { opacity: 0.35; cursor: default; background: var(--black); }
+
+  /* FULL WIDTH SECTION */
+  .dash-section-full { border: 1px solid var(--gray-2); padding: 1.75rem; margin-bottom: 1.5rem; }
+
+  /* FEEDBACK REQUEST FORM */
+  .request-form { display: none; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--gray-2); }
+  .request-form.show { display: flex; }
+  .form-label { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-1); letter-spacing: 0.04em; display: block; margin-bottom: 0.3rem; }
+  .form-input { width: 100%; font-family: var(--body); font-size: 0.88rem; color: var(--black); background: var(--gray-3); border: 1px solid var(--gray-2); padding: 0.65rem 0.85rem; outline: none; transition: border-color 0.15s; }
+  .form-input:focus { border-color: var(--amber); }
+  .form-input::placeholder { color: var(--gray-1); }
+  textarea.form-input { resize: vertical; min-height: 80px; }
+  .form-select { width: 100%; font-family: var(--body); font-size: 0.88rem; color: var(--black); background: var(--gray-3); border: 1px solid var(--gray-2); padding: 0.65rem 0.85rem; outline: none; cursor: pointer; }
+  .btn-submit-request { font-family: var(--display); font-size: 0.88rem; font-weight: 600; color: var(--white); background: var(--amber); border: none; padding: 0.75rem 1.5rem; cursor: pointer; transition: background 0.15s; align-self: flex-start; }
+  .btn-submit-request:hover { background: var(--amber-dim); }
+  .btn-submit-request:disabled { opacity: 0.35; cursor: default; }
+  .form-error { font-family: var(--body); font-size: 0.82rem; color: var(--red); display: none; }
+  .form-error.show { display: block; }
+  .form-success { font-family: var(--body); font-size: 0.82rem; color: var(--green); display: none; }
+  .form-success.show { display: block; }
+
+  /* OPEN REQUESTS (marketplace) */
+  .request-card { border: 1px solid var(--gray-2); padding: 1.25rem; margin-bottom: 0.75rem; }
+  .request-card:last-child { margin-bottom: 0; }
+  .request-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+  .request-card-title { font-family: var(--display); font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; }
+  .request-card-user { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); letter-spacing: 0.02em; }
+  .request-card-desc { font-family: var(--body); font-size: 0.82rem; color: var(--gray-1); margin-bottom: 0.85rem; line-height: 1.55; }
+  .request-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .request-card-meta { display: flex; gap: 0.75rem; align-items: center; }
+  .meta-chip { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-1); border: 1px solid var(--gray-2); padding: 0.15rem 0.5rem; }
+  .btn-give-feedback { font-family: var(--mono); font-size: 0.7rem; color: var(--white); background: var(--black); border: none; padding: 0.45rem 1rem; cursor: pointer; transition: background 0.15s; }
+  .btn-give-feedback:hover { background: var(--amber); }
+  .empty-state { font-family: var(--body); font-size: 0.88rem; color: var(--gray-1); padding: 1.5rem 0; text-align: center; }
+
+  /* FEEDBACK MODAL */
+  .feedback-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.75); z-index: 600; display: none; align-items: center; justify-content: center; }
+  .feedback-overlay.show { display: flex; }
+  .feedback-box { background: var(--white); border: 1px solid var(--gray-2); padding: 2rem; max-width: 480px; width: calc(100% - 2rem); max-height: 90vh; overflow-y: auto; }
+  .feedback-box h3 { font-family: var(--display); font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+  .feedback-box p { font-family: var(--body); font-size: 0.82rem; color: var(--gray-1); margin-bottom: 1.25rem; }
+  .feedback-type-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .btn-ftype { font-family: var(--body); font-size: 0.78rem; color: var(--black); background: var(--gray-3); border: 1px solid var(--gray-2); padding: 0.4rem 0.85rem; cursor: pointer; transition: all 0.15s; }
+  .btn-ftype.selected { background: var(--black); color: var(--white); border-color: var(--black); }
+  .feedback-points-note { font-family: var(--mono); font-size: 0.65rem; color: var(--green); letter-spacing: 0.02em; margin-bottom: 0.85rem; }
+  .btn-submit-feedback { font-family: var(--display); font-size: 0.88rem; font-weight: 600; color: var(--white); background: var(--amber); border: none; padding: 0.7rem 1.5rem; cursor: pointer; margin-right: 0.75rem; transition: background 0.15s; }
+  .btn-submit-feedback:hover { background: var(--amber-dim); }
+  .btn-submit-feedback:disabled { opacity: 0.35; cursor: default; }
+  .btn-cancel-feedback { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); background: none; border: none; cursor: pointer; }
+
+  /* TRANSACTIONS */
+  .tx-item { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--gray-3); font-size: 0.82rem; }
+  .tx-item:last-child { border-bottom: none; }
+  .tx-reason { font-family: var(--body); color: var(--black); }
+  .tx-amount { font-family: var(--mono); font-size: 0.75rem; }
+  .tx-amount.pos { color: var(--green); }
+  .tx-amount.neg { color: var(--red); }
+  .tx-date { font-family: var(--mono); font-size: 0.6rem; color: var(--gray-1); }
+
+  /* TOGGLE */
+  .toggle-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.85rem; }
+  .toggle-switch { width: 36px; height: 20px; background: var(--gray-2); border-radius: 10px; position: relative; cursor: pointer; transition: background 0.2s; border: none; flex-shrink: 0; }
+  .toggle-switch.on { background: var(--amber); }
+  .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: var(--white); border-radius: 50%; transition: transform 0.2s; }
+  .toggle-switch.on::after { transform: translateX(16px); }
+  .toggle-label { font-family: var(--body); font-size: 0.82rem; color: var(--gray-1); }
+
+  .loading-text { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-1); animation: pulse 1.4s ease-in-out infinite; text-align: center; padding: 2rem; }
+  @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/logo.png" width="24" height="24" alt="logo" style="object-fit:contain"/>
+    Execution<span>Curve</span>
+  </a>
+  <div class="nav-right">
+    <a href="/" class="nav-link">My Log</a>
+    <a href="/roadmap.html" class="nav-link">Roadmap</a>
+    <span class="nav-username" id="nav-username"></span>
+    <button class="btn-signout" id="btn-signout">Sign Out</button>
+  </div>
+</nav>
+
+<!-- USERNAME SETUP MODAL -->
+<div class="setup-overlay" id="setup-overlay">
+  <div class="setup-box">
+    <span class="setup-label">One Time Setup</span>
+    <h3>Choose your username</h3>
+    <p>Your username is how others will see you in the community. Your email stays private.</p>
+    <input class="setup-input" id="setup-username" type="text" placeholder="username" maxlength="30" autocomplete="off" autocorrect="off" autocapitalize="off"/>
+    <input class="setup-input" id="setup-displayname" type="text" placeholder="Display name (optional)" maxlength="50"/>
+    <p class="setup-hint">Letters, numbers, underscores only. Min 3 characters.</p>
+    <div class="setup-error" id="setup-error"></div>
+    <button class="btn-setup-save" id="btn-setup-save" disabled>Save Username</button>
+  </div>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div class="feedback-overlay" id="feedback-overlay">
+  <div class="feedback-box">
+    <h3 id="feedback-modal-title">Give Feedback</h3>
+    <p id="feedback-modal-desc">Choose what type of feedback you're leaving.</p>
+    <div class="feedback-type-row">
+      <button class="btn-ftype selected" data-type="thoughtful_feedback" data-points="15" onclick="selectFeedbackType(this)">Thoughtful Feedback +15pts</button>
+      <button class="btn-ftype" data-type="app_test" data-points="20" onclick="selectFeedbackType(this)">App Test +20pts</button>
+      <button class="btn-ftype" data-type="bug_report" data-points="30" onclick="selectFeedbackType(this)">Bug Report +30pts</button>
+    </div>
+    <div class="feedback-points-note" id="feedback-points-note">You will earn +15 points for this feedback.</div>
+    <label class="form-label">Your Feedback</label>
+    <textarea class="form-input" id="feedback-content" rows="5" placeholder="Be specific and constructive. What works, what doesn't, what you'd improve..."></textarea>
+    <div class="form-error" id="feedback-form-error"></div>
+    <div style="margin-top:1rem">
+      <button class="btn-submit-feedback" id="btn-submit-feedback" onclick="submitFeedback()">Submit Feedback</button>
+      <button class="btn-cancel-feedback" onclick="closeFeedbackModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  <div id="state-loading" class="loading-text">Loading your dashboard...</div>
+  <div id="state-locked" class="state-card" style="display:none">
+    <h3>Sign in to access the dashboard</h3>
+    <p>You need an account to earn and spend points.</p>
+    <a href="/" style="font-family:var(--display);font-size:0.9rem;font-weight:600;color:var(--white);background:var(--amber);padding:0.75rem 1.75rem;text-decoration:none;display:inline-block;">Go to Execution Curve</a>
+  </div>
+
+  <div id="main-dashboard" style="display:none">
+    <!-- HEADER -->
+    <div class="dash-header">
+      <div>
+        <div class="dash-greeting">Hey, <span id="dash-username">builder</span>.</div>
+        <p style="font-family:var(--body);font-size:0.88rem;color:var(--gray-1);margin-top:0.35rem;">Earn points by helping others. Spend them to get feedback on your work.</p>
+      </div>
+      <div class="points-card">
+        <span class="points-num" id="dash-points">0</span>
+        <span class="points-label">Points Available</span>
+      </div>
+    </div>
+
+    <!-- EARN + SPEND GRID -->
+    <div class="dash-grid">
+      <div class="dash-section">
+        <div class="dash-section-title">Earn Points</div>
+        <div class="dash-section-sub">Help other builders and get rewarded.</div>
+        <div class="earn-item">
+          <div class="earn-item-left">
+            <span class="earn-item-name">Leave Thoughtful Feedback</span>
+            <span class="earn-item-desc">Written review of someone's project</span>
+          </div>
+          <span class="earn-badge">+15 pts</span>
+        </div>
+        <div class="earn-item">
+          <div class="earn-item-left">
+            <span class="earn-item-name">Test Someone's App</span>
+            <span class="earn-item-desc">Spend 5 minutes using their product</span>
+          </div>
+          <span class="earn-badge">+20 pts</span>
+        </div>
+        <div class="earn-item">
+          <div class="earn-item-left">
+            <span class="earn-item-name">Give a Detailed Bug Report</span>
+            <span class="earn-item-desc">Steps to reproduce, screenshots, context</span>
+          </div>
+          <span class="earn-badge">+30 pts</span>
+        </div>
+      </div>
+
+      <div class="dash-section">
+        <div class="dash-section-title">Request Feedback</div>
+        <div class="dash-section-sub">Spend points to get guaranteed reviewers.</div>
+        <div class="tier-item">
+          <span class="tier-cost">30</span>
+          <div class="tier-info">
+            <div class="tier-name">Starter</div>
+            <div class="tier-desc">Guaranteed 10 reviewers</div>
+          </div>
+          <button class="btn-tier" onclick="openRequestForm(30, 10)" id="btn-tier-30">Request</button>
+        </div>
+        <div class="tier-item">
+          <span class="tier-cost">60</span>
+          <div class="tier-info">
+            <div class="tier-name">Growth</div>
+            <div class="tier-desc">Guaranteed 25 reviewers</div>
+          </div>
+          <button class="btn-tier" onclick="openRequestForm(60, 25)" id="btn-tier-60">Request</button>
+        </div>
+        <div class="tier-item">
+          <span class="tier-cost">100</span>
+          <div class="tier-info">
+            <div class="tier-name">Scale</div>
+            <div class="tier-desc">Guaranteed 50 reviewers</div>
+          </div>
+          <button class="btn-tier" onclick="openRequestForm(100, 50)" id="btn-tier-100">Request</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REQUEST FEEDBACK FORM -->
+    <div class="dash-section-full" id="request-form-section" style="display:none">
+      <div class="dash-section-title" id="request-form-title">Request Feedback</div>
+      <div class="dash-section-sub">Fill in your project details. Points will be deducted when you submit.</div>
+      <div class="request-form show" id="request-form">
+        <div>
+          <label class="form-label">Project</label>
+          <select class="form-select" id="request-project-select"></select>
+        </div>
+        <div>
+          <label class="form-label">What should reviewers focus on?</label>
+          <input class="form-input" id="request-title" type="text" placeholder="e.g. Is the onboarding clear? Does the value prop land?" maxlength="120"/>
+        </div>
+        <div>
+          <label class="form-label">Description (optional)</label>
+          <textarea class="form-input" id="request-desc" rows="3" placeholder="More context, what stage you're at, what kind of feedback helps most..."></textarea>
+        </div>
+        <div>
+          <label class="form-label">Link to your project (optional)</label>
+          <input class="form-input" id="request-url" type="url" placeholder="https://..."/>
+        </div>
+        <div class="form-error" id="request-form-error"></div>
+        <div class="form-success" id="request-form-success"></div>
+        <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+          <button class="btn-submit-request" id="btn-submit-request" onclick="submitFeedbackRequest()">Submit Request</button>
+          <button style="font-family:var(--mono);font-size:0.72rem;color:var(--gray-1);background:none;border:none;cursor:pointer;" onclick="closeRequestForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPEN REQUESTS MARKETPLACE -->
+    <div class="dash-section-full">
+      <div class="dash-section-title">Open Feedback Requests</div>
+      <div class="dash-section-sub">Help other builders and earn points.</div>
+      <div id="requests-list"><div class="loading-text">Loading requests...</div></div>
+    </div>
+
+    <!-- MY REQUESTS -->
+    <div class="dash-section-full">
+      <div class="dash-section-title">My Requests</div>
+      <div class="dash-section-sub">Feedback requests you have submitted.</div>
+      <div id="my-requests-list"><div class="loading-text">Loading...</div></div>
+    </div>
+
+    <!-- POINTS HISTORY -->
+    <div class="dash-section-full">
+      <div class="dash-section-title">Points History</div>
+      <div id="tx-list"><div class="loading-text">Loading...</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://exqczahgelcoibcsagsx.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4cWN6YWhnZWxjb2liY3NhZ3N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MzM2MjEsImV4cCI6MjEwMDMwOTYyMX0.G6kN0LtvxSO9j5orEGnYuyq9AOQDfqpJel6KqB7PKqs';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let currentUser = null;
+  let currentProfile = null;
+  let selectedRequestId = null;
+  let selectedFeedbackType = 'thoughtful_feedback';
+  let selectedFeedbackPoints = 15;
+  let pendingRequestCost = 30;
+  let pendingRequestReviewers = 10;
+
+  // ---- INIT ----
+  sb.auth.onAuthStateChange(async (event, session) => {
+    currentUser = session?.user || null;
+    if (!currentUser) {
+      document.getElementById('state-loading').style.display = 'none';
+      document.getElementById('state-locked').style.display = 'block';
+      return;
+    }
+    await init();
+  });
+
+  async function init() {
+    // Load or create profile
+    const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+
+    if (!profile) {
+      // New user — show username setup
+      document.getElementById('state-loading').style.display = 'none';
+      document.getElementById('setup-overlay').classList.add('show');
+      return;
+    }
+
+    currentProfile = profile;
+    document.getElementById('state-loading').style.display = 'none';
+    document.getElementById('main-dashboard').style.display = 'block';
+    document.getElementById('nav-username').textContent = '@' + profile.username;
+    document.getElementById('dash-username').textContent = profile.display_name || profile.username;
+    document.getElementById('dash-points').textContent = profile.points;
+    updateTierButtons(profile.points);
+    await loadProjects();
+    await loadOpenRequests();
+    await loadMyRequests();
+    await loadTransactions();
+  }
+
+  // ---- USERNAME SETUP ----
+  const setupUsernameEl = document.getElementById('setup-username');
+  const setupDisplayEl = document.getElementById('setup-displayname');
+  const btnSetupSave = document.getElementById('btn-setup-save');
+  const setupErrorEl = document.getElementById('setup-error');
+
+  setupUsernameEl.addEventListener('input', () => {
+    const val = setupUsernameEl.value.trim();
+    const valid = /^[a-zA-Z0-9_]{3,30}$/.test(val);
+    btnSetupSave.disabled = !valid;
+    setupErrorEl.classList.remove('show');
+  });
+
+  setupUsernameEl.addEventListener('keydown', e => { if (e.key === 'Enter') saveUsername(); });
+
+  btnSetupSave.addEventListener('click', saveUsername);
+
+  async function saveUsername() {
+    const username = setupUsernameEl.value.trim().toLowerCase();
+    const displayName = setupDisplayEl.value.trim();
+    if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) return;
+
+    btnSetupSave.disabled = true;
+    btnSetupSave.textContent = 'Saving...';
+    setupErrorEl.classList.remove('show');
+
+    // Check uniqueness
+    const { data: existing } = await sb.from('profiles').select('id').eq('username', username).maybeSingle();
+    if (existing) {
+      setupErrorEl.textContent = 'That username is already taken. Try another.';
+      setupErrorEl.classList.add('show');
+      btnSetupSave.disabled = false;
+      btnSetupSave.textContent = 'Save Username';
+      return;
+    }
+
+    const { error } = await sb.from('profiles').insert({
+      id: currentUser.id,
+      username,
+      display_name: displayName || null,
+      points: 30,
+    });
+
+    if (error) {
+      setupErrorEl.textContent = error.message;
+      setupErrorEl.classList.add('show');
+      btnSetupSave.disabled = false;
+      btnSetupSave.textContent = 'Save Username';
+      return;
+    }
+
+    // Log initial points transaction
+    await sb.from('point_transactions').insert({
+      user_id: currentUser.id,
+      amount: 30,
+      reason: 'Welcome bonus',
+    });
+
+    document.getElementById('setup-overlay').classList.remove('show');
+    await init();
+  }
+
+  // ---- LOAD PROJECTS ----
+  async function loadProjects() {
+    const { data } = await sb.from('projects').select('*').eq('user_id', currentUser.id).order('created_at');
+    const select = document.getElementById('request-project-select');
+    if (!select) return;
+    select.innerHTML = data?.map(p => `<option value="${p.id}" data-public="${p.is_public}">${p.name}</option>`).join('') || '<option value="">No projects yet</option>';
+  }
+
+  // ---- TIER BUTTONS ----
+  function updateTierButtons(points) {
+    [30, 60, 100].forEach(cost => {
+      const btn = document.getElementById('btn-tier-' + cost);
+      if (btn) btn.disabled = points < cost;
+    });
+  }
+
+  // ---- REQUEST FORM ----
+  function openRequestForm(cost, reviewers) {
+    pendingRequestCost = cost;
+    pendingRequestReviewers = reviewers;
+    document.getElementById('request-form-title').textContent = `Request Feedback (${cost} points — ${reviewers} guaranteed reviewers)`;
+    document.getElementById('request-form-section').style.display = 'block';
+    document.getElementById('request-form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('request-form-error').classList.remove('show');
+    document.getElementById('request-form-success').classList.remove('show');
+  }
+
+  function closeRequestForm() {
+    document.getElementById('request-form-section').style.display = 'none';
+  }
+
+  window.openRequestForm = openRequestForm;
+  window.closeRequestForm = closeRequestForm;
+
+  async function submitFeedbackRequest() {
+    const projectId = document.getElementById('request-project-select').value;
+    const title = document.getElementById('request-title').value.trim();
+    const desc = document.getElementById('request-desc').value.trim();
+    const url = document.getElementById('request-url').value.trim();
+    const errorEl = document.getElementById('request-form-error');
+    const successEl = document.getElementById('request-form-success');
+    const btn = document.getElementById('btn-submit-request');
+
+    errorEl.classList.remove('show');
+    successEl.classList.remove('show');
+
+    if (!projectId) { errorEl.textContent = 'Please select a project.'; errorEl.classList.add('show'); return; }
+    if (!title) { errorEl.textContent = 'Please describe what reviewers should focus on.'; errorEl.classList.add('show'); return; }
+    if (currentProfile.points < pendingRequestCost) { errorEl.textContent = `You need ${pendingRequestCost} points. You have ${currentProfile.points}.`; errorEl.classList.add('show'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    // Deduct points
+    const newPoints = currentProfile.points - pendingRequestCost;
+    await sb.from('profiles').update({ points: newPoints }).eq('id', currentUser.id);
+    await sb.from('point_transactions').insert({ user_id: currentUser.id, amount: -pendingRequestCost, reason: `Feedback request: ${title.slice(0, 40)}` });
+
+    // Make project public automatically
+    await sb.from('projects').update({ is_public: true }).eq('id', projectId);
+
+    // Create request
+    const { error } = await sb.from('feedback_requests').insert({
+      user_id: currentUser.id,
+      project_id: projectId,
+      title,
+      description: desc || null,
+      url: url || null,
+      points_spent: pendingRequestCost,
+      guaranteed_reviewers: pendingRequestReviewers,
+      status: 'open',
+    });
+
+    btn.disabled = false;
+    btn.textContent = 'Submit Request';
+
+    if (error) { errorEl.textContent = 'Something went wrong. Try again.'; errorEl.classList.add('show'); return; }
+
+    currentProfile.points = newPoints;
+    document.getElementById('dash-points').textContent = newPoints;
+    updateTierButtons(newPoints);
+    successEl.textContent = `Request submitted. ${pendingRequestReviewers} reviewers guaranteed.`;
+    successEl.classList.add('show');
+
+    // Reset form
+    document.getElementById('request-title').value = '';
+    document.getElementById('request-desc').value = '';
+    document.getElementById('request-url').value = '';
+
+    await loadOpenRequests();
+    await loadMyRequests();
+    await loadTransactions();
+  }
+
+  // ---- LOAD OPEN REQUESTS ----
+  async function loadOpenRequests() {
+    const container = document.getElementById('requests-list');
+    const { data, error } = await sb.from('feedback_requests')
+      .select('*, profiles(username, display_name), projects(name)')
+      .eq('status', 'open')
+      .neq('user_id', currentUser.id)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (error || !data?.length) {
+      container.innerHTML = '<p class="empty-state">No open requests right now. Check back soon.</p>';
+      return;
+    }
+
+    container.innerHTML = data.map(r => `
+      <div class="request-card">
+        <div class="request-card-header">
+          <div>
+            <div class="request-card-title">${r.title}</div>
+            <div class="request-card-user">@${r.profiles?.username || 'anonymous'} · ${r.projects?.name || 'Project'}</div>
+          </div>
+        </div>
+        ${r.description ? `<div class="request-card-desc">${r.description}</div>` : ''}
+        <div class="request-card-footer">
+          <div class="request-card-meta">
+            <span class="meta-chip">${r.guaranteed_reviewers} reviewers needed</span>
+            ${r.url ? `<a href="${r.url}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:0.62rem;color:var(--amber);">View Project ↗</a>` : ''}
+          </div>
+          <button class="btn-give-feedback" onclick="openFeedbackModal('${r.id}', '${r.title.replace(/'/g, "\\'")}')">Give Feedback</button>
+        </div>
+      </div>`).join('');
+  }
+
+  // ---- LOAD MY REQUESTS ----
+  async function loadMyRequests() {
+    const container = document.getElementById('my-requests-list');
+    const { data } = await sb.from('feedback_requests')
+      .select('*, projects(name), feedback_submissions(id)')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false });
+
+    if (!data?.length) { container.innerHTML = '<p class="empty-state">You have not submitted any feedback requests yet.</p>'; return; }
+
+    container.innerHTML = data.map(r => `
+      <div class="request-card">
+        <div class="request-card-header">
+          <div>
+            <div class="request-card-title">${r.title}</div>
+            <div class="request-card-user">${r.projects?.name || 'Project'} · ${r.points_spent} pts spent</div>
+          </div>
+          <span class="meta-chip">${r.feedback_submissions?.length || 0} / ${r.guaranteed_reviewers} reviews</span>
+        </div>
+        ${r.description ? `<div class="request-card-desc">${r.description}</div>` : ''}
+      </div>`).join('');
+  }
+
+  // ---- LOAD TRANSACTIONS ----
+  async function loadTransactions() {
+    const container = document.getElementById('tx-list');
+    const { data } = await sb.from('point_transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(15);
+
+    if (!data?.length) { container.innerHTML = '<p class="empty-state">No transactions yet.</p>'; return; }
+
+    container.innerHTML = data.map(tx => `
+      <div class="tx-item">
+        <span class="tx-reason">${tx.reason}</span>
+        <div style="display:flex;gap:0.75rem;align-items:center">
+          <span class="tx-date">${new Date(tx.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+          <span class="tx-amount ${tx.amount > 0 ? 'pos' : 'neg'}">${tx.amount > 0 ? '+' : ''}${tx.amount} pts</span>
+        </div>
+      </div>`).join('');
+  }
+
+  // ---- FEEDBACK MODAL ----
+  function openFeedbackModal(requestId, title) {
+    selectedRequestId = requestId;
+    document.getElementById('feedback-modal-title').textContent = 'Give Feedback';
+    document.getElementById('feedback-modal-desc').textContent = `For: "${title}"`;
+    document.getElementById('feedback-content').value = '';
+    document.getElementById('feedback-form-error').classList.remove('show');
+    selectedFeedbackType = 'thoughtful_feedback';
+    selectedFeedbackPoints = 15;
+    document.querySelectorAll('.btn-ftype').forEach(b => b.classList.toggle('selected', b.dataset.type === 'thoughtful_feedback'));
+    document.getElementById('feedback-points-note').textContent = 'You will earn +15 points for this feedback.';
+    document.getElementById('feedback-overlay').classList.add('show');
+    document.getElementById('project-dropdown')?.classList.remove('show');
+  }
+
+  function closeFeedbackModal() {
+    document.getElementById('feedback-overlay').classList.remove('show');
+    selectedRequestId = null;
+  }
+
+  function selectFeedbackType(btn) {
+    document.querySelectorAll('.btn-ftype').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedFeedbackType = btn.dataset.type;
+    selectedFeedbackPoints = parseInt(btn.dataset.points);
+    document.getElementById('feedback-points-note').textContent = `You will earn +${selectedFeedbackPoints} points for this feedback.`;
+  }
+
+  window.openFeedbackModal = openFeedbackModal;
+  window.closeFeedbackModal = closeFeedbackModal;
+  window.selectFeedbackType = selectFeedbackType;
+
+  document.getElementById('feedback-overlay').addEventListener('click', function(e) { if (e.target === this) closeFeedbackModal(); });
+
+  async function submitFeedback() {
+    const content = document.getElementById('feedback-content').value.trim();
+    const errorEl = document.getElementById('feedback-form-error');
+    const btn = document.getElementById('btn-submit-feedback');
+    errorEl.classList.remove('show');
+
+    if (!content || content.length < 30) { errorEl.textContent = 'Please write at least 30 characters of feedback.'; errorEl.classList.add('show'); return; }
+    if (!selectedRequestId) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    const { error } = await sb.from('feedback_submissions').insert({
+      request_id: selectedRequestId,
+      reviewer_id: currentUser.id,
+      type: selectedFeedbackType,
+      content,
+      points_earned: selectedFeedbackPoints,
+    });
+
+    if (error) {
+      if (error.code === '23505') { errorEl.textContent = 'You have already given feedback on this request.'; }
+      else { errorEl.textContent = 'Something went wrong. Try again.'; }
+      errorEl.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Submit Feedback';
+      return;
+    }
+
+    // Award points
+    const newPoints = currentProfile.points + selectedFeedbackPoints;
+    await sb.from('profiles').update({ points: newPoints }).eq('id', currentUser.id);
+    await sb.from('point_transactions').insert({ user_id: currentUser.id, amount: selectedFeedbackPoints, reason: `Feedback given (${selectedFeedbackType.replace(/_/g, ' ')})` });
+    currentProfile.points = newPoints;
+    document.getElementById('dash-points').textContent = newPoints;
+    updateTierButtons(newPoints);
+
+    btn.disabled = false;
+    btn.textContent = 'Submit Feedback';
+    closeFeedbackModal();
+    await loadOpenRequests();
+    await loadTransactions();
+  }
+
+  // ---- SIGN OUT ----
+  document.getElementById('btn-signout').addEventListener('click', async () => {
+    await sb.auth.signOut();
+    window.location.href = '/';
+  });
+</script>
+</body>
+</html>
