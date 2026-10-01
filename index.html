@@ -946,6 +946,7 @@
     <li><a href="#phases">The curve</a></li>
     <li><a href="#log">Your log</a></li>
     <li><a href="/roadmap.html">Roadmap</a></li>
+    <li><a href="/dashboard.html">Community</a></li>
   </ul>
   <!-- Project switcher (only shown when logged in) -->
   <div class="project-switcher" id="project-switcher" style="display:none">
@@ -964,6 +965,7 @@
     <button class="nav-cta" id="nav-signin-btn" onclick="showAuthModal('signin')">Sign In</button>
     <div class="nav-account" id="nav-account" style="display:none">
       <span class="nav-account-email" id="nav-account-email"></span>
+      <span class="nav-account-email" id="nav-account-username" style="color:var(--amber)"></span>
       <button class="btn-nav-signout" id="nav-signout-btn">Sign Out</button>
     </div>
   </div>
@@ -1260,7 +1262,7 @@
   <div class="chat-convo-panel" id="chat-convo-panel">
     <div class="chat-convo-title-bar">
       <button class="btn-chat-back" onclick="showChatList()">← Back</button>
-      <span class="chat-convo-name" id="chat-convo-name">New Chat</span>
+      <span class="chat-convo-name" id="chat-convo-name" onclick="renameCurrent()" title="Click to rename" style="cursor:pointer" title="Rename">New Chat</span>
       <button class="btn-chat-action" id="btn-pin-current" onclick="togglePinCurrent()" title="Pin">☆</button>
       <button class="btn-chat-action" onclick="renameCurrent()" title="Rename">✎</button>
     </div>
@@ -1417,26 +1419,47 @@
     });
   }
 
-  document.getElementById('new-project-name').addEventListener('input', function() {
-    document.getElementById('btn-project-create').disabled = this.value.trim().length === 0;
-  });
-
-  document.getElementById('new-project-name').addEventListener('keydown', e => {
-    if (e.key === 'Enter') createProject();
-    if (e.key === 'Escape') closeNewProjectModal();
-  });
+  const newProjectNameEl = document.getElementById('new-project-name');
+  if (newProjectNameEl) {
+    newProjectNameEl.addEventListener('input', function() {
+      const btn = document.getElementById('btn-project-create');
+      if (btn) btn.disabled = this.value.trim().length === 0;
+    });
+    newProjectNameEl.addEventListener('keydown', e => {
+      if (e.key === 'Enter') createProject();
+      if (e.key === 'Escape') closeNewProjectModal();
+    });
+  }
 
   async function createProject() {
     const name = document.getElementById('new-project-name').value.trim();
     if (!name || !currentUser) return;
-    document.getElementById('btn-project-create').disabled = true;
+    const btn = document.getElementById('btn-project-create');
+    btn.disabled = true;
+    btn.textContent = 'Creating...';
     const { data } = await sb.from('projects').insert({ user_id: currentUser.id, name, color: selectedColor }).select().single();
     if (data) {
       allProjects.push(data);
       await switchProject(data.id);
       closeNewProjectModal();
     }
-    document.getElementById('btn-project-create').disabled = false;
+    btn.disabled = false;
+    btn.textContent = 'Create Project';
+  }
+
+  // After goal is saved, auto-rename the current project to match the goal
+  async function autoNameProjectFromGoal(goal, projectId) {
+    if (!goal || !projectId || !currentUser) return;
+    const project = allProjects.find(p => p.id === projectId);
+    if (!project) return;
+    // Only rename if still called "My Project" or a default name
+    const defaultNames = ['my project', 'main project', 'project'];
+    if (!defaultNames.includes(project.name.toLowerCase())) return;
+    // Generate a short project name from the goal
+    const smartName = goal.length <= 40 ? goal : goal.slice(0, 37) + '...';
+    await sb.from('projects').update({ name: smartName }).eq('id', projectId);
+    project.name = smartName;
+    renderProjectSwitcher();
   }
 
   window.openNewProjectModal = openNewProjectModal;
@@ -1458,10 +1481,18 @@
     const signinBtn = document.getElementById('nav-signin-btn');
     const accountEl = document.getElementById('nav-account');
     const emailEl = document.getElementById('nav-account-email');
+    const usernameEl = document.getElementById('nav-account-username');
     if (currentUser) {
       signinBtn.style.display = 'none';
       accountEl.style.display = 'flex';
       emailEl.textContent = currentUser.email;
+      // Load username from profiles
+      sb.from('profiles').select('username').eq('id', currentUser.id).maybeSingle().then(({ data }) => {
+        if (data?.username && usernameEl) {
+          emailEl.style.display = 'none';
+          usernameEl.textContent = '@' + data.username;
+        }
+      });
     } else {
       signinBtn.style.display = '';
       accountEl.style.display = 'none';
@@ -1522,9 +1553,11 @@
   window.switchAuthMode = switchAuthMode;
   window.showForgotPassword = showForgotPassword;
 
-  document.getElementById('auth-overlay').addEventListener('click', function(e) { if (e.target === this) hideAuthModal(); });
+  const authOverlayEl = document.getElementById('auth-overlay');
+  if (authOverlayEl) authOverlayEl.addEventListener('click', function(e) { if (e.target === this) hideAuthModal(); });
 
-  document.getElementById('auth-submit-btn').addEventListener('click', async () => {
+  const authSubmitBtn = document.getElementById('auth-submit-btn');
+  if (authSubmitBtn) authSubmitBtn.addEventListener('click', async () => {
     const email = document.getElementById('auth-email').value.trim();
     const password = document.getElementById('auth-password').value;
     const errorEl = document.getElementById('auth-error');
@@ -1555,25 +1588,12 @@
         successEl.textContent = 'Check your email for a confirmation link, then sign in.';
         successEl.classList.add('show');
       }
-   } else {
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-  submitBtn.disabled = false;
-  submitBtn.textContent = 'Sign In';
-  if (error) {
-    console.error('LOGIN ERROR:', error);
-    const msg = (error.message || '').toLowerCase();
-    if (msg.includes('email not confirmed')) {
-      errorEl.textContent = 'Please confirm your email first. Check your inbox for the link.';
-    } else if (msg.includes('invalid login')) {
-      errorEl.textContent = 'Incorrect email or password.';
     } else {
-      errorEl.textContent = error.message;
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      submitBtn.disabled = false; submitBtn.textContent = 'Sign In';
+      if (error) { errorEl.textContent = 'Incorrect email or password.'; errorEl.classList.add('show'); }
+      else { hideAuthModal(); }
     }
-    errorEl.classList.add('show');
-  } else {
-    hideAuthModal();
-  }
-}
   });
 
   ['auth-email', 'auth-password'].forEach(id => {
@@ -1583,7 +1603,8 @@
     });
   });
 
-  document.getElementById('nav-signout-btn').addEventListener('click', async () => {
+  const signoutBtn = document.getElementById('nav-signout-btn');
+  if (signoutBtn) signoutBtn.addEventListener('click', async () => {
     await sb.auth.signOut();
     currentUser = null;
     updateNavAuth();
@@ -1897,7 +1918,8 @@
   window.confirmAction = confirmAction;
   window.cancelConfirm = cancelConfirm;
 
-  document.getElementById('confirm-proceed').addEventListener('click', async () => {
+  const confirmProceedEl = document.getElementById('confirm-proceed');
+  if (confirmProceedEl) confirmProceedEl.addEventListener('click', async () => {
     if (!pendingAction) return;
     if (pendingAction.type === 'timeline') {
       if (currentUser && currentProjectId) {
@@ -1919,7 +1941,8 @@
     await renderLog();
   });
 
-  document.getElementById('confirm-overlay').addEventListener('click', function(e) { if (e.target === this) cancelConfirm(); });
+  const confirmOverlayEl = document.getElementById('confirm-overlay');
+  if (confirmOverlayEl) confirmOverlayEl.addEventListener('click', function(e) { if (e.target === this) cancelConfirm(); });
 
   // ---- RENDER LOG ----
   async function renderLog() {
@@ -2055,6 +2078,7 @@
     if (!val) return;
     localStorage.setItem('ec_goal', val);
     await saveGoalToSupabase(val);
+    await autoNameProjectFromGoal(val, currentProjectId);
     hideGoalModal(); updateGoalChip(); renderTaskCheck();
   });
 
@@ -2138,7 +2162,8 @@
     localStorage.setItem('ec_milestones_seen', JSON.stringify(seen));
   }
 
-  document.getElementById('milestone-dismiss').addEventListener('click', () => { document.getElementById('milestone-banner').classList.remove('show'); });
+  const milestoneDismissEl = document.getElementById('milestone-dismiss');
+  if (milestoneDismissEl) milestoneDismissEl.addEventListener('click', () => { document.getElementById('milestone-banner').classList.remove('show'); });
 
   // ---- PHASES ----
   const pills = document.querySelectorAll('.phase-pill');
@@ -2482,12 +2507,39 @@
   async function renameChat(id) {
     const chat = allChats.find(c => c.id === id);
     if (!chat) return;
-    const newName = prompt('Rename this chat:', chat.title);
-    if (!newName || !newName.trim()) return;
-    chat.title = newName.trim();
-    await sb.from('chat_sessions').update({ title: chat.title }).eq('id', id);
-    if (id === currentChatId) document.getElementById('chat-convo-name').textContent = chat.title;
-    renderChatList();
+    const nameEl = id === currentChatId ? document.getElementById('chat-convo-name') : null;
+    // Use inline editing on the convo name if currently open
+    if (nameEl) {
+      const oldText = nameEl.textContent;
+      const input = document.createElement('input');
+      input.value = oldText;
+      input.style.cssText = 'font-family:var(--display);font-size:0.68rem;color:var(--black);border:none;border-bottom:1px solid var(--amber);background:none;outline:none;width:100%;';
+      nameEl.replaceWith(input);
+      input.focus();
+      input.select();
+      const save = async () => {
+        const newName = input.value.trim() || oldText;
+        chat.title = newName;
+        await sb.from('chat_sessions').update({ title: newName }).eq('id', id);
+        const span = document.createElement('span');
+        span.className = 'chat-convo-name';
+        span.id = 'chat-convo-name';
+        span.textContent = newName;
+        span.onclick = renameCurrent;
+        span.style.cursor = 'pointer';
+        span.title = 'Rename';
+        input.replaceWith(span);
+        renderChatList();
+      };
+      input.addEventListener('blur', save);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') save(); if (e.key === 'Escape') { input.value = oldText; save(); } });
+    } else {
+      const newName = prompt('Rename this chat:', chat.title);
+      if (!newName || !newName.trim()) return;
+      chat.title = newName.trim();
+      await sb.from('chat_sessions').update({ title: chat.title }).eq('id', id);
+      renderChatList();
+    }
   }
 
   async function deleteChat(id) {
