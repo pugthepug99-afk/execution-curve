@@ -1315,18 +1315,28 @@
     const { data } = await sb.from('projects').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: true });
     allProjects = data || [];
 
-    // If no projects exist, create a default one and migrate existing entries
+    // Only create default project if truly none exist AND we haven't done this before
+    // Use user_preferences to track whether migration has already run
     if (allProjects.length === 0) {
-      const { data: newProject } = await sb.from('projects').insert({
-        user_id: currentUser.id,
-        name: 'My Project',  // fallback
-        color: '#C8873F',
-      }).select().single();
-      if (newProject) {
-        allProjects = [newProject];
-        // Migrate existing entries that have no project_id
-        await sb.from('app_entries').update({ project_id: newProject.id }).eq('user_id', currentUser.id).is('project_id', null);
-        await sb.from('user_goals').update({ project_id: newProject.id }).eq('user_id', currentUser.id).is('project_id', null);
+      const { data: prefs } = await sb.from('user_preferences').select('last_active_project_id').eq('user_id', currentUser.id).maybeSingle();
+      // If prefs exist with a project id, the project was deleted — don't recreate
+      // Only create if no prefs at all (brand new user)
+      if (!prefs) {
+        // Get goal for naming
+        const { data: goalData } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).is('project_id', null).maybeSingle();
+        const defaultName = goalData?.goal ? goalData.goal.slice(0, 40) : 'My Project';
+        const { data: newProject, error: insertErr } = await sb.from('projects').insert({
+          user_id: currentUser.id,
+          name: defaultName,
+          color: '#C8873F',
+        }).select().single();
+        if (!insertErr && newProject) {
+          allProjects = [newProject];
+          await sb.from('app_entries').update({ project_id: newProject.id }).eq('user_id', currentUser.id).is('project_id', null);
+          await sb.from('user_goals').update({ project_id: newProject.id }).eq('user_id', currentUser.id).is('project_id', null);
+          // Save to prefs immediately so this never runs again
+          await sb.from('user_preferences').upsert({ user_id: currentUser.id, last_active_project_id: newProject.id, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+        }
       }
     }
 
@@ -1355,15 +1365,49 @@
 
     const container = document.getElementById('project-dropdown-items');
     container.innerHTML = allProjects.map(p => `
-      <button class="project-dropdown-item ${p.id === currentProjectId ? 'active' : ''}" onclick="switchProject('${p.id}')">
-        <span class="item-dot" style="background:${p.color}"></span>
-        ${p.name}
-      </button>`).join('');
+      <div class="project-dropdown-item ${p.id === currentProjectId ? 'active' : ''}" style="justify-content:space-between">
+        <button style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:0.6rem;flex:1;font-family:var(--body);font-size:0.85rem;color:var(--black);text-align:left;padding:0" onclick="switchProject('${p.id}')">
+          <span class="item-dot" style="background:${p.color};width:7px;height:7px;border-radius:50%;flex-shrink:0"></span>
+          <span id="proj-name-${p.id}">${p.name}</span>
+        </button>
+        <button style="background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:0.6rem;color:var(--gray-1);padding:0 0 0 0.5rem;transition:color 0.15s" onclick="event.stopPropagation();renameProject('${p.id}')" title="Rename">✎</button>
+      </div>`).join('');
   }
 
   function toggleProjectDropdown() {
     document.getElementById('project-dropdown').classList.toggle('show');
   }
+
+  async function renameProject(projectId) {
+    const project = allProjects.find(p => p.id === projectId);
+    if (!project) return;
+    const nameSpan = document.getElementById('proj-name-' + projectId);
+    if (!nameSpan) return;
+    const oldName = project.name;
+    const input = document.createElement('input');
+    input.value = oldName;
+    input.maxLength = 60;
+    input.style.cssText = 'font-family:var(--body);font-size:0.82rem;color:var(--black);border:none;border-bottom:1px solid var(--amber);background:none;outline:none;width:120px;';
+    nameSpan.replaceWith(input);
+    input.focus();
+    input.select();
+    const save = async () => {
+      const newName = input.value.trim() || oldName;
+      project.name = newName;
+      await sb.from('projects').update({ name: newName }).eq('id', projectId);
+      const span = document.createElement('span');
+      span.id = 'proj-name-' + projectId;
+      span.textContent = newName;
+      input.replaceWith(span);
+      if (projectId === currentProjectId) {
+        document.getElementById('nav-project-name').textContent = newName;
+      }
+    };
+    input.addEventListener('blur', save);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { input.blur(); } if (e.key === 'Escape') { input.value = oldName; input.blur(); } });
+  }
+
+  window.renameProject = renameProject;
 
   document.addEventListener('click', e => {
     const switcher = document.getElementById('project-switcher');
@@ -1612,6 +1656,8 @@
   });
 
   // ---- GOAL SYNC ----
+  let goalModalShownThisSession = false;
+
   async function syncGoalFromSupabase() {
     if (!currentUser || !currentProjectId) return;
     const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).eq('project_id', currentProjectId).maybeSingle();
@@ -1620,14 +1666,17 @@
       updateGoalChip();
       renderTaskCheck();
     } else {
-      // No goal in Supabase for this project yet
+      // No goal in Supabase for this project
       localStorage.removeItem('ec_goal');
       updateGoalChip();
       renderTaskCheck();
-      // Only prompt if this is genuinely a new project with no entries
-      const { count } = await sb.from('app_entries').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('project_id', currentProjectId);
-      if (!count || count === 0) {
-        setTimeout(() => showGoalModal(), 800);
+      // Only prompt once per session, and only if project has no entries
+      if (!goalModalShownThisSession) {
+        const { count } = await sb.from('app_entries').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('project_id', currentProjectId);
+        if (count === 0) {
+          goalModalShownThisSession = true;
+          setTimeout(() => showGoalModal(), 800);
+        }
       }
     }
   }
@@ -2411,14 +2460,36 @@
     renderChatMessages();
     addTypingIndicator();
 
-    // Auto-title after first user message
+    // Auto-title: after 2nd user message, generate a smart title from context
     const userMessages = currentChatMessages.filter(m => m.role === 'user');
-    if (userMessages.length === 1) {
-      const autoTitle = text.slice(0, 40) + (text.length > 40 ? '...' : '');
-      await sb.from('chat_sessions').update({ title: autoTitle }).eq('id', currentChatId);
-      document.getElementById('chat-convo-name').textContent = autoTitle;
-      const chat = allChats.find(c => c.id === currentChatId);
-      if (chat) chat.title = autoTitle;
+    if (userMessages.length === 2) {
+      const titleContext = currentChatMessages.slice(0, 4).map(m => m.content.slice(0, 100)).join(' | ');
+      try {
+        const titleRes = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [{
+              role: 'user',
+              content: 'Generate a short 4-6 word title for this conversation based on what it is about. Return ONLY the title, no punctuation, no quotes, no explanation: ' + titleContext
+            }],
+            goal: localStorage.getItem('ec_goal') || '',
+          }),
+        });
+        const titleData = await titleRes.json();
+        const autoTitle = (titleData.reply || text.slice(0, 40)).replace(/['"]/g, '').trim().slice(0, 50);
+        await sb.from('chat_sessions').update({ title: autoTitle }).eq('id', currentChatId);
+        const nameEl = document.getElementById('chat-convo-name');
+        if (nameEl) nameEl.textContent = autoTitle;
+        const chat = allChats.find(c => c.id === currentChatId);
+        if (chat) chat.title = autoTitle;
+      } catch (e) {
+        // Fallback to first message snippet
+        const autoTitle = text.slice(0, 40) + (text.length > 40 ? '...' : '');
+        await sb.from('chat_sessions').update({ title: autoTitle }).eq('id', currentChatId);
+        const nameEl = document.getElementById('chat-convo-name');
+        if (nameEl) nameEl.textContent = autoTitle;
+      }
     }
 
     // Build context
