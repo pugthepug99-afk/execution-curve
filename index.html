@@ -950,10 +950,10 @@
   </ul>
   <!-- Project switcher (only shown when logged in) -->
   <div class="project-switcher" id="project-switcher" style="display:none">
-    <button class="btn-project-switch" id="btn-project-switch" onclick="toggleProjectDropdown()">
+    <button class="btn-project-switch" id="btn-project-switch" onclick="toggleProjectDropdown(event)">
       <span class="project-dot" id="nav-project-dot" style="background:#C8873F"></span>
       <span id="nav-project-name">Loading...</span>
-      <span>▾</span>
+      <span id="dropdown-chevron">▾</span>
     </button>
     <div class="project-dropdown" id="project-dropdown">
       <div id="project-dropdown-items"></div>
@@ -1374,9 +1374,24 @@
       </div>`).join('');
   }
 
-  function toggleProjectDropdown() {
-    document.getElementById('project-dropdown').classList.toggle('show');
+  function toggleProjectDropdown(e) {
+    if (e) e.stopPropagation();
+    const dropdown = document.getElementById('project-dropdown');
+    const chevron = document.getElementById('dropdown-chevron');
+    const isOpen = dropdown.classList.toggle('show');
+    if (chevron) chevron.textContent = isOpen ? '▴' : '▾';
   }
+
+  // Update click-away to also reset chevron
+  document.addEventListener('click', e => {
+    const switcher = document.getElementById('project-switcher');
+    const dropdown = document.getElementById('project-dropdown');
+    const chevron = document.getElementById('dropdown-chevron');
+    if (switcher && !switcher.contains(e.target) && dropdown?.classList.contains('show')) {
+      dropdown.classList.remove('show');
+      if (chevron) chevron.textContent = '▾';
+    }
+  });
 
   async function renameProject(projectId) {
     const project = allProjects.find(p => p.id === projectId);
@@ -1409,12 +1424,7 @@
 
   window.renameProject = renameProject;
 
-  document.addEventListener('click', e => {
-    const switcher = document.getElementById('project-switcher');
-    if (switcher && !switcher.contains(e.target)) {
-      document.getElementById('project-dropdown').classList.remove('show');
-    }
-  });
+
 
   async function switchProject(projectId) {
     currentProjectId = projectId;
@@ -1425,7 +1435,7 @@
       last_active_project_id: projectId,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'user_id' });
-    document.getElementById('project-dropdown').classList.remove('show');
+    // Do NOT close dropdown here — let click-away handle it
     renderProjectSwitcher();
     await syncGoalFromSupabase();
     await renderLog();
@@ -1486,6 +1496,7 @@
       allProjects.push(data);
       await switchProject(data.id);
       closeNewProjectModal();
+      document.getElementById('project-dropdown').classList.remove('show');
     }
     btn.disabled = false;
     btn.textContent = 'Create Project';
