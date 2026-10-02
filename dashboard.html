@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Dashboard — Execution Curve</title>
+<title>Dashboard — ExecutionCurve</title>
 <link rel="icon" type="image/png" href="/logo.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -168,7 +168,7 @@
 <nav>
   <a href="/" class="nav-logo">
     <img src="/logo.png" width="24" height="24" alt="logo" style="object-fit:contain"/>
-    Execution<span style="color:var(--amber)">Curve</span>
+    ExecutionCurve
   </a>
   <div class="nav-right">
     <a href="/" class="nav-link">My Log</a>
@@ -229,8 +229,9 @@
         <p style="font-family:var(--body);font-size:0.88rem;color:var(--gray-1);margin-top:0.35rem;">Earn points by helping others. Spend them to get feedback on your work.</p>
       </div>
       <div class="points-card">
-        <span class="points-num" id="dash-points">0</span>
+        <span class="points-num" id="dash-points" onclick="devPointsClick()" style="cursor:default" title="">0</span>
         <span class="points-label">Points Available</span>
+        <button id="btn-dev-points" onclick="addDevPoints()" style="display:none;margin-top:0.5rem;font-family:var(--mono);font-size:0.6rem;color:var(--green);background:none;border:1px solid var(--green);padding:0.2rem 0.5rem;cursor:pointer;">+ Add 999 Points</button>
       </div>
     </div>
 
@@ -558,8 +559,10 @@
   // ---- LOAD OPEN REQUESTS ----
   async function loadOpenRequests() {
     const container = document.getElementById('requests-list');
-    const { data, error } = await sb.from('feedback_requests')
-      .select('*, profiles(username, display_name)')
+
+    // Step 1: fetch requests without join
+    const { data: requests, error } = await sb.from('feedback_requests')
+      .select('*')
       .eq('status', 'open')
       .neq('user_id', currentUser.id)
       .order('created_at', { ascending: false })
@@ -567,20 +570,26 @@
 
     if (error) {
       console.error('Load open requests error:', error);
-      container.innerHTML = '<p class="empty-state">Could not load requests: ' + error.message + '</p>';
+      container.innerHTML = '<p class="empty-state">Could not load requests. Try refreshing.</p>';
       return;
     }
-    if (!data?.length) {
+    if (!requests?.length) {
       container.innerHTML = '<p class="empty-state">No open requests right now. Be the first to submit one.</p>';
       return;
     }
 
-    container.innerHTML = data.map(r => `
+    // Step 2: fetch usernames separately to avoid schema join issues
+    const userIds = [...new Set(requests.map(r => r.user_id))];
+    const { data: profilesData } = await sb.from('profiles').select('id, username').in('id', userIds);
+    const profileMap = {};
+    (profilesData || []).forEach(p => { profileMap[p.id] = p.username; });
+
+    container.innerHTML = requests.map(r => `
       <div class="request-card">
         <div class="request-card-header">
           <div>
             <div class="request-card-title">${r.title}</div>
-            <div class="request-card-user">@${r.profiles?.username || 'anonymous'}</div>
+            <div class="request-card-user">@${profileMap[r.user_id] || 'anonymous'}</div>
           </div>
         </div>
         ${r.description ? `<div class="request-card-desc">${r.description}</div>` : ''}
@@ -711,6 +720,29 @@
     await loadOpenRequests();
     await loadTransactions();
   }
+
+  // ---- DEV POINTS (click points number 5 times to unlock) ----
+  let devClickCount = 0;
+  function devPointsClick() {
+    devClickCount++;
+    if (devClickCount >= 5) {
+      document.getElementById('btn-dev-points').style.display = 'inline-block';
+      devClickCount = 0;
+    }
+  }
+  async function addDevPoints() {
+    if (!currentUser || !currentProfile) return;
+    const newPoints = currentProfile.points + 999;
+    await sb.from('profiles').update({ points: newPoints }).eq('id', currentUser.id);
+    await sb.from('point_transactions').insert({ user_id: currentUser.id, amount: 999, reason: 'Dev bonus' });
+    currentProfile.points = newPoints;
+    document.getElementById('dash-points').textContent = newPoints;
+    updateTierButtons(newPoints);
+    document.getElementById('btn-dev-points').style.display = 'none';
+    await loadTransactions();
+  }
+  window.devPointsClick = devPointsClick;
+  window.addDevPoints = addDevPoints;
 
   // ---- SIGN OUT ----
   document.getElementById('btn-signout').addEventListener('click', async () => {
