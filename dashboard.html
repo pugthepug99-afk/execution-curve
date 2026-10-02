@@ -168,7 +168,7 @@
 <nav>
   <a href="/" class="nav-logo">
     <img src="/logo.png" width="24" height="24" alt="logo" style="object-fit:contain"/>
-    Execution<span>Curve</span>
+    Execution<span style="color:var(--amber)">Curve</span>
   </a>
   <div class="nav-right">
     <a href="/" class="nav-link">My Log</a>
@@ -295,7 +295,7 @@
     <!-- REQUEST FEEDBACK FORM -->
     <div class="dash-section-full" id="request-form-section" style="display:none">
       <div class="dash-section-title" id="request-form-title">Request Feedback</div>
-      <div class="dash-section-sub">Fill in your project details. Points will be deducted when you submit.</div>
+      <div class="dash-section-sub">Fill in your project details. Your request will be visible to all users. Points are only deducted on success.</div>
       <div class="request-form show" id="request-form">
         <div>
           <label class="form-label">Project Title</label>
@@ -507,12 +507,7 @@
     btn.disabled = true;
     btn.textContent = 'Submitting...';
 
-    // Deduct points
-    const newPoints = currentProfile.points - pendingRequestCost;
-    await sb.from('profiles').update({ points: newPoints }).eq('id', currentUser.id);
-    await sb.from('point_transactions').insert({ user_id: currentUser.id, amount: -pendingRequestCost, reason: `Feedback request: ${title.slice(0, 40)}` });
-
-    // Create request — no project_id required, title is free text
+    // INSERT FIRST — only deduct points if insert succeeds
     const fullDesc = focus + (desc ? '\n\n' + desc : '');
     const { error } = await sb.from('feedback_requests').insert({
       user_id: currentUser.id,
@@ -525,19 +520,33 @@
       status: 'open',
     });
 
-    btn.disabled = false;
-    btn.textContent = 'Submit Request';
+    if (error) {
+      console.error('Feedback request error:', error);
+      errorEl.textContent = 'Could not submit request: ' + (error.message || 'Unknown error') + '. Your points were NOT deducted.';
+      errorEl.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Submit Request';
+      return;
+    }
 
-    if (error) { errorEl.textContent = 'Something went wrong. Try again.'; errorEl.classList.add('show'); return; }
+    // Only deduct points after confirmed successful insert
+    const newPoints = currentProfile.points - pendingRequestCost;
+    await sb.from('profiles').update({ points: newPoints }).eq('id', currentUser.id);
+    await sb.from('point_transactions').insert({ user_id: currentUser.id, amount: -pendingRequestCost, reason: `Feedback request: ${title.slice(0, 40)}` });
 
     currentProfile.points = newPoints;
     document.getElementById('dash-points').textContent = newPoints;
     updateTierButtons(newPoints);
+
+    btn.disabled = false;
+    btn.textContent = 'Submit Request';
+
     successEl.textContent = `Request submitted. ${pendingRequestReviewers} reviewers guaranteed.`;
     successEl.classList.add('show');
 
     // Reset form
     document.getElementById('request-title').value = '';
+    document.getElementById('request-focus').value = '';
     document.getElementById('request-desc').value = '';
     document.getElementById('request-url').value = '';
 
@@ -556,8 +565,13 @@
       .order('created_at', { ascending: false })
       .limit(20);
 
-    if (error || !data?.length) {
-      container.innerHTML = '<p class="empty-state">No open requests right now. Check back soon.</p>';
+    if (error) {
+      console.error('Load open requests error:', error);
+      container.innerHTML = '<p class="empty-state">Could not load requests: ' + error.message + '</p>';
+      return;
+    }
+    if (!data?.length) {
+      container.innerHTML = '<p class="empty-state">No open requests right now. Be the first to submit one.</p>';
       return;
     }
 
