@@ -162,6 +162,24 @@
 
   .loading-text { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-1); animation: pulse 1.4s ease-in-out infinite; text-align: center; padding: 2rem; }
   @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  /* TIMER */
+  .timer-wrap { background: var(--gray-3); padding: 0.6rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+  .timer-bar-track { flex: 1; height: 3px; background: var(--gray-2); }
+  .timer-bar-fill { height: 3px; background: var(--amber); width: 0%; transition: width 1s linear; }
+  .timer-text { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); letter-spacing: 0.02em; white-space: nowrap; }
+  .timer-done { color: var(--green); }
+
+  /* CHAR COUNT */
+  .char-count { font-family: var(--mono); font-size: 0.6rem; color: var(--gray-1); text-align: right; margin-top: 0.25rem; }
+  .char-count.warn { color: var(--amber); }
+  .char-count.ok { color: var(--green); }
+
+  /* VERIFICATION */
+  .verify-checking { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); animation: pulse 1.4s ease-in-out infinite; display: none; margin-top: 0.5rem; }
+  .verify-checking.show { display: block; }
+  .verify-fail { font-family: var(--body); font-size: 0.82rem; color: var(--red); background: rgba(184,92,56,0.08); padding: 0.6rem 0.85rem; border-left: 2px solid var(--red); margin-top: 0.5rem; display: none; }
+  .verify-fail.show { display: block; }
 </style>
 </head>
 <body>
@@ -198,18 +216,42 @@
     <h3 id="feedback-modal-title">Give Feedback</h3>
     <p id="feedback-modal-desc">Choose what type of feedback you're leaving.</p>
     <div class="feedback-type-row">
-      <button class="btn-ftype selected" data-type="thoughtful_feedback" data-points="15" onclick="selectFeedbackType(this)">Thoughtful Feedback +15pts</button>
-      <button class="btn-ftype" data-type="app_test" data-points="20" onclick="selectFeedbackType(this)">App Test +20pts</button>
-      <button class="btn-ftype" data-type="bug_report" data-points="30" onclick="selectFeedbackType(this)">Bug Report +30pts</button>
+      <button class="btn-ftype selected" data-type="thoughtful_feedback" data-points="15" data-min="100" data-timer="120" onclick="selectFeedbackType(this)">Thoughtful Feedback +15pts</button>
+      <button class="btn-ftype" data-type="app_test" data-points="20" data-min="150" data-timer="300" onclick="selectFeedbackType(this)">App Test +20pts</button>
+      <button class="btn-ftype" data-type="bug_report" data-points="30" data-min="200" data-timer="60" onclick="selectFeedbackType(this)">Bug Report +30pts</button>
     </div>
     <div class="feedback-points-note" id="feedback-points-note">You will earn +15 points for this feedback.</div>
-    <label class="form-label">Your Feedback</label>
-    <textarea class="form-input" id="feedback-content" rows="5" placeholder="Be specific and constructive. What works, what doesn't, what you'd improve..."></textarea>
+
+    <!-- Timer -->
+    <div class="timer-wrap" id="feedback-timer-wrap">
+      <div class="timer-bar-track"><div class="timer-bar-fill" id="timer-bar"></div></div>
+      <span class="timer-text" id="timer-text">Review time: 2:00 remaining</span>
+    </div>
+
+    <label class="form-label" id="feedback-content-label">Your Feedback <span style="color:var(--gray-1)">(min 100 chars)</span></label>
+    <textarea class="form-input" id="feedback-content" rows="5" placeholder="Be specific and constructive. What works, what doesn't, what you'd improve..." oninput="updateCharCount()"></textarea>
+    <div class="char-count" id="char-count">0 / 100 minimum</div>
+
+    <!-- Bug report extra fields (shown only for bug_report type) -->
+    <div id="bug-report-fields" style="display:none;margin-top:0.75rem;display:none;flex-direction:column;gap:0.75rem">
+      <div>
+        <label class="form-label">Steps to Reproduce</label>
+        <textarea class="form-input" id="bug-steps" rows="3" placeholder="1. Go to... 2. Click... 3. See error..."></textarea>
+      </div>
+      <div>
+        <label class="form-label">Expected vs Actual Behavior</label>
+        <input class="form-input" id="bug-expected" type="text" placeholder="Expected: X happened. Actual: Y happened instead."/>
+      </div>
+    </div>
+
+    <div class="verify-checking" id="verify-checking">Navi is checking your feedback...</div>
+    <div class="verify-fail" id="verify-fail"></div>
     <div class="form-error" id="feedback-form-error"></div>
     <div style="margin-top:1rem">
-      <button class="btn-submit-feedback" id="btn-submit-feedback" onclick="submitFeedback()">Submit Feedback</button>
+      <button class="btn-submit-feedback" id="btn-submit-feedback" onclick="submitFeedback()" disabled>Submit Feedback</button>
       <button class="btn-cancel-feedback" onclick="closeFeedbackModal()">Cancel</button>
     </div>
+    <p style="font-family:var(--mono);font-size:0.6rem;color:var(--gray-1);margin-top:0.75rem;">Feedback is verified by Navi before points are awarded. Low quality submissions will be rejected.</p>
   </div>
 </div>
 
@@ -353,8 +395,15 @@
   let currentUser = null;
   let currentProfile = null;
   let selectedRequestId = null;
+  let selectedRequestTitle = '';
+  let selectedRequestDesc = '';
   let selectedFeedbackType = 'thoughtful_feedback';
   let selectedFeedbackPoints = 15;
+  let selectedFeedbackMin = 100;
+  let selectedFeedbackTimer = 120;
+  let timerInterval = null;
+  let timerRemaining = 120;
+  let timerComplete = false;
   let pendingRequestCost = 30;
   let pendingRequestReviewers = 10;
 
@@ -598,7 +647,7 @@
             <span class="meta-chip">${r.guaranteed_reviewers} reviewers needed</span>
             ${r.url ? `<a href="${r.url}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:0.62rem;color:var(--amber);">View Project ↗</a>` : ''}
           </div>
-          <button class="btn-give-feedback" onclick="openFeedbackModal('${r.id}', '${r.title.replace(/'/g, "\\'")}')">Give Feedback</button>
+          <button class="btn-give-feedback" onclick="openFeedbackModal('${r.id}', '${r.title.replace(/'/g, "\\'")}', '${(r.description||'').slice(0,100).replace(/'/g, "\\'")}')">Give Feedback</button>
         </div>
       </div>`).join('');
   }
@@ -644,21 +693,81 @@
   }
 
   // ---- FEEDBACK MODAL ----
-  function openFeedbackModal(requestId, title) {
+  function openFeedbackModal(requestId, title, desc) {
     selectedRequestId = requestId;
+    selectedRequestTitle = title || '';
+    selectedRequestDesc = desc || '';
     document.getElementById('feedback-modal-title').textContent = 'Give Feedback';
     document.getElementById('feedback-modal-desc').textContent = `For: "${title}"`;
     document.getElementById('feedback-content').value = '';
     document.getElementById('feedback-form-error').classList.remove('show');
+    document.getElementById('verify-fail').classList.remove('show');
+    document.getElementById('verify-checking').classList.remove('show');
+    document.getElementById('char-count').textContent = '0 / 100 minimum';
+    document.getElementById('char-count').className = 'char-count';
+    document.getElementById('bug-report-fields').style.display = 'none';
     selectedFeedbackType = 'thoughtful_feedback';
     selectedFeedbackPoints = 15;
+    selectedFeedbackMin = 100;
+    selectedFeedbackTimer = 120;
     document.querySelectorAll('.btn-ftype').forEach(b => b.classList.toggle('selected', b.dataset.type === 'thoughtful_feedback'));
     document.getElementById('feedback-points-note').textContent = 'You will earn +15 points for this feedback.';
+    document.getElementById('btn-submit-feedback').disabled = true;
     document.getElementById('feedback-overlay').classList.add('show');
-    document.getElementById('project-dropdown')?.classList.remove('show');
+    startTimer(120);
+  }
+
+  function startTimer(seconds) {
+    clearInterval(timerInterval);
+    timerRemaining = seconds;
+    timerComplete = false;
+    updateTimerUI();
+    timerInterval = setInterval(() => {
+      timerRemaining--;
+      updateTimerUI();
+      if (timerRemaining <= 0) {
+        clearInterval(timerInterval);
+        timerComplete = true;
+        document.getElementById('timer-text').textContent = 'Time complete. You can now submit.';
+        document.getElementById('timer-text').className = 'timer-text timer-done';
+        document.getElementById('timer-bar').style.width = '100%';
+        document.getElementById('timer-bar').style.background = 'var(--green)';
+        checkSubmitReady();
+      }
+    }, 1000);
+  }
+
+  function updateTimerUI() {
+    const total = selectedFeedbackTimer;
+    const elapsed = total - timerRemaining;
+    const pct = Math.min((elapsed / total) * 100, 100);
+    const mins = Math.floor(timerRemaining / 60);
+    const secs = timerRemaining % 60;
+    const label = selectedFeedbackType === 'app_test' ? 'Testing time' : selectedFeedbackType === 'bug_report' ? 'Review time' : 'Review time';
+    document.getElementById('timer-bar').style.width = pct + '%';
+    document.getElementById('timer-text').textContent = timerRemaining > 0
+      ? `${label}: ${mins}:${secs.toString().padStart(2, '0')} remaining`
+      : 'Time complete.';
+  }
+
+  function updateCharCount() {
+    const content = document.getElementById('feedback-content').value;
+    const len = content.trim().length;
+    const countEl = document.getElementById('char-count');
+    countEl.textContent = `${len} / ${selectedFeedbackMin} minimum`;
+    countEl.className = 'char-count' + (len >= selectedFeedbackMin ? ' ok' : len > selectedFeedbackMin * 0.7 ? ' warn' : '');
+    checkSubmitReady();
+  }
+
+  function checkSubmitReady() {
+    const content = document.getElementById('feedback-content').value.trim();
+    const ready = timerComplete && content.length >= selectedFeedbackMin;
+    document.getElementById('btn-submit-feedback').disabled = !ready;
   }
 
   function closeFeedbackModal() {
+    clearInterval(timerInterval);
+    timerComplete = false;
     document.getElementById('feedback-overlay').classList.remove('show');
     selectedRequestId = null;
   }
@@ -668,7 +777,22 @@
     btn.classList.add('selected');
     selectedFeedbackType = btn.dataset.type;
     selectedFeedbackPoints = parseInt(btn.dataset.points);
+    selectedFeedbackMin = parseInt(btn.dataset.min) || 100;
+    selectedFeedbackTimer = parseInt(btn.dataset.timer) || 120;
     document.getElementById('feedback-points-note').textContent = `You will earn +${selectedFeedbackPoints} points for this feedback.`;
+    // Show/hide bug report fields
+    const bugFields = document.getElementById('bug-report-fields');
+    bugFields.style.display = selectedFeedbackType === 'bug_report' ? 'flex' : 'none';
+    // Update label
+    const minLabels = { thoughtful_feedback: 100, app_test: 150, bug_report: 200 };
+    document.getElementById('feedback-content-label').innerHTML = `Your Feedback <span style="color:var(--gray-1)">(min ${selectedFeedbackMin} chars)</span>`;
+    document.getElementById('char-count').textContent = `0 / ${selectedFeedbackMin} minimum`;
+    // Restart timer
+    document.getElementById('timer-bar').style.background = 'var(--amber)';
+    document.getElementById('timer-text').className = 'timer-text';
+    document.getElementById('btn-submit-feedback').disabled = true;
+    startTimer(selectedFeedbackTimer);
+    updateCharCount();
   }
 
   window.openFeedbackModal = openFeedbackModal;
@@ -678,15 +802,58 @@
   document.getElementById('feedback-overlay').addEventListener('click', function(e) { if (e.target === this) closeFeedbackModal(); });
 
   async function submitFeedback() {
-    const content = document.getElementById('feedback-content').value.trim();
+    let content = document.getElementById('feedback-content').value.trim();
     const errorEl = document.getElementById('feedback-form-error');
+    const verifyEl = document.getElementById('verify-checking');
+    const verifyFailEl = document.getElementById('verify-fail');
     const btn = document.getElementById('btn-submit-feedback');
     errorEl.classList.remove('show');
+    verifyFailEl.classList.remove('show');
 
-    if (!content || content.length < 30) { errorEl.textContent = 'Please write at least 30 characters of feedback.'; errorEl.classList.add('show'); return; }
+    if (!timerComplete) { errorEl.textContent = 'Please wait for the review timer to complete.'; errorEl.classList.add('show'); return; }
+    if (!content || content.length < selectedFeedbackMin) { errorEl.textContent = `Please write at least ${selectedFeedbackMin} characters.`; errorEl.classList.add('show'); return; }
     if (!selectedRequestId) return;
 
+    // Append bug report fields if applicable
+    if (selectedFeedbackType === 'bug_report') {
+      const steps = document.getElementById('bug-steps')?.value.trim();
+      const expected = document.getElementById('bug-expected')?.value.trim();
+      if (steps) content += '\n\nSteps to reproduce:\n' + steps;
+      if (expected) content += '\n\nExpected vs actual:\n' + expected;
+    }
+
     btn.disabled = true;
+    btn.textContent = 'Verifying...';
+    verifyEl.classList.add('show');
+
+    // Call Navi to verify the feedback
+    try {
+      const verifyRes = await fetch('/api/verify-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          feedbackType: selectedFeedbackType,
+          content,
+          projectTitle: selectedRequestTitle,
+          projectDescription: selectedRequestDesc,
+        }),
+      });
+      const verifyData = await verifyRes.json();
+      verifyEl.classList.remove('show');
+
+      if (!verifyData.valid) {
+        verifyFailEl.textContent = verifyData.reason || 'Your feedback did not pass quality check. Please revise it.';
+        verifyFailEl.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Submit Feedback';
+        return;
+      }
+    } catch (err) {
+      verifyEl.classList.remove('show');
+      // If verification fails due to network, allow submission
+      console.warn('Verification failed, allowing submission:', err);
+    }
+
     btn.textContent = 'Submitting...';
 
     const { error } = await sb.from('feedback_submissions').insert({
@@ -706,7 +873,7 @@
       return;
     }
 
-    // Award points
+    // Award points only after successful submission
     const newPoints = currentProfile.points + selectedFeedbackPoints;
     await sb.from('profiles').update({ points: newPoints }).eq('id', currentUser.id);
     await sb.from('point_transactions').insert({ user_id: currentUser.id, amount: selectedFeedbackPoints, reason: `Feedback given (${selectedFeedbackType.replace(/_/g, ' ')})` });
