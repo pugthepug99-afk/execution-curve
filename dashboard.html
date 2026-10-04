@@ -381,6 +381,12 @@
 
     <!-- POINTS HISTORY -->
     <div class="dash-section-full">
+      <div class="dash-section-title">Feedback I've Received</div>
+      <div class="dash-section-sub" style="font-family:var(--body);font-size:0.82rem;color:var(--gray-1);margin-bottom:1rem;">What reviewers said about your projects.</div>
+      <div id="received-feedback-list"><div class="loading-text">Loading...</div></div>
+    </div>
+
+    <div class="dash-section-full">
       <div class="dash-section-title">Points History</div>
       <div id="tx-list"><div class="loading-text">Loading...</div></div>
     </div>
@@ -439,6 +445,7 @@
     // loadProjects removed — no longer needed for free-text requests
     await loadOpenRequests();
     await loadMyRequests();
+    await loadReceivedFeedback();
     await loadTransactions();
   }
 
@@ -672,6 +679,57 @@
           <span class="meta-chip">${r.feedback_submissions?.length || 0} / ${r.guaranteed_reviewers} reviews</span>
         </div>
         ${r.description ? `<div class="request-card-desc">${r.description}</div>` : ''}
+      </div>`).join('');
+  }
+
+  // ---- LOAD RECEIVED FEEDBACK ----
+  async function loadReceivedFeedback() {
+    const container = document.getElementById('received-feedback-list');
+    if (!container) return;
+
+    // Get all my requests first
+    const { data: myRequests } = await sb.from('feedback_requests')
+      .select('id, title')
+      .eq('user_id', currentUser.id);
+
+    if (!myRequests?.length) {
+      container.innerHTML = '<p class="empty-state">Submit a feedback request first to start receiving reviews.</p>';
+      return;
+    }
+
+    const requestIds = myRequests.map(r => r.id);
+    const requestTitleMap = {};
+    myRequests.forEach(r => { requestTitleMap[r.id] = r.title; });
+
+    // Get all submissions on my requests
+    const { data: submissions, error } = await sb.from('feedback_submissions')
+      .select('*')
+      .in('request_id', requestIds)
+      .order('created_at', { ascending: false });
+
+    if (error || !submissions?.length) {
+      container.innerHTML = '<p class="empty-state">No feedback received yet. Your reviewers will appear here once they submit.</p>';
+      return;
+    }
+
+    // Get reviewer usernames
+    const reviewerIds = [...new Set(submissions.map(s => s.reviewer_id))];
+    const { data: reviewerProfiles } = await sb.from('profiles').select('id, username').in('id', reviewerIds);
+    const reviewerMap = {};
+    (reviewerProfiles || []).forEach(p => { reviewerMap[p.id] = p.username; });
+
+    const typeLabels = { thoughtful_feedback: 'Thoughtful Feedback', app_test: 'App Test', bug_report: 'Bug Report' };
+
+    container.innerHTML = submissions.map(s => `
+      <div class="request-card">
+        <div class="request-card-header">
+          <div>
+            <div class="request-card-title" style="font-size:0.82rem;font-weight:500">${requestTitleMap[s.request_id] || 'Your project'}</div>
+            <div class="request-card-user">@${reviewerMap[s.reviewer_id] || 'anonymous'} · ${typeLabels[s.type] || s.type} · ${new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+          </div>
+          <span class="meta-chip" style="color:var(--green);border-color:var(--green)">+${s.points_earned}pts given</span>
+        </div>
+        <div style="font-family:var(--body);font-size:0.88rem;color:var(--black);line-height:1.65;margin-top:0.5rem;white-space:pre-wrap">${s.content}</div>
       </div>`).join('');
   }
 
