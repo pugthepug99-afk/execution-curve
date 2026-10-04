@@ -1370,7 +1370,10 @@
           <span class="item-dot" style="background:${p.color};width:7px;height:7px;border-radius:50%;flex-shrink:0"></span>
           <span id="proj-name-${p.id}">${p.name}</span>
         </button>
-        <button style="background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:0.6rem;color:var(--gray-1);padding:0 0 0 0.5rem;transition:color 0.15s" onclick="event.stopPropagation();renameProject('${p.id}')" title="Rename">✎</button>
+        <div style="display:flex;gap:0.25rem;flex-shrink:0">
+          <button style="background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:0.6rem;color:var(--gray-1);padding:0 0.3rem;transition:color 0.15s" onclick="event.stopPropagation();renameProject('${p.id}')" title="Rename">✎</button>
+          ${allProjects.length > 1 ? `<button style="background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:0.6rem;color:var(--gray-1);padding:0 0.3rem;transition:color 0.15s" onmouseover="this.style.color='#b85c38'" onmouseout="this.style.color='var(--gray-1)'" onclick="event.stopPropagation();deleteProject('${p.id}')" title="Delete">✕</button>` : ''}
+        </div>
       </div>`).join('');
   }
 
@@ -1423,6 +1426,36 @@
   }
 
   window.renameProject = renameProject;
+
+  async function deleteProject(projectId) {
+    const project = allProjects.find(p => p.id === projectId);
+    if (!project) return;
+    if (allProjects.length <= 1) {
+      alert('You need at least one project. Create a new one before deleting this one.');
+      return;
+    }
+    if (!confirm(`Delete "${project.name}"? This will permanently delete all entries and data for this project. This cannot be undone.`)) return;
+
+    // Switch to another project first if deleting active one
+    if (projectId === currentProjectId) {
+      const other = allProjects.find(p => p.id !== projectId);
+      if (other) await switchProject(other.id);
+    }
+
+    // Delete from Supabase (cascade deletes entries, goals, chats)
+    const { error } = await sb.from('projects').delete().eq('id', projectId);
+    if (error) {
+      console.error('Delete project error:', error);
+      alert('Could not delete project. Try again.');
+      return;
+    }
+
+    allProjects = allProjects.filter(p => p.id !== projectId);
+    document.getElementById('project-dropdown').classList.remove('show');
+    renderProjectSwitcher();
+  }
+
+  window.deleteProject = deleteProject;
 
 
 
