@@ -6,14 +6,14 @@
 <title>Your Roadmap — Execution Curve</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --black: #0A0A0A; --white: #FAFAFA; --amber: #C8873F; --amber-dim: #8A5C28;
     --gray-1: #6B6B6B; --gray-2: #D4D4D4; --gray-3: #F0F0F0;
-    --display: 'Syne', sans-serif; --mono: 'DM Mono', monospace; --body: 'IBM Plex Sans', sans-serif;
+    --display: 'Plus Jakarta Sans', sans-serif; --mono: 'Fira Code', monospace; --body: 'Inter', sans-serif;
     --complete: #4a7c59; --active: #C8873F; --upcoming: #6B6B6B;
   }
   html { scroll-behavior: smooth; }
@@ -21,7 +21,7 @@
 
   /* NAV */
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; background: var(--white); border-bottom: 1px solid var(--gray-2); }
-  .nav-logo { font-family: var(--mono); font-weight: 500; font-size: 0.9rem; color: var(--black); text-decoration: none; }
+  .nav-logo { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); text-decoration: none; display: flex; align-items: center; gap: 0; }
   .nav-logo span { color: var(--amber); }
   .nav-back { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s; }
   .nav-back:hover { color: var(--black); }
@@ -145,7 +145,7 @@
 <body>
 
 <nav>
-  <a href="/" class="nav-logo">Execution<span>Curve</span></a>
+  <a href="/" class="nav-logo"><img src="/logo.png" width="24" height="24" alt="logo" style="object-fit:contain;margin-right:8px"/><span style="color:var(--black)">Execution</span><span style="color:var(--amber)">Curve</span></a>
   <div class="nav-right">
     <span class="nav-account-email" id="nav-email"></span>
     <a href="/" class="nav-back">← Back to log</a>
@@ -279,8 +279,17 @@
   }
 
   async function getUserGoal() {
-    const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).maybeSingle();
-    return data?.goal || null;
+    // Try localStorage first (fastest)
+    const localGoal = localStorage.getItem('ec_goal');
+    if (localGoal) return localGoal;
+
+    // Try Supabase — check any goal for this user regardless of project_id
+    const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).order('updated_at', { ascending: false }).limit(1).maybeSingle();
+    if (data?.goal) {
+      localStorage.setItem('ec_goal', data.goal);
+      return data.goal;
+    }
+    return null;
   }
 
   async function getUserEntries() {
