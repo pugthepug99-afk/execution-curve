@@ -184,10 +184,7 @@
 </head>
 <body>
 <nav>
-  <a href="/" class="nav-logo">
-    <img src="/logo.png" width="24" height="24" alt="logo" style="object-fit:contain"/>
-    ExecutionCurve
-  </a>
+  <a href="/" class="nav-logo"><img src="/logo.png" width="24" height="24" alt="logo" style="object-fit:contain;margin-right:8px"/><span style="color:var(--black)">Execution</span><span style="color:var(--amber)">Curve</span></a>
   <div class="nav-right">
     <a href="/" class="nav-link">My Log</a>
     <a href="/roadmap.html" class="nav-link">Roadmap</a>
@@ -622,7 +619,7 @@
       .eq('status', 'open')
       .neq('user_id', currentUser.id)
       .order('created_at', { ascending: false })
-      .limit(20);
+      .limit(50);
 
     if (error) {
       console.error('Load open requests error:', error);
@@ -634,13 +631,27 @@
       return;
     }
 
-    // Step 2: fetch usernames separately to avoid schema join issues
-    const userIds = [...new Set(requests.map(r => r.user_id))];
+    // Step 2: get requests I have already reviewed so we can hide them
+    const { data: mySubmissions } = await sb.from('feedback_submissions')
+      .select('request_id')
+      .eq('reviewer_id', currentUser.id);
+    const reviewedIds = new Set((mySubmissions || []).map(s => s.request_id));
+
+    // Filter out already-reviewed requests
+    const unreviewed = requests.filter(r => !reviewedIds.has(r.id));
+
+    if (!unreviewed.length) {
+      container.innerHTML = '<p class="empty-state">You have reviewed all open requests. Check back later for new ones.</p>';
+      return;
+    }
+
+    // Step 3: fetch usernames separately to avoid schema join issues
+    const userIds = [...new Set(unreviewed.map(r => r.user_id))];
     const { data: profilesData } = await sb.from('profiles').select('id, username').in('id', userIds);
     const profileMap = {};
     (profilesData || []).forEach(p => { profileMap[p.id] = p.username; });
 
-    container.innerHTML = requests.map(r => `
+    container.innerHTML = unreviewed.map(r => `
       <div class="request-card">
         <div class="request-card-header">
           <div>
