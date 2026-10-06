@@ -1559,8 +1559,8 @@
     currentUser = session?.user || null;
     updateNavAuth();
     if (currentUser) {
-      await loadProjects();
-      await syncGoalFromSupabase();
+      await loadProjects(); // sets currentProjectId first
+      await syncGoalFromSupabase(); // now currentProjectId is valid
     }
     await renderLog();
   });
@@ -1703,36 +1703,77 @@
   let goalModalShownThisSession = false;
 
   async function syncGoalFromSupabase() {
-    if (!currentUser || !currentProjectId) return;
-    const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).eq('project_id', currentProjectId).maybeSingle();
-    if (data?.goal) {
-      localStorage.setItem('ec_goal', data.goal);
+    if (!currentUser) return;
+
+    // If localStorage already has a goal, trust it — no need to clear or prompt
+    const localGoal = localStorage.getItem('ec_goal');
+    if (localGoal) {
       updateGoalChip();
       renderTaskCheck();
-    } else {
-      // No goal in Supabase for this project
-      localStorage.removeItem('ec_goal');
+      return;
+    }
+
+    // localStorage is empty — try to find goal in Supabase
+    // Try current project first, then any project for this user
+    let goalData = null;
+
+    if (currentProjectId) {
+      const { data } = await sb.from('user_goals')
+        .select('goal')
+        .eq('user_id', currentUser.id)
+        .eq('project_id', currentProjectId)
+        .maybeSingle();
+      goalData = data;
+    }
+
+    // Fallback: find any goal for this user (handles migration edge cases)
+    if (!goalData?.goal) {
+      const { data } = await sb.from('user_goals')
+        .select('goal')
+        .eq('user_id', currentUser.id)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      goalData = data;
+    }
+
+    if (goalData?.goal) {
+      // Found in Supabase — sync to localStorage
+      localStorage.setItem('ec_goal', goalData.goal);
       updateGoalChip();
       renderTaskCheck();
-      // Only prompt once per session, and only if project has no entries
-      if (!goalModalShownThisSession) {
-        const { count } = await sb.from('app_entries').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('project_id', currentProjectId);
-        if (count === 0) {
-          goalModalShownThisSession = true;
-          setTimeout(() => showGoalModal(), 800);
-        }
+      return;
+    }
+
+    // Truly no goal anywhere — only show modal once per session for genuinely new projects
+    updateGoalChip();
+    renderTaskCheck();
+    if (!goalModalShownThisSession && currentProjectId) {
+      const { count } = await sb.from('app_entries')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', currentUser.id)
+        .eq('project_id', currentProjectId);
+      if (count === 0) {
+        goalModalShownThisSession = true;
+        setTimeout(() => showGoalModal(), 1200);
       }
     }
   }
 
   async function saveGoalToSupabase(goal) {
-    if (!currentUser || !currentProjectId) return;
-    await sb.from('user_goals').upsert({
-      user_id: currentUser.id,
-      project_id: currentProjectId,
-      goal,
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'user_id,project_id' });
+    if (!currentUser) return;
+    // Try update first, then insert — avoids upsert constraint issues
+    const { data: existing } = await sb.from('user_goals')
+      .select('id')
+      .eq('user_id', currentUser.id)
+      .eq('project_id', currentProjectId || null)
+      .maybeSingle();
+
+    if (existing) {
+      await sb.from('user_goals').update({ goal, updated_at: new Date().toISOString() }).eq('id', existing.id);
+    } else {
+      await sb.from('user_goals').insert({ user_id: currentUser.id, project_id: currentProjectId || null, goal, updated_at: new Date().toISOString() });
+    }
   }
 
   // ---- SUPABASE ENTRY OPS ----
@@ -2178,13 +2219,13 @@
   goalSkipBtn.addEventListener('click', () => { localStorage.setItem('ec_goal_skipped', '1'); hideGoalModal(); });
   goalOverlay.addEventListener('click', function(e) { if (e.target === this) hideGoalModal(); });
 
-  // Goal modal for logged-out users only — logged-in handled by syncGoalFromSupabase
-  // Delay to allow auth to resolve first
+  // Goal modal for logged-out users only — logged-in users handled by syncGoalFromSupabase
+  // Use a longer delay to ensure auth state has fully resolved
   setTimeout(() => {
     if (!currentUser && !localStorage.getItem('ec_goal') && !localStorage.getItem('ec_goal_skipped')) {
       showGoalModal();
     }
-  }, 2000);
+  }, 3000);
 
   updateGoalChip();
 
