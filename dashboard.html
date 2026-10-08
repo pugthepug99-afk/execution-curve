@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Dashboard — ExecutionCurve</title>
+<title>Community — ExecutionCurve</title>
 <link rel="icon" type="image/png" href="/logo.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -22,15 +22,29 @@
   html { scroll-behavior: smooth; }
   body { background: var(--white); color: var(--black); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
 
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 3rem; background: var(--white); border-bottom: 1px solid var(--gray-2); }
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 3rem;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-2);
+  }
   .nav-logo { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); text-decoration: none; display: flex; align-items: center; }
   .nav-logo span { color: var(--amber); }
-  .nav-right { display: flex; align-items: center; gap: 1rem; }
-  .nav-link { font-family: var(--body); font-size: 0.875rem; color: var(--gray-1); text-decoration: none; transition: color 0.2s; }
-  .nav-link:hover { color: var(--black); }
-  .nav-username { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-1); letter-spacing: 0.02em; }
-  .btn-signout { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.3rem 0.7rem; cursor: pointer; transition: all 0.15s; }
-  .btn-signout:hover { color: var(--red); border-color: var(--red); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-family: var(--body); font-size: 0.875rem; font-weight: 400; color: var(--gray-1); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--black); }
+  @media (max-width: 768px) { .nav-links { display: none; } nav { padding: 1rem 1.25rem; } }
+  .nav-account { display: flex; align-items: center; gap: 0.75rem; }
+  .nav-account-username { font-family: var(--mono); font-size: 0.65rem; color: var(--amber); letter-spacing: 0.02em; }
+  .btn-nav-signout { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.3rem 0.7rem; cursor: pointer; letter-spacing: 0.02em; transition: color 0.15s, border-color 0.15s; }
+  .btn-nav-signout:hover { color: #b85c38; border-color: #b85c38; }
+  .btn-nav-signin { font-family: var(--body); font-size: 0.875rem; font-weight: 500; color: var(--white); background: var(--black); border: none; padding: 0.5rem 1.25rem; cursor: pointer; transition: background 0.2s; }
+  .btn-nav-signin:hover { background: var(--amber); }
 
   .page { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem 6rem; }
 
@@ -180,16 +194,26 @@
   .verify-checking.show { display: block; }
   .verify-fail { font-family: var(--body); font-size: 0.82rem; color: var(--red); background: rgba(184,92,56,0.08); padding: 0.6rem 0.85rem; border-left: 2px solid var(--red); margin-top: 0.5rem; display: none; }
   .verify-fail.show { display: block; }
+
+  :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+  body { overflow-x: hidden; }
 </style>
 </head>
 <body>
 <nav>
-  <a href="/" class="nav-logo"><img src="/logo.png" width="24" height="24" alt="logo" style="object-fit:contain;margin-right:8px"/><span style="color:var(--black)">Execution</span><span style="color:var(--amber)">Curve</span></a>
-  <div class="nav-right">
-    <a href="/" class="nav-link">My Log</a>
-    <a href="/roadmap.html" class="nav-link">Roadmap</a>
-    <span class="nav-username" id="nav-username"></span>
-    <button class="btn-signout" id="btn-signout">Sign Out</button>
+  <a href="/" class="nav-logo"><img src="/logo.png" width="24" height="24" alt="logo" style="object-fit:contain;margin-right:8px"/><span style="color:var(--black)">Execution</span><span>Curve</span></a>
+  <ul class="nav-links">
+    <li><a href="/#how">How It Works</a></li>
+    <li><a href="/#phases">The Curve</a></li>
+    <li><a href="/#log">My Log</a></li>
+    <li><a href="/roadmap.html">Roadmap</a></li>
+    <li><a href="/dashboard.html" class="active">Community</a></li>
+  </ul>
+  <div class="nav-account" id="nav-account-area">
+    <span class="nav-account-username" id="nav-account-username"></span>
+    <button class="btn-nav-signout" id="btn-nav-signout" style="display:none">Sign Out</button>
+    <button class="btn-nav-signin" id="btn-nav-signin" onclick="window.location.href='/'">Sign In</button>
   </div>
 </nav>
 
@@ -253,7 +277,7 @@
 </div>
 
 <div class="page">
-  <div id="state-loading" class="loading-text">Loading your dashboard...</div>
+  <div id="state-loading" class="loading-text" style="padding:4rem 2rem">Setting up your dashboard...</div>
   <div id="state-locked" class="state-card" style="display:none">
     <h3>Sign in to access the dashboard</h3>
     <p>You need an account to earn and spend points.</p>
@@ -435,7 +459,7 @@
     currentProfile = profile;
     document.getElementById('state-loading').style.display = 'none';
     document.getElementById('main-dashboard').style.display = 'block';
-    document.getElementById('nav-username').textContent = '@' + profile.username;
+    // username shown by shared nav JS
     document.getElementById('dash-username').textContent = profile.display_name || profile.username;
     document.getElementById('dash-points').textContent = profile.points;
     updateTierButtons(profile.points);
@@ -980,11 +1004,42 @@
   window.devPointsClick = devPointsClick;
   window.addDevPoints = addDevPoints;
 
-  // ---- SIGN OUT ----
-  document.getElementById('btn-signout').addEventListener('click', async () => {
-    await sb.auth.signOut();
+  // Sign out handled by shared nav JS
+
+  // ---- SHARED NAV AUTH ----
+  const sb2 = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  sb2.auth.onAuthStateChange(async (event, session) => {
+    const user = session?.user || null;
+    const usernameEl = document.getElementById('nav-account-username');
+    const signoutBtn = document.getElementById('btn-nav-signout');
+    const signinBtn = document.getElementById('btn-nav-signin');
+    if (user) {
+      if (signinBtn) signinBtn.style.display = 'none';
+      if (signoutBtn) signoutBtn.style.display = 'inline-block';
+      // Load username
+      const { data } = await sb2.from('profiles').select('username').eq('id', user.id).maybeSingle();
+      if (data?.username && usernameEl) usernameEl.textContent = '@' + data.username;
+    } else {
+      if (signinBtn) signinBtn.style.display = 'inline-block';
+      if (signoutBtn) signoutBtn.style.display = 'none';
+    }
+  });
+  document.getElementById('btn-nav-signout')?.addEventListener('click', async () => {
+    await sb2.auth.signOut();
     window.location.href = '/';
   });
 </script>
+<footer style="padding:2rem 3rem;border-top:1px solid var(--gray-2);font-size:0.8rem;color:var(--gray-1);font-family:var(--body);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+  <span style="font-family:var(--display);font-weight:700;font-size:0.9rem;letter-spacing:-0.01em;color:var(--black)">Execution<span style="color:var(--amber)">Curve</span></span>
+  <div style="display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap">
+    <a href="/" style="color:var(--gray-1);text-decoration:none">Home</a>
+    <a href="/roadmap.html" style="color:var(--gray-1);text-decoration:none">Roadmap</a>
+    <a href="/dashboard.html" style="color:var(--gray-1);text-decoration:none">Community</a>
+    <a href="mailto:executioncurve@gmail.com" style="color:var(--gray-1);text-decoration:none">Contact</a>
+    <a href="/privacy.html" style="color:var(--gray-1);text-decoration:none">Privacy</a>
+    <a href="/terms.html" style="color:var(--gray-1);text-decoration:none">Terms</a>
+    <span>© 2026</span>
+  </div>
+</footer>
 </body>
 </html>
