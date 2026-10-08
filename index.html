@@ -35,7 +35,12 @@
     font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
+
+  /* Accessibility: visible focus */
+  :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
 
   nav {
     position: fixed;
@@ -938,13 +943,11 @@
 
 <!-- NAV -->
 <nav>
-  <a href="/" class="nav-logo">
-    <img src="/logo.png" width="26" height="26" alt="Execution Curve logo" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0;object-fit:contain;">Execution<span>Curve</span>
-  </a>
+  <a href="/" class="nav-logo"><img src="/logo.png" width="24" height="24" alt="ExecutionCurve logo" style="object-fit:contain;margin-right:8px"/><span style="color:var(--black)">Execution</span><span>Curve</span></a>
   <ul class="nav-links">
-    <li><a href="#how">How it works</a></li>
-    <li><a href="#phases">The curve</a></li>
-    <li><a href="#log">Your log</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#phases">The Curve</a></li>
+    <li><a href="#log">My Log</a></li>
     <li><a href="/roadmap.html">Roadmap</a></li>
     <li><a href="/dashboard.html">Community</a></li>
   </ul>
@@ -952,7 +955,7 @@
   <div class="project-switcher" id="project-switcher" style="display:none">
     <button class="btn-project-switch" id="btn-project-switch" onclick="toggleProjectDropdown(event)">
       <span class="project-dot" id="nav-project-dot" style="background:#C8873F"></span>
-      <span id="nav-project-name">Loading...</span>
+      <span id="nav-project-name"></span>
       <span id="dropdown-chevron">▾</span>
     </button>
     <div class="project-dropdown" id="project-dropdown">
@@ -990,18 +993,19 @@
   <div class="hero-inner">
     <p class="hero-eyebrow">For builders who don't quit</p>
     <h1 class="hero-heading">You started.<br/>Now <em>stay in it.</em></h1>
-    <p class="hero-sub">Anyone can start something now. The hard part is pushing through when progress feels invisible. Execution Curve gives you a log, a timeline, and honest feedback, so you always know where you are and what to do next.</p>
+    <p class="hero-sub">Log what you worked on. See where you are on the curve. Get a personalised next step from Navi, your AI coach. ExecutionCurve is built for people who started something and want to actually finish it.</p>
     <div class="hero-actions">
       <button class="btn-primary" onclick="openEntryBar()">Log your first entry</button>
       <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
     </div>
+    <p style="font-family:var(--mono);font-size:0.68rem;color:var(--gray-1);margin-top:1rem;letter-spacing:0.02em;">Your entries move your dot along the curve below.</p>
     <div class="hero-stats">
-      <div class="stat-item"><span class="stat-num">92%</span><span class="stat-label">of people quit before the breakthrough</span></div>
-      <div class="stat-item"><span class="stat-num">30 sec</span><span class="stat-label">to log an entry and get feedback</span></div>
-      <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">generic advice. Everything is based on your input</span></div>
+      <div class="stat-item"><span class="stat-num">30 sec</span><span class="stat-label">to log an entry and get your next step</span></div>
+      <div class="stat-item"><span class="stat-num">5 phases</span><span class="stat-label">that every long-term project moves through</span></div>
+      <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">generic advice. Everything is tailored to your goal</span></div>
     </div>
   </div>
-  <div class="hero-bg-numeral" aria-hidden="true">EC</div>
+  <div class="hero-bg-numeral" aria-hidden="true" style="-webkit-text-stroke:none;background:none;opacity:0;transition:opacity 1.2s ease 0.4s"></div>
   <div class="scroll-hint"><div class="scroll-hint-line"></div><span>scroll</span></div>
 </section>
 
@@ -1159,8 +1163,8 @@
   <div class="log-empty" id="log-empty">
     <div class="log-empty-line"></div>
     <div class="log-empty-prompt">
-      <span class="log-empty-mono">Nothing Here Yet</span>
-      <p>Your first entry starts the timeline. Log something, even one sentence, and it appears here.</p>
+      <span class="log-empty-mono">Your curve starts here</span>
+      <p>Your first entry starts the timeline and places you on the curve. Log something — even one sentence — and it appears here.</p>
       <button class="btn-primary" onclick="openEntryBar()">Log your first entry</button>
     </div>
   </div>
@@ -1288,11 +1292,15 @@
 </button>
 
 <footer>
-  <span>© 2025 Execution Curve</span>
-  <div style="display:flex; gap:1.5rem">
+  <span style="font-family:var(--display);font-weight:700;font-size:0.9rem;letter-spacing:-0.01em">Execution<span style="color:var(--amber)">Curve</span></span>
+  <div style="display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap">
+    <a href="/roadmap.html">Roadmap</a>
+    <a href="/dashboard.html">Community</a>
     <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>
-    <a href="/privacy.html" style="color:var(--gray-1); text-decoration:none; font-size:0.8rem">Privacy Policy</a>
-    <a href="/terms.html" style="color:var(--gray-1); text-decoration:none; font-size:0.8rem">Terms of Service</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+    <span style="color:var(--gray-2)">|</span>
+    <span>© 2026</span>
   </div>
 </footer>
 
