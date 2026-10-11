@@ -1049,6 +1049,19 @@
   </div>
 </section>
 
+<!-- FEATURES TEASE -->
+<section style="background:var(--white);padding:2.5rem 3rem;border-top:1px solid var(--gray-1)">
+  <div style="max-width:760px;margin:0 auto;display:flex;gap:2rem;align-items:center;flex-wrap:wrap">
+    <span style="font-family:var(--display);font-size:0.7rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-2)">Also on ExecutionCurve</span>
+    <a href="/roadmap.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--black);font-size:0.875rem;font-weight:500">
+      <span style="font-size:1rem">🗺</span> Personalized Roadmap — see where your project is headed based on your goal and entries
+    </a>
+    <a href="/dashboard.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--black);font-size:0.875rem;font-weight:500">
+      <span style="font-size:1rem">🤝</span> Community — get real feedback from builders like you
+    </a>
+  </div>
+</section>
+
 <!-- PHASES -->
 <section id="phases">
   <div class="phases-header reveal">
@@ -1116,6 +1129,9 @@
 
 <!-- YOUR LOG -->
 <section id="log">
+  <div id="log-goal-cta" style="display:none;text-align:center;padding:1.5rem 1.5rem 0;margin-bottom:-1rem">
+    <button onclick="showGoalModal()" style="background:transparent;border:1.5px solid var(--amber);color:var(--amber);font-family:var(--display);font-size:0.85rem;font-weight:600;padding:0.5rem 1.25rem;border-radius:6px;cursor:pointer;letter-spacing:0.01em">Set your goal →</button>
+  </div>
   <div class="log-header reveal">
     <span class="section-label">your log</span>
     <div class="log-header-row">
@@ -1290,6 +1306,22 @@
   <span class="chat-trigger-dot"></span>
   Ask Navi
 </button>
+
+<!-- GOAL CTA (new users only) -->
+<section id="goal-cta" style="display:none;background:var(--black);padding:6rem 2rem 7rem;text-align:center;position:relative;overflow:hidden">
+  <div style="max-width:520px;margin:0 auto;position:relative">
+    <p style="font-family:var(--display);font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);opacity:0.8;margin-bottom:1.25rem">Ready to begin?</p>
+    <h2 style="font-family:var(--display);font-size:clamp(2rem,5vw,3rem);font-weight:800;color:var(--white);letter-spacing:-0.03em;line-height:1.1;margin-bottom:1.5rem">Start your goal today.</h2>
+    <p style="color:#999;font-size:1rem;line-height:1.6;margin-bottom:3rem">Give your project a north star. One sentence — that's all it takes to unlock your personalized curve, roadmap, and progress tracking.</p>
+    <!-- arrows -->
+    <div style="display:flex;justify-content:center;gap:1rem;margin-bottom:1.25rem;opacity:0.5">
+      <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 26M12 26L4 18M12 26L20 18" stroke="#C8873F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 26M12 26L4 18M12 26L20 18" stroke="#C8873F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 26M12 26L4 18M12 26L20 18" stroke="#C8873F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <button onclick="showGoalModal()" style="background:var(--amber);color:var(--white);font-family:var(--display);font-size:1.1rem;font-weight:700;padding:1rem 2.5rem;border:none;border-radius:10px;cursor:pointer;letter-spacing:-0.01em;box-shadow:0 0 40px rgba(200,135,63,0.35);transition:transform 0.15s,box-shadow 0.15s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 60px rgba(200,135,63,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 0 40px rgba(200,135,63,0.35)'">Start your goal today</button>
+  </div>
+</section>
 
 <footer>
   <span style="font-family:var(--display);font-weight:700;font-size:0.9rem;letter-spacing:-0.01em">Execution<span style="color:var(--amber)">Curve</span></span>
@@ -1717,6 +1749,7 @@
     const localGoal = localStorage.getItem('ec_goal');
     if (localGoal) {
       updateGoalChip();
+      updateGoalCTA(true);
       renderTaskCheck();
       return;
     }
@@ -1749,23 +1782,15 @@
       // Found in Supabase — sync to localStorage
       localStorage.setItem('ec_goal', goalData.goal);
       updateGoalChip();
+      updateGoalCTA(true);
       renderTaskCheck();
       return;
     }
 
-    // Truly no goal anywhere — only show modal once per session for genuinely new projects
+    // Truly no goal anywhere — show bottom CTA instead of auto-popup
     updateGoalChip();
     renderTaskCheck();
-    if (!goalModalShownThisSession && currentProjectId) {
-      const { count } = await sb.from('app_entries')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', currentUser.id)
-        .eq('project_id', currentProjectId);
-      if (count === 0) {
-        goalModalShownThisSession = true;
-        setTimeout(() => showGoalModal(), 1200);
-      }
-    }
+    updateGoalCTA(false);
   }
 
   async function saveGoalToSupabase(goal) {
@@ -2201,6 +2226,15 @@
     }
   }
 
+  function updateGoalCTA(hasGoal) {
+    const cta = document.getElementById('goal-cta');
+    const logCta = document.getElementById('log-goal-cta');
+    if (cta) cta.style.display = hasGoal ? 'none' : 'block';
+    if (logCta) logCta.style.display = hasGoal ? 'none' : 'block';
+  }
+  // Initialize CTA state on load based on localStorage
+  updateGoalCTA(!!localStorage.getItem('ec_goal'));
+
   window.showGoalModal = showGoalModal;
 
   goalInput.addEventListener('input', () => { goalSaveBtn.disabled = goalInput.value.trim().length === 0; });
@@ -2210,7 +2244,7 @@
       const val = goalInput.value.trim();
       localStorage.setItem('ec_goal', val);
       await saveGoalToSupabase(val);
-      hideGoalModal(); updateGoalChip(); renderTaskCheck();
+      hideGoalModal(); updateGoalChip(); updateGoalCTA(true); renderTaskCheck();
     }
     if (e.key === 'Escape') hideGoalModal();
   });
@@ -2221,7 +2255,7 @@
     localStorage.setItem('ec_goal', val);
     await saveGoalToSupabase(val);
     await autoNameProjectFromGoal(val, currentProjectId);
-    hideGoalModal(); updateGoalChip(); renderTaskCheck();
+    hideGoalModal(); updateGoalChip(); updateGoalCTA(true); renderTaskCheck();
   });
 
   goalSkipBtn.addEventListener('click', () => { localStorage.setItem('ec_goal_skipped', '1'); hideGoalModal(); });
@@ -2229,11 +2263,7 @@
 
   // Goal modal for logged-out users only — logged-in users handled by syncGoalFromSupabase
   // Use a longer delay to ensure auth state has fully resolved
-  setTimeout(() => {
-    if (!currentUser && !localStorage.getItem('ec_goal') && !localStorage.getItem('ec_goal_skipped')) {
-      showGoalModal();
-    }
-  }, 3000);
+  // No auto-popup — bottom CTA section handles new users instead
 
   updateGoalChip();
 
