@@ -143,7 +143,7 @@
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -549,6 +549,34 @@
     const phases = getPhases();
     const phase = phases.find(p => p.id === phaseId);
     if (phase) renderMilestones(phase);
+
+    // Auto-advance phase when all milestones are checked
+    checkPhaseAutoAdvance(phaseId, phases);
+  }
+
+  async function checkPhaseAutoAdvance(phaseId, phases) {
+    const phase = phases.find(p => p.id === phaseId);
+    if (!phase || phase.status !== 'active') return;
+    const milestones = phase.milestones || [];
+    if (milestones.length === 0) return;
+
+    const checked = checkedMilestones[phaseId] || {};
+    const allChecked = milestones.every((_, idx) => checked[idx] === true);
+    if (!allChecked) return;
+
+    // All milestones done — advance this phase to complete and activate the next
+    phase.status = 'complete';
+    const nextPhase = phases[phases.indexOf(phase) + 1];
+    if (nextPhase && nextPhase.status === 'upcoming') nextPhase.status = 'active';
+
+    // Persist to Supabase
+    try {
+      await sb.from('roadmaps').update({ phases: roadmapData, updated_at: new Date().toISOString() }).eq('user_id', currentUser.id);
+    } catch (e) { console.warn('Auto-advance save failed:', e); }
+
+    // Re-render the full roadmap so progress bar + nodes update
+    renderRoadmap();
+    if (selectedPhaseId) setTimeout(() => selectPhase(selectedPhaseId), 100);
   }
 
   function addMilestone() {
