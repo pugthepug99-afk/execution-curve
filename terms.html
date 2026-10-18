@@ -3,103 +3,138 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Terms of Service — Execution Curve</title>
+<title>Terms of Service — ExecutionCurve</title>
+<link rel="icon" type="image/png" href="/logo.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --black: #0A0A0A; --white: #FAFAFA; --amber: #C8873F;
     --gray-1: #6B6B6B; --gray-2: #D4D4D4; --gray-3: #F0F0F0;
-    --mono: 'DM Mono', monospace; --body: 'IBM Plex Sans', sans-serif;
-    --display: 'Syne', sans-serif;
+    --display: 'Plus Jakarta Sans', sans-serif;
+    --mono: 'Fira Code', monospace;
+    --body: 'Inter', sans-serif;
   }
   body { background: var(--white); color: var(--black); font-family: var(--body); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
   nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; border-bottom: 1px solid var(--gray-2); }
-  .nav-logo { font-family: var(--mono); font-weight: 500; font-size: 0.9rem; color: var(--black); text-decoration: none; }
+  .nav-logo { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); text-decoration: none; display: flex; align-items: center; }
   .nav-logo span { color: var(--amber); }
   .wrap { max-width: 720px; margin: 0 auto; padding: 5rem 1.5rem 8rem; }
   .eyebrow { font-family: var(--mono); font-size: 0.7rem; color: var(--amber); letter-spacing: 0.08em; display: block; margin-bottom: 1rem; text-transform: uppercase; }
-  h1 { font-family: var(--display); font-size: 2.4rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.5rem; line-height: 1.1; }
-  .updated { font-family: var(--mono); font-size: 0.68rem; color: var(--gray-1); letter-spacing: 0.02em; margin-bottom: 3rem; display: block; }
-  h2 { font-family: var(--display); font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); margin: 2.5rem 0 0.75rem; }
+  h1 { font-family: var(--display); font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; line-height: 1.1; }
+  .meta-row { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 3rem; flex-wrap: wrap; }
+  .updated { font-family: var(--mono); font-size: 0.68rem; color: var(--gray-1); letter-spacing: 0.02em; }
+  .version-tag { font-family: var(--mono); font-size: 0.65rem; background: var(--gray-3); color: var(--gray-1); padding: 0.2rem 0.6rem; letter-spacing: 0.04em; }
+  h2 { font-family: var(--display); font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--black); margin: 2.5rem 0 0.75rem; }
   p { color: var(--gray-1); margin-bottom: 1rem; font-size: 0.95rem; }
   ul { color: var(--gray-1); font-size: 0.95rem; padding-left: 1.25rem; margin-bottom: 1rem; }
   ul li { margin-bottom: 0.4rem; }
   a { color: var(--black); }
   .divider { border: none; border-top: 1px solid var(--gray-2); margin: 2rem 0; }
-  footer { padding: 2rem 3rem; border-top: 1px solid var(--gray-2); font-size: 0.8rem; color: var(--gray-1); font-family: var(--body); display: flex; justify-content: space-between; }
+  footer { padding: 2rem 3rem; border-top: 1px solid var(--gray-2); font-size: 0.8rem; color: var(--gray-1); font-family: var(--body); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
   footer a { color: var(--gray-1); text-decoration: none; }
   footer a:hover { color: var(--black); }
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .wrap { padding: 4rem 1.25rem 6rem; }
+    h1 { font-size: 1.9rem; }
+    footer { padding: 1.5rem 1.25rem; flex-direction: column; align-items: flex-start; }
+  }
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="/" class="nav-logo">Execution<span>Curve</span></a>
+  <a href="/" class="nav-logo"><span style="color:var(--black)">Execution</span><span>Curve</span></a>
 </nav>
 
 <div class="wrap">
   <span class="eyebrow">Legal</span>
   <h1>Terms of Service</h1>
-  <span class="updated">Last updated: August 2026</span>
+  <div class="meta-row">
+    <span class="updated">Last updated: October 14, 2026</span>
+    <span class="version-tag">v2.0</span>
+  </div>
 
-  <p>These terms govern your use of Execution Curve. By creating an account or using the app, you agree to these terms. Please read them before using the service.</p>
+  <p>These terms govern your use of ExecutionCurve and all of its features, including the personal progress log, AI coach (Navi), personalized Roadmap, and Community feedback system. By creating an account or using the app, you agree to these terms.</p>
 
   <hr class="divider"/>
 
-  <h2>1. What Execution Curve is</h2>
-  <p>Execution Curve is a personal progress log and AI coaching tool. It helps you track your work on a long-term goal, understand what phase of progress you are in, and receive personalised next-step feedback based on your entries.</p>
-  <p>Execution Curve is not a mental health service, a therapist, a doctor, or a crisis resource. The AI feedback it provides is motivational and productivity-focused in nature. If you are experiencing a mental health crisis, please reach out to a qualified professional or a crisis helpline.</p>
+  <h2>1. What ExecutionCurve is</h2>
+  <p>ExecutionCurve is a personal persistence and project-logging platform. It helps you track progress on a long-term goal, understand which phase of the execution curve you are in, receive AI-generated coaching from Navi, generate a personalized project roadmap, and exchange feedback with other builders in the Community.</p>
+  <p>ExecutionCurve is not a mental health service, a therapist, a doctor, or a crisis resource. The AI feedback it provides is motivational and productivity-focused in nature. If you are experiencing a mental health crisis, please reach out to a qualified professional or a crisis helpline.</p>
 
   <h2>2. Your account</h2>
-  <p>To use the full features of Execution Curve you must create an account with a valid email address and password. You are responsible for keeping your login credentials secure. Do not share your password with anyone.</p>
+  <p>To access the full features of ExecutionCurve you must create an account with a valid email address and password. You are responsible for keeping your login credentials secure and for all activity that occurs under your account.</p>
   <p>You must be at least 13 years old to create an account. By creating an account you confirm that you meet this requirement.</p>
-  <p>We reserve the right to suspend or delete accounts that violate these terms.</p>
+  <p>We reserve the right to suspend or permanently delete accounts that violate these terms, engage in abuse, or harm other users.</p>
 
   <h2>3. Your content</h2>
-  <p>The journal entries, goals, and other content you add to Execution Curve belong to you. We do not claim ownership of anything you write.</p>
-  <p>By using the app you grant us permission to store your content on our servers and to send it to our AI provider (Google Gemini) for the sole purpose of generating your personalised feedback. We do not use your content for any other purpose.</p>
+  <p>The journal entries, goals, project names, and other content you add to ExecutionCurve belong to you. We do not claim ownership of anything you write.</p>
+  <p>By using the app, you grant us a limited, non-exclusive license to store your content and to process it through our AI systems (Google Gemini) solely for the purpose of generating your personalized feedback, roadmap, and Navi responses. We do not use your private journal entries for any other purpose.</p>
   <p>You are responsible for what you write. Do not enter content that is illegal, harmful to others, or violates anyone else's rights.</p>
 
-  <h2>4. AI feedback</h2>
-  <p>The personalised feedback generated by Execution Curve is produced by an AI system and is intended for motivational and productivity purposes only. It is not professional advice of any kind, including medical, psychological, financial, or legal advice.</p>
-  <p>AI-generated content can be inaccurate or inappropriate. Use your own judgment when acting on any suggestion the app makes. We are not responsible for any outcome resulting from following AI-generated feedback.</p>
+  <h2>4. Navi — AI coach</h2>
+  <p>Navi is ExecutionCurve's AI coaching assistant, powered by Google Gemini. Navi reads your journal entries and goal to generate personalized next-step suggestions, answer questions about your progress, and help you think through roadblocks.</p>
+  <p>Navi's responses are AI-generated and intended for motivational and productivity purposes only. They are not professional advice of any kind, including medical, psychological, financial, or legal advice. AI-generated content can be inaccurate. Use your own judgment when acting on any suggestion Navi makes.</p>
+  <p>Your Navi conversations are saved to your account and are private. They are sent to Google's Gemini API for processing and are subject to Google's usage policies.</p>
 
-  <h2>5. What we do not allow</h2>
-  <p>When using Execution Curve you agree not to:</p>
+  <h2>5. Roadmap</h2>
+  <p>The Roadmap feature generates a personalized project plan based on your stated goal and journal entries, using AI analysis. Roadmap content is illustrative and based on pattern recognition across your entries. It is not a guarantee of outcomes or a professional project management service.</p>
+  <p>The roadmap is regenerated as you add entries and update your goal. Your roadmap data is private to your account.</p>
+
+  <h2>6. Community</h2>
+  <p>The Community feature allows users to voluntarily share a project brief and request feedback from other ExecutionCurve users. Participation is optional.</p>
+  <p>When you submit a feedback request to the Community, your project brief and any context you provide become visible to other logged-in users for the purpose of receiving feedback. When you provide feedback to another user, that feedback is shared with the recipient.</p>
+  <p>You agree that Community content you post:</p>
   <ul>
-    <li>Attempt to access another user's account or data.</li>
+    <li>Will not contain illegal, abusive, harassing, or harmful material.</li>
+    <li>Will not violate the privacy or intellectual property rights of any third party.</li>
+    <li>Will be feedback given in good faith — not spam, promotional content, or deliberate misinformation.</li>
+  </ul>
+  <p>We reserve the right to remove Community content that violates these guidelines and to suspend accounts that abuse the Community feature.</p>
+
+  <h2>7. What we do not allow</h2>
+  <p>When using ExecutionCurve you agree not to:</p>
+  <ul>
+    <li>Attempt to access another user's account, private entries, or data.</li>
     <li>Use the app to store or transmit illegal, harmful, or offensive content.</li>
     <li>Attempt to reverse-engineer, scrape, or abuse the app or its API.</li>
+    <li>Use automated bots or scripts to interact with any part of the app.</li>
+    <li>Use the Community to spam, harass, or manipulate other users.</li>
     <li>Use the app in any way that could damage, disable, or impair it for other users.</li>
     <li>Misrepresent your age or identity when creating an account.</li>
   </ul>
 
-  <h2>6. Service availability</h2>
-  <p>We aim to keep Execution Curve available but cannot guarantee uninterrupted access. The app may be unavailable during maintenance, updates, or due to issues outside our control. We are not liable for any losses resulting from downtime.</p>
+  <h2>8. Multiple projects</h2>
+  <p>ExecutionCurve supports multiple projects per account. Each project has its own goal, journal entries, Navi chats, and roadmap. Switching between projects updates which data is active in each feature. You are responsible for the content within all of your projects.</p>
+
+  <h2>9. Service availability</h2>
+  <p>We aim to keep ExecutionCurve available but cannot guarantee uninterrupted access. The app may be unavailable during maintenance, updates, or due to issues outside our control. We are not liable for any losses resulting from downtime.</p>
   <p>We reserve the right to modify, suspend, or discontinue the app at any time with or without notice.</p>
 
-  <h2>7. Limitation of liability</h2>
-  <p>Execution Curve is provided as-is without warranties of any kind. To the maximum extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising from your use of the app, including but not limited to loss of data, loss of progress, or decisions made based on AI feedback.</p>
+  <h2>10. Limitation of liability</h2>
+  <p>ExecutionCurve is provided as-is without warranties of any kind. To the maximum extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising from your use of the app, including but not limited to loss of data, loss of progress, or decisions made based on AI feedback or Community responses.</p>
 
-  <h2>8. Changes to these terms</h2>
-  <p>We may update these terms as the app evolves. When we do, we will update the date at the top of this page. Continued use of the app after changes are posted means you accept the updated terms.</p>
+  <h2>11. Changes to these terms</h2>
+  <p>We may update these terms as the app evolves. When we do, we will update the version number and date at the top of this page. If changes are material, we will notify you the next time you open the app and ask you to review and accept the updated terms before continuing. Continued use of the app after you have accepted updated terms means you agree to them.</p>
 
-  <h2>9. Governing law</h2>
+  <h2>12. Governing law</h2>
   <p>These terms are governed by the laws of the United States. Any disputes will be resolved in accordance with applicable US law.</p>
 
-  <h2>10. Contact</h2>
+  <h2>13. Contact</h2>
   <p>Questions about these terms: <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a></p>
 </div>
 
 <footer>
-  <span>© 2025 Execution Curve</span>
-  <div style="display:flex; gap:1.5rem">
+  <span style="font-family:var(--display);font-weight:700;font-size:0.9rem;letter-spacing:-0.01em">Execution<span style="color:var(--amber)">Curve</span></span>
+  <div style="display:flex; gap:1.5rem; flex-wrap:wrap">
     <a href="/privacy.html">Privacy Policy</a>
     <a href="/terms.html">Terms of Service</a>
-    <a href="/">Back to app</a>
+    <a href="/">Back to App</a>
+    <span style="color:var(--gray-2)">© 2026</span>
   </div>
 </footer>
 
