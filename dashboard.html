@@ -25,7 +25,7 @@
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -440,14 +440,30 @@
   let pendingRequestReviewers = 10;
 
   // ---- INIT ----
-  sb.auth.onAuthStateChange(async (event, session) => {
-    currentUser = session?.user || null;
-    if (!currentUser) {
+  // getSession() first — restores existing session on mobile refresh without 30s+ delay
+  sb.auth.getSession().then(async ({ data: { session } }) => {
+    if (session?.user) {
+      currentUser = session.user;
+      await init();
+    } else {
       document.getElementById('state-loading').style.display = 'none';
       document.getElementById('state-locked').style.display = 'block';
-      return;
     }
-    await init();
+  });
+
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && !currentUser) {
+      currentUser = session?.user || null;
+      if (currentUser) await init();
+      else {
+        document.getElementById('state-loading').style.display = 'none';
+        document.getElementById('state-locked').style.display = 'block';
+      }
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      document.getElementById('main-dashboard').style.display = 'none';
+      document.getElementById('state-locked').style.display = 'block';
+    }
   });
 
   async function init() {
