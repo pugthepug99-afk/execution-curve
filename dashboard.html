@@ -38,7 +38,8 @@
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a { font-family: var(--body); font-size: 0.875rem; font-weight: 400; color: var(--gray-1); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover, .nav-links a.active { color: var(--black); }
-  @media (max-width: 768px) { .nav-links { display: none; } nav { padding: 1rem 1.25rem; } }
+  @media (max-width: 768px) { .nav-links { display: none; } nav { padding: 0.875rem 1rem; gap: 0.5rem; } }
+  @media (max-width: 420px) { .btn-nav-signout { font-size: 0.58rem !important; padding: 0.2rem 0.45rem !important; } }
   .nav-account { display: flex; align-items: center; gap: 0.75rem; }
   .nav-account-username { font-family: var(--mono); font-size: 0.65rem; color: var(--amber); letter-spacing: 0.02em; }
   .btn-nav-signout { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-1); background: none; border: 1px solid var(--gray-2); padding: 0.3rem 0.7rem; cursor: pointer; letter-spacing: 0.02em; transition: color 0.15s, border-color 0.15s; }
@@ -198,6 +199,10 @@
   :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
 
   body { overflow-x: hidden; }
+  @media (max-width: 600px) {
+    #site-footer { padding: 1.5rem 1.25rem !important; flex-direction: column; align-items: flex-start; }
+    #site-footer > div { flex-wrap: wrap; gap: 0.75rem 1rem; }
+  }
 </style>
 </head>
 <body>
@@ -1029,7 +1034,7 @@
     window.location.href = '/';
   });
 </script>
-<footer style="padding:2rem 3rem;border-top:1px solid var(--gray-2);font-size:0.8rem;color:var(--gray-1);font-family:var(--body);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+<footer style="padding:2rem 3rem;border-top:1px solid var(--gray-2);font-size:0.8rem;color:var(--gray-1);font-family:var(--body);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem" id="site-footer">
   <span style="font-family:var(--display);font-weight:700;font-size:0.9rem;letter-spacing:-0.01em;color:var(--black)">Execution<span style="color:var(--amber)">Curve</span></span>
   <div style="display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap">
     <a href="/" style="color:var(--gray-1);text-decoration:none">Home</a>
