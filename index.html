@@ -1023,7 +1023,7 @@
   <div class="hero-inner">
     <p class="hero-eyebrow">For builders who don't quit</p>
     <h1 class="hero-heading">You started.<br/>Now <em>stay in it.</em></h1>
-    <p class="hero-sub">Log what you worked on. See where you are on the curve. Get a personalised next step from Navi, your AI coach. ExecutionCurve is built for people who started something and want to actually finish it.</p>
+    <p class="hero-sub">Log what you worked on. See where you are on the curve. Get a personalized next step from Navi, your AI coach. ExecutionCurve is built for people who started something and want to actually finish it.</p>
     <div class="hero-actions">
       <button class="btn-primary" onclick="openEntryBar()">Log your first entry</button>
       <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
@@ -2292,9 +2292,9 @@
 
       let nudgeBlock = '';
       if (!currentUser) {
-        nudgeBlock = `<div class="timeline-nudge-locked"><span class="timeline-nudge-label">Your Nudge</span><p>Sign in to get a personalised next step based on this entry.</p><button class="btn-nudge-signin" onclick="showAuthModal('signin')">Sign In</button></div>`;
+        nudgeBlock = `<div class="timeline-nudge-locked"><span class="timeline-nudge-label">Your Nudge</span><p>Sign in to get a personalized next step based on this entry.</p><button class="btn-nudge-signin" onclick="showAuthModal('signin')">Sign In</button></div>`;
       } else if (entry.nudgeLoading) {
-        nudgeBlock = `<div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p class="timeline-nudge-loading">Generating your personalised next step...</p></div>`;
+        nudgeBlock = `<div class="timeline-nudge"><span class="timeline-nudge-label">Your Nudge</span><p class="timeline-nudge-loading">Generating your personalized next step...</p></div>`;
       } else if (entry.nudge) {
         const safeEntry = encodeURIComponent(entry.text);
         const safeNudge = encodeURIComponent(entry.nudge);
