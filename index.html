@@ -45,7 +45,7 @@
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -827,6 +827,9 @@
     gap: 0.5rem;
     border-left: 2px solid var(--gray-2);
     padding-left: 0.85rem;
+    max-height: 320px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
   }
 
   .nudge-thread.open { display: flex; }
@@ -954,7 +957,6 @@
   @media (max-width: 420px) {
     nav { padding: 0.75rem 0.875rem; }
     .btn-nav-signout { display: none; }
-    .nav-account::after { content: '→'; font-size: 0.7rem; color: var(--gray-1); cursor: pointer; }
   }
 </style>
 </head>
@@ -1270,6 +1272,7 @@
 
 <!-- ENTRY BAR -->
 <div id="entry-bar" role="dialog" aria-label="Quick Log Entry">
+  <button id="entry-bar-close" onclick="closeBar()" aria-label="Close" style="position:absolute;top:0.6rem;right:0.75rem;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--gray-1);line-height:1;padding:0.25rem 0.4rem;transition:color 0.15s" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray-1)'">&#x2715;</button>
   <div class="entry-step active" id="step-1">
     <div class="entry-input-row">
       <span class="entry-prompt">Today</span>
@@ -1369,9 +1372,10 @@
 <footer>
   <span style="font-family:var(--display);font-weight:700;font-size:0.9rem;letter-spacing:-0.01em">Execution<span style="color:var(--amber)">Curve</span></span>
   <div style="display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap">
+    <a href="/">Home</a>
     <a href="/roadmap.html">Roadmap</a>
     <a href="/dashboard.html">Community</a>
-    <a href="mailto:executioncurve@gmail.com">executioncurve@gmail.com</a>
+    <a href="mailto:executioncurve@gmail.com" style="color:var(--gray-1);text-decoration:none">Contact</a>
     <a href="/privacy.html">Privacy</a>
     <a href="/terms.html">Terms</a>
     <span style="color:var(--gray-2)">|</span>
@@ -1574,6 +1578,8 @@
 
 
   async function switchProject(projectId) {
+    // Close the entry bar if open so it doesn't bleed into the new project
+    if (typeof closeBar === 'function') closeBar();
     currentProjectId = projectId;
     localStorage.setItem('ec_current_project_' + currentUser.id, projectId);
     // Save to Supabase so it persists across devices
@@ -1669,12 +1675,28 @@
   window.selectProjectColor = selectProjectColor;
   window.createProject = createProject;
 
+  // Hide action buttons until auth resolves — prevents silent failures on mobile
+  (function() {
+    const et = document.getElementById('entry-trigger');
+    const ct = document.getElementById('chat-trigger');
+    if (et) et.classList.add('hidden');
+    if (ct) ct.style.display = 'none';
+  })();
+
+  function enableActionButtons() {
+    const et = document.getElementById('entry-trigger');
+    const ct = document.getElementById('chat-trigger');
+    if (et) et.classList.remove('hidden');
+    if (ct) ct.style.display = '';
+  }
+
   // getSession() first — restores existing session immediately on refresh
   // without this, onAuthStateChange alone can take 30s+ to fire on mobile
   sb.auth.getSession().then(async ({ data: { session } }) => {
     if (session?.user) {
       currentUser = session.user;
       updateNavAuth();
+      enableActionButtons();
       await loadProjects();
       await syncGoalFromSupabase();
       await renderLog();
@@ -1686,6 +1708,7 @@
       currentUser = session?.user || null;
       updateNavAuth();
       if (currentUser) {
+        enableActionButtons();
         await loadProjects();
         await syncGoalFromSupabase();
       }
@@ -2929,6 +2952,8 @@
     // Load existing messages
     const messages = await loadNudgeThread(entryId);
     renderNudgeThread(entryId, messages, entryText, nudgeText);
+    // Scroll to bottom so user sees latest message
+    setTimeout(() => { threadEl.scrollTop = threadEl.scrollHeight; }, 50);
   }
 
   function renderNudgeThread(entryId, messages, entryText, nudgeText) {
@@ -2998,10 +3023,12 @@
       existingMessages.push({ role: 'assistant', content: reply });
       await saveNudgeThread(entryId, existingMessages);
       renderNudgeThread(entryId, existingMessages, decodeURIComponent(entryText), decodeURIComponent(nudgeText));
+      setTimeout(() => { const t = document.getElementById('thread-' + entryId); if (t) t.scrollTop = t.scrollHeight; }, 50);
     } catch (err) {
       document.getElementById('ntyping-' + entryId)?.remove();
       existingMessages.push({ role: 'assistant', content: 'Navi lost connection. Your message was not lost — try sending again.' });
       renderNudgeThread(entryId, existingMessages, decodeURIComponent(entryText), decodeURIComponent(nudgeText));
+      setTimeout(() => { const t = document.getElementById('thread-' + entryId); if (t) t.scrollTop = t.scrollHeight; }, 50);
     }
 
     sendBtn.disabled = false;
