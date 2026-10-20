@@ -373,7 +373,7 @@
   .btn-delete-entry { font-family: var(--mono); font-size: 0.6rem; color: #aaa; background: none; border: none; cursor: pointer; letter-spacing: 0.02em; margin-top: 0.85rem; padding: 0; display: block; transition: color 0.15s; }
   .btn-delete-entry:hover { color: #b85c38; }
 
-  .confirm-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.7); z-index: 500; display: none; align-items: center; justify-content: center; }
+  .confirm-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.7); z-index: 1100; display: none; align-items: center; justify-content: center; }
   .confirm-overlay.show { display: flex; }
   .confirm-box { background: var(--white); border: 1px solid var(--gray-2); padding: 2rem 2rem 1.5rem; max-width: 380px; width: calc(100% - 2rem); }
   .confirm-box p { font-family: var(--body); font-size: 0.95rem; color: var(--black); line-height: 1.6; margin-bottom: 1.5rem; }
@@ -1351,6 +1351,17 @@
 
   <div class="log-timeline" id="log-timeline"></div>
 </section>
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <p id="confirm-message"></p>
+    <div class="confirm-box-actions">
+      <button class="btn-confirm-cancel" onclick="cancelConfirm()">Cancel</button>
+      <button class="btn-confirm-delete" id="confirm-proceed">Delete</button>
+    </div>
+  </div>
+</div>
 
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="auth-overlay">
