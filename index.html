@@ -41,6 +41,8 @@
   /* Accessibility: visible focus */
   :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
   button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  /* Eliminate iOS 300ms tap delay on all interactive elements */
+  button, a, [role="button"] { touch-action: manipulation; }
 
   nav {
     position: fixed;
@@ -611,6 +613,7 @@
     cursor: pointer;
     transition: background 0.15s;
     position: relative;
+    touch-action: manipulation;
   }
 
   .chat-list-item:hover { background: var(--gray-3); }
@@ -648,12 +651,51 @@
   .chat-list-actions {
     display: flex;
     gap: 0.25rem;
-    opacity: 0;
-    transition: opacity 0.15s;
     flex-shrink: 0;
+    position: relative;
   }
 
-  .chat-list-item:hover .chat-list-actions { opacity: 1; }
+  .btn-chat-menu {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--gray-1);
+    padding: 0.3rem 0.5rem;
+    line-height: 1;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+    touch-action: manipulation;
+  }
+  .btn-chat-menu:hover { background: var(--gray-2); color: var(--black); }
+
+  .chat-item-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    background: var(--white);
+    border: 1px solid var(--gray-2);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    z-index: 500;
+    min-width: 140px;
+    display: none;
+    flex-direction: column;
+  }
+  .chat-item-dropdown.open { display: flex; }
+  .chat-item-dropdown button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--body);
+    font-size: 0.85rem;
+    color: var(--black);
+    padding: 0.7rem 1rem;
+    text-align: left;
+    transition: background 0.15s;
+    touch-action: manipulation;
+  }
+  .chat-item-dropdown button:hover { background: var(--gray-3); }
+  .chat-item-dropdown button.danger { color: #b85c38; }
 
   .btn-chat-action {
     font-family: var(--mono);
@@ -997,6 +1039,7 @@
     height: 44px;
     display: flex;
     align-items: center;
+    touch-action: manipulation;
     gap: 0.5rem;
     bottom: 1.25rem;
   }
@@ -2648,6 +2691,25 @@
   window.openSidebar = openSidebar;
   window.closeSidebar = closeSidebar;
 
+  // Chat item 3-dot menu
+  function toggleChatItemMenu(chatId) {
+    const menu = document.getElementById('chat-menu-' + chatId);
+    if (!menu) return;
+    const isOpen = menu.classList.contains('open');
+    closeChatItemMenus();
+    if (!isOpen) menu.classList.add('open');
+  }
+  function closeChatItemMenus() {
+    document.querySelectorAll('.chat-item-dropdown.open').forEach(m => m.classList.remove('open'));
+  }
+  window.toggleChatItemMenu = toggleChatItemMenu;
+  window.closeChatItemMenus = closeChatItemMenus;
+
+  // Close chat item menus when clicking outside
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.chat-list-actions')) closeChatItemMenus();
+  });
+
   // Mobile hamburger menu
   function toggleMobileMenu() {
     const menu = document.getElementById('mobile-nav-menu');
@@ -2688,9 +2750,12 @@
             <span class="chat-list-preview">${lastMsg}</span>
           </div>
           <div class="chat-list-actions">
-            <button class="btn-chat-action ${isPinned ? 'pin-active' : ''}" onclick="event.stopPropagation(); pinChat('${chat.id}')" title="${isPinned ? 'Unpin' : 'Pin'}">${isPinned ? '★' : '☆'}</button>
-            <button class="btn-chat-action" onclick="event.stopPropagation(); renameChat('${chat.id}')" title="Rename">✎</button>
-            <button class="btn-chat-action" onclick="event.stopPropagation(); deleteChat('${chat.id}')" title="Delete" style="color:#b85c38">✕</button>
+            <button class="btn-chat-menu" onclick="event.stopPropagation(); toggleChatItemMenu('${chat.id}')" aria-label="Chat options">⋮</button>
+            <div class="chat-item-dropdown" id="chat-menu-${chat.id}">
+              <button onclick="event.stopPropagation(); pinChat('${chat.id}'); closeChatItemMenus()">${isPinned ? '★ Unpin' : '☆ Pin'}</button>
+              <button onclick="event.stopPropagation(); renameChat('${chat.id}'); closeChatItemMenus()">✎ Rename</button>
+              <button class="danger" onclick="event.stopPropagation(); closeChatItemMenus(); deleteChat('${chat.id}')">✕ Delete</button>
+            </div>
           </div>
         </div>`;
     }).join('');
