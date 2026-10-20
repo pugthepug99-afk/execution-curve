@@ -20,7 +20,7 @@
   body { background: var(--white); color: var(--black); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
 
   /* NAV */
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; background: var(--white); border-bottom: 1px solid var(--gray-2); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; background: var(--white); border-bottom: 1px solid var(--gray-2); }
   .nav-logo { font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); text-decoration: none; display: flex; align-items: center; gap: 0; }
   .nav-logo span { color: var(--amber); }
   .nav-back { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-1); text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s; }
@@ -147,7 +147,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.1rem 3rem;
+    padding: 1.25rem 3rem;
     background: var(--white);
     border-bottom: 1px solid var(--gray-2);
   }
@@ -156,7 +156,7 @@
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a { font-family: var(--body); font-size: 0.875rem; font-weight: 400; color: var(--gray-1); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover, .nav-links a.active { color: var(--black); }
-  @media (max-width: 768px) { .nav-links { display: none; } nav { padding: 0.875rem 1rem; gap: 0.5rem; } }
+  @media (max-width: 768px) { .nav-links { display: none; } nav { padding: 1rem 1.25rem; gap: 0.5rem; } }
   @media (max-width: 420px) { .btn-nav-signout { font-size: 0.58rem; padding: 0.2rem 0.45rem; } }
   .btn-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.4rem; flex-direction: column; gap: 5px; align-items: center; justify-content: center; touch-action: manipulation; }
   .btn-hamburger span { display: block; width: 20px; height: 2px; background: var(--black); }
