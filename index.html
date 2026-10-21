@@ -122,7 +122,7 @@
     font-weight: 400;
   }
   .mobile-nav-links a:last-child { border-bottom: none; }
-  .mobile-nav-links a:hover { color: var(--amber); }
+  .mobile-nav-links a:hover, .mobile-nav-links a.active { color: var(--amber); font-weight: 600; }
 
   /* PROJECT SWITCHER */
   .project-switcher {
@@ -452,7 +452,7 @@
   }
 
   /* PHASES */
-  #phases { background: var(--black); padding: 8rem 3rem 6rem; overflow: hidden; }
+  #phases { background: var(--black); padding: 8rem 3rem 6rem; }
   .phases-header { margin-bottom: 5rem; }
   .phases-header .section-label { color: var(--amber); opacity: 0.8; }
   .phases-header .section-heading { color: var(--white); max-width: 560px; }
@@ -525,7 +525,26 @@
   @media (max-width: 768px) {
     #chat-sidebar { width: 100%; top: 0; }
     body.chat-open { margin-right: 0; }
-    .chat-sidebar-header { padding-top: 4.5rem; }
+    .chat-sidebar-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.6rem;
+      padding: 0;
+    }
+    .chat-sidebar-header > div:first-child {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      padding-top: calc(0.75rem + 56px); /* clear fixed nav */
+      border-bottom: none;
+    }
+    .chat-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem 0.75rem;
+      border-bottom: 1px solid var(--gray-2);
+    }
   }
 
   .chat-sidebar-header {
@@ -1070,8 +1089,8 @@
     #dropdown-chevron { display: none; }
     .btn-project-switch { padding: 0.25rem 0.4rem; gap: 0; }
     .nav-cta { font-size: 0.75rem; padding: 0.4rem 0.85rem; }
-    /* Show sign out in dropdown on mobile */
-    #dropdown-signout-divider, #dropdown-signout-btn { display: block !important; }
+    /* Hide sign out from project dropdown on mobile — it's in the hamburger menu instead */
+    #dropdown-signout-divider, #dropdown-signout-btn { display: none !important; }
     /* Bigger tap targets for project actions on mobile */
     .project-dropdown-item button[onclick*="deleteProject"] { padding: 0.4rem 0.6rem !important; font-size: 0.75rem !important; }
     .project-dropdown-item button[onclick*="renameProject"] { padding: 0.4rem 0.6rem !important; font-size: 0.75rem !important; }
@@ -1125,11 +1144,12 @@
     <button onclick="toggleMobileMenu()" style="background:none;border:none;cursor:pointer;font-size:1.3rem;color:var(--gray-1);padding:0.25rem">✕</button>
   </div>
   <div class="mobile-nav-links">
-    <a href="#how" onclick="toggleMobileMenu()">How It Works</a>
-    <a href="#phases" onclick="toggleMobileMenu()">The Curve</a>
-    <a href="#log" onclick="toggleMobileMenu()">My Log</a>
+    <a href="#how" onclick="toggleMobileMenu()" data-section="how">How It Works</a>
+    <a href="#phases" onclick="toggleMobileMenu()" data-section="phases">The Curve</a>
+    <a href="#log" onclick="toggleMobileMenu()" data-section="log">My Log</a>
     <a href="/roadmap.html">Roadmap</a>
     <a href="/dashboard.html">Community</a>
+    <button id="mobile-signout-btn" onclick="document.getElementById('nav-signout-btn').click()" style="display:none;font-family:var(--body);font-size:1rem;color:#b85c38;background:none;border:none;border-top:1px solid var(--gray-3);padding:0.85rem 0;text-align:left;cursor:pointer;width:100%;touch-action:manipulation">Sign Out</button>
   </div>
 </div>
 
@@ -1230,14 +1250,14 @@
     <p class="section-body">Most people quit in phase 2, not because they failed, but because they don't know they're in it. Knowing the phase changes everything.</p>
   </div>
   <div class="curve-wrap reveal">
-    <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg">
       <line x1="0" y1="200" x2="900" y2="200" stroke="#1e1e1e" stroke-width="1"/>
       <path d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15" fill="none" stroke="#2a2a2a" stroke-width="1.5" id="curve-bg"/>
       <path d="M 40 60 C 100 55, 140 58, 180 80 C 220 102, 240 155, 280 170 C 320 185, 340 188, 380 182 C 430 174, 460 160, 500 138 C 560 105, 620 72, 700 45 C 760 26, 820 18, 860 15" fill="none" stroke="#C8873F" stroke-width="2" stroke-dasharray="820" stroke-dashoffset="820" id="curve-draw" opacity="0.9"/>
       <circle cx="40" cy="60" r="4" fill="#C8873F" class="phase-dot" data-phase="0" style="cursor:pointer"/>
       <text x="40" y="50" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">01</text>
       <circle cx="340" cy="188" r="4" fill="#555" class="phase-dot" data-phase="1" style="cursor:pointer"/>
-      <text x="340" y="205" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">02</text>
+      <text x="340" y="178" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">02</text>
       <circle cx="450" cy="152" r="4" fill="#555" class="phase-dot" data-phase="2" style="cursor:pointer"/>
       <text x="450" y="143" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">03</text>
       <circle cx="620" cy="72" r="4" fill="#555" class="phase-dot" data-phase="3" style="cursor:pointer"/>
@@ -1245,7 +1265,7 @@
       <circle cx="860" cy="15" r="4" fill="#555" class="phase-dot" data-phase="4" style="cursor:pointer"/>
       <text x="860" y="8" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#444">05</text>
       <line x1="240" y1="200" x2="420" y2="200" stroke="#b85c38" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
-      <text x="330" y="218" text-anchor="middle" font-family="'DM Mono', monospace" font-size="8" fill="#b85c38" opacity="0.6">most people quit here</text>
+      <text x="330" y="220" text-anchor="middle" font-family="'DM Mono', monospace" font-size="8" fill="#b85c38" opacity="0.6">most people quit here</text>
     </svg>
   </div>
   <div class="phase-nav" id="phase-nav">
@@ -1884,10 +1904,12 @@
     const accountEl = document.getElementById('nav-account');
     const emailEl = document.getElementById('nav-account-email');
     const usernameEl = document.getElementById('nav-account-username');
+    const mobileSignout = document.getElementById('mobile-signout-btn');
     if (currentUser) {
       signinBtn.style.display = 'none';
       accountEl.style.display = 'flex';
       emailEl.textContent = currentUser.email;
+      if (mobileSignout) mobileSignout.style.display = 'block';
       // Load username from profiles
       sb.from('profiles').select('username').eq('id', currentUser.id).maybeSingle().then(({ data }) => {
         if (data?.username && usernameEl) {
@@ -1898,6 +1920,7 @@
     } else {
       signinBtn.style.display = '';
       accountEl.style.display = 'none';
+      if (mobileSignout) mobileSignout.style.display = 'none';
     }
   }
 
@@ -2727,6 +2750,21 @@
     if (menu) menu.classList.toggle('open');
   }
   window.toggleMobileMenu = toggleMobileMenu;
+
+  // Highlight active section in mobile nav
+  (function() {
+    const sectionIds = ['how', 'phases', 'log'];
+    const mobileLinks = document.querySelectorAll('.mobile-nav-links a[data-section]');
+    function setActiveSection(id) {
+      mobileLinks.forEach(a => {
+        a.classList.toggle('active', a.dataset.section === id);
+      });
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
+    }, { threshold: 0.3 });
+    sectionIds.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+  })();
 
   // ---- CHAT LIST ----
   async function loadChatList() {
