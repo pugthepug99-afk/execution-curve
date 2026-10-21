@@ -317,6 +317,7 @@
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let currentUser = null;
+  let currentProjectId = null;
   let roadmapData = null;
   let selectedPhaseId = null;
   let hasUnsavedEdits = false;
@@ -327,6 +328,8 @@
   sb.auth.getSession().then(async ({ data: { session } }) => {
     if (session?.user) {
       currentUser = session.user;
+      // Read the active project the user last had open on the main page
+      currentProjectId = localStorage.getItem('ec_current_project_' + currentUser.id) || null;
       await init();
     } else {
       showState('locked');
@@ -336,6 +339,7 @@
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && !currentUser) {
       currentUser = session.user;
+      currentProjectId = localStorage.getItem('ec_current_project_' + currentUser.id) || null;
       await init();
     } else if (event === 'SIGNED_OUT') {
       currentUser = null;
@@ -359,29 +363,40 @@
   }
 
   async function getUserGoal() {
-    // Try localStorage first (fastest)
-    const localGoal = localStorage.getItem('ec_goal');
-    if (localGoal) return localGoal;
+    // Try localStorage scoped to current project first
+    const localKey = currentProjectId ? 'ec_goal_' + currentUser.id + '_' + currentProjectId : null;
+    if (localKey) {
+      const localGoal = localStorage.getItem(localKey);
+      if (localGoal) return localGoal;
+    }
 
-    // Try Supabase — check any goal for this user regardless of project_id
-    const { data } = await sb.from('user_goals').select('goal').eq('user_id', currentUser.id).order('updated_at', { ascending: false }).limit(1).maybeSingle();
+    // Fetch from Supabase scoped to current project
+    let query = sb.from('user_goals').select('goal').eq('user_id', currentUser.id);
+    if (currentProjectId) query = query.eq('project_id', currentProjectId);
+    else query = query.order('updated_at', { ascending: false }).limit(1);
+    const { data } = await query.maybeSingle();
     if (data?.goal) {
-      localStorage.setItem('ec_goal', data.goal);
+      if (localKey) localStorage.setItem(localKey, data.goal);
       return data.goal;
     }
     return null;
   }
 
   async function getUserEntries() {
-    const { data } = await sb.from('app_entries').select('text, feeling, date').eq('user_id', currentUser.id).order('date', { ascending: false }).limit(20);
+    let query = sb.from('app_entries').select('text, feeling, date').eq('user_id', currentUser.id).order('date', { ascending: false }).limit(20);
+    if (currentProjectId) query = query.eq('project_id', currentProjectId);
+    const { data } = await query;
     return data || [];
   }
 
   async function loadSavedRoadmap() {
-    const { data } = await sb.from('roadmaps').select('*').eq('user_id', currentUser.id).maybeSingle();
+    let query = sb.from('roadmaps').select('*').eq('user_id', currentUser.id);
+    if (currentProjectId) query = query.eq('project_id', currentProjectId);
+    const { data } = await query.maybeSingle();
     if (!data) return null;
-    // Load checked milestones from localStorage
-    checkedMilestones = JSON.parse(localStorage.getItem('ec_milestones_' + currentUser.id) || '{}');
+    // Load checked milestones from localStorage (scoped to project)
+    const milestoneKey = 'ec_milestones_' + currentUser.id + (currentProjectId ? '_' + currentProjectId : '');
+    checkedMilestones = JSON.parse(localStorage.getItem(milestoneKey) || '{}');
     return data.phases;
   }
 
@@ -416,17 +431,20 @@
 
       roadmapData = data.roadmap;
 
-      // Save to Supabase
-      await sb.from('roadmaps').upsert({
+      // Save to Supabase scoped to current project
+      const upsertRow = {
         user_id: currentUser.id,
         goal,
         phases: roadmapData,
         generated_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      }, { onConflict: 'user_id' });
+      };
+      if (currentProjectId) upsertRow.project_id = currentProjectId;
+      await sb.from('roadmaps').upsert(upsertRow, { onConflict: currentProjectId ? 'user_id,project_id' : 'user_id' });
 
       checkedMilestones = {};
-      localStorage.setItem('ec_milestones_' + currentUser.id, '{}');
+      const milestoneKey = 'ec_milestones_' + currentUser.id + (currentProjectId ? '_' + currentProjectId : '');
+      localStorage.setItem(milestoneKey, '{}');
       renderRoadmap();
 
     } catch (err) {
@@ -570,7 +588,8 @@
   function toggleMilestone(phaseId, idx) {
     if (!checkedMilestones[phaseId]) checkedMilestones[phaseId] = {};
     checkedMilestones[phaseId][idx] = !checkedMilestones[phaseId][idx];
-    localStorage.setItem('ec_milestones_' + currentUser.id, JSON.stringify(checkedMilestones));
+    const milestoneKey = 'ec_milestones_' + currentUser.id + (currentProjectId ? '_' + currentProjectId : '');
+    localStorage.setItem(milestoneKey, JSON.stringify(checkedMilestones));
 
     // Re-render milestone list
     const phases = getPhases();
@@ -598,7 +617,9 @@
 
     // Persist to Supabase
     try {
-      await sb.from('roadmaps').update({ phases: roadmapData, updated_at: new Date().toISOString() }).eq('user_id', currentUser.id);
+      let q = sb.from('roadmaps').update({ phases: roadmapData, updated_at: new Date().toISOString() }).eq('user_id', currentUser.id);
+      if (currentProjectId) q = q.eq('project_id', currentProjectId);
+      await q;
     } catch (e) { console.warn('Auto-advance save failed:', e); }
 
     // Re-render the full roadmap so progress bar + nodes update
@@ -647,9 +668,10 @@
     const milestoneInputs = document.querySelectorAll('.milestone-text');
     phase.milestones = Array.from(milestoneInputs).map(el => el.value.trim()).filter(v => v.length > 0);
 
-    // Save to Supabase
-    const toSave = Array.isArray(roadmapData) ? roadmapData : roadmapData.phases;
-    await sb.from('roadmaps').update({ phases: roadmapData, updated_at: new Date().toISOString() }).eq('user_id', currentUser.id);
+    // Save to Supabase scoped to current project
+    let saveQ = sb.from('roadmaps').update({ phases: roadmapData, updated_at: new Date().toISOString() }).eq('user_id', currentUser.id);
+    if (currentProjectId) saveQ = saveQ.eq('project_id', currentProjectId);
+    await saveQ;
 
     hasUnsavedEdits = false;
     document.getElementById('btn-save-edits').classList.remove('show');
