@@ -40,10 +40,7 @@
   .roadmap-goal-chip { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-1); border: 1px solid var(--gray-2); padding: 0.25rem 0.75rem; display: inline-block; letter-spacing: 0.02em; }
   .roadmap-goal-chip span { color: var(--black); }
   .header-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
-  .btn-regenerate { font-family: var(--mono); font-size: 0.72rem; color: var(--white); background: var(--black); border: none; padding: 0.6rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: background 0.15s; }
-  .btn-regenerate:hover { background: var(--amber); }
-  .btn-regenerate:disabled { opacity: 0.4; cursor: default; background: var(--black); }
-  .btn-save-edits { font-family: var(--mono); font-size: 0.72rem; color: var(--black); background: none; border: 1px solid var(--gray-2); padding: 0.6rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: all 0.15s; display: none; }
+.btn-save-edits { font-family: var(--mono); font-size: 0.72rem; color: var(--black); background: none; border: 1px solid var(--gray-2); padding: 0.6rem 1.25rem; cursor: pointer; letter-spacing: 0.02em; transition: all 0.15s; display: none; }
   .btn-save-edits:hover { border-color: var(--amber); color: var(--amber); }
   .btn-save-edits.show { display: inline-block; }
 
@@ -257,7 +254,6 @@
       <p class="roadmap-summary" id="roadmap-summary"></p>
       <div class="roadmap-goal-chip">Goal: <span id="roadmap-goal-text"></span></div>
       <div class="header-actions">
-        <button class="btn-regenerate" id="btn-regenerate" onclick="confirmRegenerate()">Regenerate with Navi</button>
         <button class="btn-save-edits" id="btn-save-edits" onclick="saveEdits()">Save Edits</button>
       </div>
     </div>
@@ -363,20 +359,20 @@
   }
 
   async function getUserGoal() {
-    // Try localStorage scoped to current project first
-    const localKey = currentProjectId ? 'ec_goal_' + currentUser.id + '_' + currentProjectId : null;
-    if (localKey) {
-      const localGoal = localStorage.getItem(localKey);
-      if (localGoal) return localGoal;
-    }
+    // Match the exact key format used by execution-curve.html:
+    // currentProjectId set → 'ec_goal_<projectId>'
+    // no project        → 'ec_goal'
+    const localKey = currentProjectId ? 'ec_goal_' + currentProjectId : 'ec_goal';
+    const localGoal = localStorage.getItem(localKey);
+    if (localGoal) return localGoal;
 
-    // Fetch from Supabase scoped to current project
+    // Fallback: fetch from Supabase (cross-device, or first load on new device)
     let query = sb.from('user_goals').select('goal').eq('user_id', currentUser.id);
     if (currentProjectId) query = query.eq('project_id', currentProjectId);
     else query = query.order('updated_at', { ascending: false }).limit(1);
     const { data } = await query.maybeSingle();
     if (data?.goal) {
-      if (localKey) localStorage.setItem(localKey, data.goal);
+      localStorage.setItem(localKey, data.goal); // cache it locally
       return data.goal;
     }
     return null;
@@ -403,7 +399,6 @@
   // ---- GENERATE ----
   async function generateRoadmap() {
     showState('generating');
-    document.getElementById('btn-regenerate').disabled = true;
 
     const goal = await getUserGoal();
     if (!goal) { showState('no-goal'); return; }
@@ -425,7 +420,6 @@
       if (!res.ok || !data.roadmap) {
         showState('error');
         document.getElementById('error-msg').textContent = data.error || 'Could not generate roadmap.';
-        document.getElementById('btn-regenerate').disabled = false;
         return;
       }
 
@@ -453,13 +447,6 @@
       document.getElementById('error-msg').textContent = 'Network error. Check your connection and try again.';
     }
 
-    document.getElementById('btn-regenerate').disabled = false;
-  }
-
-  function confirmRegenerate() {
-    if (!confirm('Regenerate your roadmap? This will replace the current one. Your milestone checkboxes will be reset.')) return;
-    closeDetail();
-    generateRoadmap();
   }
 
   // ---- PHASE INFERENCE ----
