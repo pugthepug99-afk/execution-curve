@@ -2065,34 +2065,40 @@
   async function syncGoalFromSupabase() {
     if (!currentUser) return;
 
-    // Always fetch from Supabase — it's the source of truth across devices.
-    // Don't trust localStorage alone: a goal set on phone won't appear on desktop
-    // unless we re-read from the server every time.
-    let goalData = null;
+    // Show whatever is cached in localStorage immediately (instant UI, no flash)
+    const cached = localStorage.getItem(goalKey());
+    if (cached) { updateGoalChip(); updateGoalCTA(true); renderTaskCheck(); }
 
-    if (currentProjectId) {
-      const { data } = await sb.from('user_goals')
-        .select('goal')
-        .eq('user_id', currentUser.id)
-        .eq('project_id', currentProjectId)
-        .maybeSingle();
-      goalData = data;
+    // Then fetch from Supabase — source of truth across devices
+    let query = sb.from('user_goals').select('goal').eq('user_id', currentUser.id);
+    if (currentProjectId) query = query.eq('project_id', currentProjectId);
+    else query = query.order('updated_at', { ascending: false }).limit(1);
+
+    const { data, error } = await query.maybeSingle();
+
+    if (error) {
+      // Network/db error — trust localStorage, don't wipe it
+      if (!cached) { updateGoalChip(); updateGoalCTA(false); renderTaskCheck(); }
+      return;
     }
 
-    if (goalData?.goal) {
-      // Sync Supabase value into localStorage (overwrites stale local copy)
-      localStorage.setItem(goalKey(), goalData.goal);
+    if (data?.goal) {
+      // Supabase has a goal — sync it locally and update UI
+      localStorage.setItem(goalKey(), data.goal);
       updateGoalChip();
       updateGoalCTA(true);
       renderTaskCheck();
       return;
     }
 
-    // No goal in Supabase — clear any stale localStorage value for this project
-    localStorage.removeItem(goalKey());
-    updateGoalChip();
-    renderTaskCheck();
-    updateGoalCTA(false);
+    // Supabase confirmed no goal exists for this project — only clear localStorage
+    // if there was genuinely nothing there either (don't wipe a valid cached goal
+    // just because the server row hasn't synced yet)
+    if (!cached) {
+      updateGoalChip();
+      renderTaskCheck();
+      updateGoalCTA(false);
+    }
   }
 
   async function saveGoalToSupabase(goal) {
