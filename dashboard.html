@@ -43,7 +43,7 @@
   .btn-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.4rem; flex-direction: column; gap: 5px; align-items: center; justify-content: center; touch-action: manipulation; }
   .btn-hamburger span { display: block; width: 20px; height: 2px; background: var(--black); transition: all 0.2s; }
   @media (max-width: 768px) { .btn-hamburger { display: flex; } }
-  .mobile-nav-menu { display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--white); border-bottom: 1px solid var(--gray-2); z-index: 999; flex-direction: column; padding: 1rem 1.5rem 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .mobile-nav-menu { display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--white); border-bottom: 1px solid var(--gray-2); z-index: 1001; flex-direction: column; padding: 1rem 1.5rem 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
   .mobile-nav-menu.open { display: flex; }
   .mobile-nav-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--gray-3); }
   .mobile-nav-links { display: flex; flex-direction: column; gap: 0; }
@@ -288,7 +288,7 @@
     <div class="char-count" id="char-count">0 / 100 minimum</div>
 
     <!-- Bug report extra fields (shown only for bug_report type) -->
-    <div id="bug-report-fields" style="display:none;margin-top:0.75rem;display:none;flex-direction:column;gap:0.75rem">
+    <div id="bug-report-fields" style="display:none;margin-top:0.75rem;flex-direction:column;gap:0.75rem">
       <div>
         <label class="form-label">Steps to Reproduce</label>
         <textarea class="form-input" id="bug-steps" rows="3" placeholder="1. Go to... 2. Click... 3. See error..."></textarea>
@@ -452,6 +452,12 @@
   const SUPABASE_URL = 'https://exqczahgelcoibcsagsx.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4cWN6YWhnZWxjb2liY3NhZ3N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MzM2MjEsImV4cCI6MjEwMDMwOTYyMX0.G6kN0LtvxSO9j5orEGnYuyq9AOQDfqpJel6KqB7PKqs';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // HTML escape helper — prevents XSS when rendering user-submitted content
+  function esc(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
 
   let currentUser = null;
   let currentProfile = null;
