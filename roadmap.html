@@ -223,8 +223,8 @@
 
   <!-- GENERATING STATE -->
   <div id="state-generating" class="state-card" style="display:none">
-    <h3>Building your roadmap</h3>
-    <p class="generating-indicator">Navi is mapping your path based on your goal and entries...</p>
+    <h3 id="generating-title">Building your roadmap</h3>
+    <p class="generating-indicator" id="generating-subtitle">Navi is mapping your path based on your goal and entries...</p>
   </div>
 
   <!-- ERROR STATE -->
@@ -336,6 +336,9 @@
     const goal = await getUserGoal();
     if (!goal) { showState('no-goal'); return; }
     document.getElementById('roadmap-goal-text').textContent = goal;
+
+    // Show loading state while fetching saved roadmap
+    showState('loading');
 
     // Try loading existing roadmap
     const existing = await loadSavedRoadmap();
@@ -672,7 +675,16 @@
     document.getElementById('roadmap-view').style.display = 'none';
     if (state === 'locked') document.getElementById('state-locked').style.display = 'block';
     else if (state === 'no-goal') document.getElementById('state-no-goal').style.display = 'block';
-    else if (state === 'generating') document.getElementById('state-generating').style.display = 'block';
+    else if (state === 'loading') {
+      document.getElementById('generating-title').textContent = 'Loading your roadmap';
+      document.getElementById('generating-subtitle').textContent = 'Fetching your progress from Navi...';
+      document.getElementById('state-generating').style.display = 'block';
+    }
+    else if (state === 'generating') {
+      document.getElementById('generating-title').textContent = 'Building your roadmap';
+      document.getElementById('generating-subtitle').textContent = 'Navi is mapping your path based on your goal and entries...';
+      document.getElementById('state-generating').style.display = 'block';
+    }
     else if (state === 'error') document.getElementById('state-error').style.display = 'block';
     else if (state === 'roadmap') document.getElementById('roadmap-view').style.display = 'block';
   }
